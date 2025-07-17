@@ -46,7 +46,6 @@ npm install
 ### 3. Run the dev server
 ```
 npm run dev
-
 ```
 
 Visit: http://localhost:5173
