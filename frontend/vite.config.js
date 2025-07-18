@@ -1,7 +1,18 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+const { defineConfig } = require("vite");
+const react = require("@vitejs/plugin-react-swc");
+const path = require("path");
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-})
+module.exports = defineConfig({
+  server: {
+    host: "::",
+    port: 8080,
+  },
+  plugins: [
+    react(),
+  ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+});
