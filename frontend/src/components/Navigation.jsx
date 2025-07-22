@@ -8,7 +8,6 @@ import {
   Phone,
   Home,
   Rocket,
-  Menu,
   X,
 } from "lucide-react";
 
