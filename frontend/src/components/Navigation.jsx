@@ -113,7 +113,7 @@ const Navigation = () => {
               <Button
                 variant="outline"
                 size="sm"
-                className="border-primary/20 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300"
+                className="border-primary/50 hover:border-primary/40 hover:bg-primary/35 transition-all duration-300 hover:text-black"
                 asChild
               >
                 <Link to="/register">Register</Link>
@@ -231,7 +231,7 @@ const Navigation = () => {
               <div className="mt-8 pt-6 border-t border-gradient-to-r from-primary/20 to-secondary/20 space-y-4">
                 <Button
                   variant="outline"
-                  className="w-full justify-start h-12 border-primary/20 hover:border-primary/40 hover:bg-primary/5"
+                  className="w-full justify-start h-12 border-primary/20 hover:border-primary/40 hover:coli hover:bg-primary/5 "
                   asChild
                 >
                   <Link to="/register" onClick={() => setIsOpen(false)}>
