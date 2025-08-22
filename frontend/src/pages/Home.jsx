@@ -1,6 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Link } from "react-router-dom";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import InfiniteCarousel from "@/components/InfiniteCarousel";
@@ -17,6 +25,15 @@ import {
   Clock,
   CheckCircle,
   Sparkles,
+  Search,
+  GraduationCap,
+  Briefcase,
+  Calculator,
+  Palette,
+  Stethoscope,
+  Code,
+  Building,
+  Atom,
 } from "lucide-react";
 
 const Home = () => {
@@ -25,41 +42,134 @@ const Home = () => {
   const statsRef = useScrollAnimation();
   const testimonialsRef = useScrollAnimation();
 
+  const studyGoals = [
+    {
+      icon: Code,
+      title: "Engineering",
+      subtitle: "BE/B.Tech, Diploma, M.Tech",
+      color: "from-blue-500 to-cyan-500",
+      bgColor: "bg-blue-50",
+      iconColor: "text-blue-600",
+    },
+    {
+      icon: Briefcase,
+      title: "Management",
+      subtitle: "MBA, BBA, PGDM",
+      color: "from-purple-500 to-pink-500",
+      bgColor: "bg-purple-50",
+      iconColor: "text-purple-600",
+    },
+    {
+      icon: Calculator,
+      title: "Commerce",
+      subtitle: "B.Com, M.Com, CA, CS",
+      color: "from-green-500 to-emerald-500",
+      bgColor: "bg-green-50",
+      iconColor: "text-green-600",
+    },
+    {
+      icon: Palette,
+      title: "Arts",
+      subtitle: "BA, MA, Fine Arts, Design",
+      color: "from-orange-500 to-red-500",
+      bgColor: "bg-orange-50",
+      iconColor: "text-orange-600",
+    },
+    {
+      icon: Stethoscope,
+      title: "Medical",
+      subtitle: "MBBS, BDS, BAMS, Nursing",
+      color: "from-red-500 to-pink-500",
+      bgColor: "bg-red-50",
+      iconColor: "text-red-600",
+    },
+    {
+      icon: Atom,
+      title: "Science",
+      subtitle: "B.Sc, M.Sc, Research",
+      color: "from-indigo-500 to-blue-500",
+      bgColor: "bg-indigo-50",
+      iconColor: "text-indigo-600",
+    },
+    {
+      icon: Building,
+      title: "Architecture",
+      subtitle: "B.Arch, M.Arch, Planning",
+      color: "from-teal-500 to-cyan-500",
+      bgColor: "bg-teal-50",
+      iconColor: "text-teal-600",
+    },
+    {
+      icon: GraduationCap,
+      title: "Education",
+      subtitle: "B.Ed, M.Ed, D.Ed",
+      color: "from-yellow-500 to-orange-500",
+      bgColor: "bg-yellow-50",
+      iconColor: "text-yellow-600",
+    },
+  ];
+
+  const goals = [
+    "Engineering",
+    "Management",
+    "Commerce",
+    "Arts",
+    "Medical",
+    "Science",
+    "Architecture",
+    "Education",
+    "Law",
+    "Pharmacy",
+  ];
+
+  const cities = [
+    "Delhi",
+    "Mumbai",
+    "Bangalore",
+    "Chennai",
+    "Kolkata",
+    "Hyderabad",
+    "Pune",
+    "Ahmedabad",
+    "Jaipur",
+    "Lucknow",
+  ];
+
   const userTypes = [
     {
-      icon: "🧑‍🎓",
+      icon: "🎯",
       title: "College-Joining Students",
       description:
-        "Get guidance on college selection, course recommendations, and career planning based on your interests and academic performance.",
+        "Get AI-powered guidance on college selection, course recommendations, and strategic career planning based on your interests and academic performance.",
       features: [
-        "College Recommendations",
-        "Course Selection",
-        "Career Mapping",
-        "Scholarship Info",
+        "🏛️ College Recommendations",
+        "📚 Course Selection",
+        "🗺️ Career Mapping",
+        "💰 Scholarship Info",
       ],
     },
     {
-      icon: "🎓",
+      icon: "🚀",
       title: "College Students",
       description:
-        "Access internship opportunities, skill development programs, and industry insights to boost your career prospects.",
+        "Access premium internship opportunities, advanced skill development programs, and exclusive industry insights to accelerate your career trajectory.",
       features: [
-        "Internship Portal",
-        "Skill Assessment",
-        "Industry Connect",
-        "Project Guidance",
+        "💼 Internship Portal",
+        "📊 Skill Assessment",
+        "🤝 Industry Connect",
+        "🔬 Project Guidance",
       ],
     },
     {
-      icon: "👨‍💻",
+      icon: "💎",
       title: "Freshers",
       description:
-        "Land your dream job with interview preparation, resume optimization, and personalized job recommendations.",
+        "Land your dream job with professional interview preparation, expert resume optimization, and AI-driven personalized job recommendations.",
       features: [
-        "Job Matching",
-        "Interview Prep",
-        "Resume Builder",
-        "Salary Insights",
+        "🎯 Job Matching",
+        "🎤 Interview Prep",
+        "📋 Resume Builder",
+        "💸 Salary Insights",
       ],
     },
   ];
@@ -144,7 +254,6 @@ const Home = () => {
     },
   ];
 
-  // Company logos for the infinite carousel
   const companyLogos = [
     <div
       key="google"
@@ -218,9 +327,11 @@ const Home = () => {
 
         <div
           ref={heroRef}
-          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-animate pt-20"
+          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-animate pt-20 w-full"
         >
-          <Badge className="mb-8 bg-gradient-to-r from-primary/10 to-secondary/10 text-primary-foreground border-primary/20 hover-lift">
+          <Badge
+            className="mb-8 bg-primary/10 text-primary border-primary/20 shadow-md hover:bg-primary hover:text-white transition-colors"
+          >
             <Sparkles className="h-4 w-4 mr-2" />
             AI-Powered Career Guidance Platform
           </Badge>
@@ -239,7 +350,196 @@ const Home = () => {
             navigate their career path with confidence and achieve their dreams
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 animate-[fade-in_1s_ease-out_1.5s_both]">
+          {/* Search Bar Section */}
+          <div className="mb-16 animate-[fade-in_1s_ease-out_1.5s_both]">
+            {/* Search Header */}
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-display font-semibold text-foreground mb-3">
+                Discover Your Future
+              </h3>
+              <p className="text-lg text-muted-foreground font-medium">
+                Search from 50,000+ colleges, courses & career opportunities
+              </p>
+            </div>
+
+            <div className="relative max-w-4xl mx-auto">
+              <div className="absolute inset-0 bg-card border-2 border-border rounded-2xl shadow-lg"></div>
+              <div className="relative bg-card rounded-2xl p-8 border-2 border-primary/20 shadow-xl hover:shadow-2xl transition-all duration-500 hover:border-primary/40">
+                <div className="hidden md:grid md:grid-cols-12 gap-4 items-center">
+                  <div className="col-span-3">
+                    <label className="block text-sm font-medium text-muted-foreground mb-2">
+                      Study Goal
+                    </label>
+                    <Select>
+                      <SelectTrigger className="h-12 bg-background border-2 border-muted hover:border-primary/50 rounded-xl font-medium text-foreground shadow-sm hover:shadow-md transition-all focus:border-primary focus:ring-2 focus:ring-primary/20">
+                        <SelectValue placeholder="Select Goal" />
+                      </SelectTrigger>
+                      <SelectContent className="z-50 bg-card border-2 border-border shadow-xl rounded-xl backdrop-blur-sm">
+                        {goals.map((goal) => (
+                          <SelectItem
+                            key={goal}
+                            value={goal.toLowerCase()}
+                            className="font-medium hover:bg-muted focus:bg-muted"
+                          >
+                            {goal}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* City Dropdown */}
+                  <div className="col-span-3">
+                    <label className="block text-sm font-medium text-muted-foreground mb-2">
+                      Location
+                    </label>
+                    <Select>
+                      <SelectTrigger className="h-12 bg-background border-2 border-muted hover:border-primary/50 rounded-xl font-medium text-foreground shadow-sm hover:shadow-md transition-all focus:border-primary focus:ring-2 focus:ring-primary/20">
+                        <SelectValue placeholder="Select City" />
+                      </SelectTrigger>
+                      <SelectContent className="z-50 bg-card border-2 border-border shadow-xl rounded-xl backdrop-blur-sm">
+                        {cities.map((city) => (
+                          <SelectItem
+                            key={city}
+                            value={city.toLowerCase()}
+                            className="font-medium hover:bg-muted focus:bg-muted"
+                          >
+                            {city}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Search Input */}
+                  <div className="col-span-4">
+                    <label className="block text-sm font-medium text-muted-foreground mb-2">
+                      Search
+                    </label>
+                    <div className="relative">
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                      <Input
+                        placeholder="Colleges, courses, exams..."
+                        className="h-12 pl-12 bg-background border border-muted hover:border-primary/50 rounded-xl font-medium text-foreground shadow-sm hover:shadow-md transition-all focus:border-primary focus:ring-0 focus:outline-none placeholder:text-muted-foreground"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Search Button */}
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-transparent mb-2 select-none">
+                      Action
+                    </label>
+                    <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 border-2 border-primary hover:border-primary/80">
+                      Search
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Mobile Search */}
+                <div className="md:hidden space-y-6">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-muted-foreground mb-2">
+                        Study Goal
+                      </label>
+                      <Select>
+                        <SelectTrigger className="h-12 bg-background border-2 border-muted hover:border-primary/50 rounded-xl font-medium text-foreground shadow-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/20">
+                          <SelectValue placeholder="Select Goal" />
+                        </SelectTrigger>
+                        <SelectContent className="z-50 bg-card border-2 border-border shadow-xl rounded-xl backdrop-blur-sm">
+                          {goals.map((goal) => (
+                            <SelectItem
+                              key={goal}
+                              value={goal.toLowerCase()}
+                              className="font-medium hover:bg-muted focus:bg-muted"
+                            >
+                              {goal}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-muted-foreground mb-2">
+                        Location
+                      </label>
+                      <Select>
+                        <SelectTrigger className="h-12 bg-background border-2 border-muted hover:border-primary/50 rounded-xl font-medium text-foreground shadow-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/20">
+                          <SelectValue placeholder="Select City" />
+                        </SelectTrigger>
+                        <SelectContent className="z-50 bg-card border-2 border-border shadow-xl rounded-xl backdrop-blur-sm">
+                          {cities.map((city) => (
+                            <SelectItem
+                              key={city}
+                              value={city.toLowerCase()}
+                              className="font-medium hover:bg-muted focus:bg-muted"
+                            >
+                              {city}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-muted-foreground mb-2">
+                        Search
+                      </label>
+                      <div className="relative">
+                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input
+                          placeholder="Colleges, courses, exams, careers..."
+                          className="h-12 pl-12 bg-background border-2 border-muted hover:border-primary/50 rounded-xl font-medium text-foreground shadow-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground"
+                        />
+                      </div>
+                    </div>
+
+                    <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 border-2 border-primary hover:border-primary/80">
+                      <Search className="h-4 w-4 mr-2" />
+                      Search Now
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Select Your Study Goal Section */}
+          <div className="mb-16 animate-[fade-in_1s_ease-out_2s_both]">
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">
+              Select Your Study Goal
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+              {studyGoals.map((goal, index) => (
+                <Card
+                  key={index}
+                  className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 border-gray-200 hover:border-primary/50"
+                >
+                  <CardContent className="p-6 text-center">
+                    <div
+                      className={`w-16 h-16 mx-auto mb-4 rounded-2xl ${goal.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
+                    >
+                      <goal.icon className={`h-8 w-8 ${goal.iconColor}`} />
+                    </div>
+                    <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">
+                      {goal.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground group-hover:text-muted-foreground/80">
+                      {goal.subtitle}
+                    </p>
+                    <div
+                      className={`h-1 w-0 group-hover:w-full bg-gradient-to-r ${goal.color} rounded-full transition-all duration-500 mt-4 mx-auto`}
+                    ></div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 animate-[fade-in_1s_ease-out_2.5s_both]">
             <Button
               size="lg"
               className="bg-gradient-to-r from-primary to-secondary hover:from-primary-light hover:to-secondary-light shadow-xl text-lg px-8 py-4 h-auto hover-lift group"

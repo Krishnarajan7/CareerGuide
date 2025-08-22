@@ -98,13 +98,13 @@ const Register = () => {
                     <SelectValue placeholder="Select your preferred city" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="bangalore">🏙️ Bangalore</SelectItem>
-                    <SelectItem value="mumbai">🌊 Mumbai</SelectItem>
-                    <SelectItem value="delhi">🏛️ Delhi</SelectItem>
-                    <SelectItem value="pune">🎓 Pune</SelectItem>
-                    <SelectItem value="hyderabad">💎 Hyderabad</SelectItem>
-                    <SelectItem value="chennai">🏖️ Chennai</SelectItem>
-                    <SelectItem value="kolkata">📚 Kolkata</SelectItem>
+                    <SelectItem value="bangalore">Bangalore</SelectItem>
+                    <SelectItem value="mumbai">Mumbai</SelectItem>
+                    <SelectItem value="delhi">Delhi</SelectItem>
+                    <SelectItem value="pune">Pune</SelectItem>
+                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                    <SelectItem value="chennai">Chennai</SelectItem>
+                    <SelectItem value="kolkata">Kolkata</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

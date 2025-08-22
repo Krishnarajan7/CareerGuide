@@ -124,7 +124,11 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
   }
 
   html {
@@ -398,3 +402,4 @@
 .floating-bubble:nth-child(3) {
   animation-delay: 4s;
 }
+
