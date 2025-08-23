@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
 import ResumeBuilder from "./pages/ResumeBuilder";
 import Contact from "./pages/Contact";
+import CollegeDetails from "./pages/CollegeDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
               <Route path="/courses" element={<Courses />} />
               <Route path="/resume-builder" element={<ResumeBuilder />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/college/:id" element={<CollegeDetails />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
