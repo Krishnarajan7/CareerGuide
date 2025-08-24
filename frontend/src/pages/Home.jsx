@@ -308,11 +308,11 @@ const Home = () => {
 
             {/* Unique Search Container */}
             <div ref={searchContainerRef} className="relative max-w-4xl mx-auto">
-              {/* Background with subtle border */}
-              <div className="absolute inset-0 bg-card border-2 border-border rounded-2xl shadow-lg"></div>
+              {/* Enhanced Background with Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-primary/5 border-2 border-primary/30 rounded-2xl shadow-2xl blur-sm"></div>
               
               {/* Search Bar */}
-              <div className="relative bg-card rounded-2xl p-8 border-2 border-primary/20 shadow-xl hover:shadow-2xl transition-all duration-500 hover:border-primary/40">
+              <div className="relative bg-card rounded-2xl p-4 md:p-8 border-2 border-primary/30 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:border-primary/50 backdrop-blur-sm bg-card/95">
                 {/* Desktop Search */}
                 <div className="hidden md:grid md:grid-cols-12 gap-4 items-center">
                   {/* Goal Dropdown */}
@@ -439,66 +439,116 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* Search Results Dropdown */}
+              {/* Search Results Dropdown - Mobile Optimized */}
               {showResults && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-card border-2 border-border shadow-2xl rounded-2xl z-50 backdrop-blur-md max-h-[480px] overflow-y-auto">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-card border-2 border-border shadow-2xl rounded-2xl z-50 backdrop-blur-md max-h-[70vh] md:max-h-[480px] overflow-y-auto mx-2 md:mx-0">
                   {searchResults.length > 0 ? (
                     <>
-                      <div className="p-4 border-b border-border">
-                        <h4 className="font-semibold text-foreground">
+                      <div className="p-3 md:p-4 border-b border-border bg-muted/30">
+                        <h4 className="font-semibold text-foreground text-sm md:text-base">
                           Found {searchResults.length} college{searchResults.length !== 1 ? 's' : ''}
                         </h4>
-                        <p className="text-sm text-muted-foreground">Click on any college to view details</p>
+                        <p className="text-xs md:text-sm text-muted-foreground">Click on any college to view details</p>
                       </div>
-                      <div className="p-2">
+                      <div className="divide-y divide-border">
                         {searchResults.map((college) => (
                           <div
                             key={college.id}
                             onClick={() => handleCollegeSelect(college.id)}
-                            className="p-6 hover:bg-muted/50 cursor-pointer border-b border-border last:border-b-0 transition-all duration-200"
+                            className="p-3 md:p-6 hover:bg-muted/50 cursor-pointer transition-all duration-200 active:bg-muted/70"
                           >
-                            <div className="flex items-start gap-4">
-                              <img 
-                                src={college.image} 
-                                alt={college.name}
-                                className="w-20 h-16 object-cover rounded-lg flex-shrink-0"
-                              />
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-start justify-between gap-4">
-                                  <div className="flex-1">
-                                    <h3 className="font-semibold text-foreground text-lg leading-tight">{college.name}</h3>
-                                    <div className="flex items-center gap-3 text-sm text-muted-foreground mt-2">
-                                      <div className="flex items-center gap-1">
-                                        <MapPin className="h-4 w-4" />
-                                        <span>{college.location}</span>
-                                      </div>
-                                      <div className="flex items-center gap-1">
-                                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                                        <span className="font-medium">{college.rating}</span>
-                                      </div>
+                            {/* Mobile Layout */}
+                            <div className="md:hidden">
+                              <div className="flex items-start gap-3 mb-3">
+                                <img 
+                                  src={college.image} 
+                                  alt={college.name}
+                                  className="w-16 h-12 object-cover rounded-lg flex-shrink-0"
+                                />
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="font-semibold text-foreground text-base leading-tight line-clamp-2">{college.name}</h3>
+                                  <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                                    <div className="flex items-center gap-1">
+                                      <MapPin className="h-3 w-3" />
+                                      <span className="text-xs">{college.location}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                                      <span className="font-medium text-xs">{college.rating}</span>
                                     </div>
                                   </div>
-                                  <div className="text-right flex-shrink-0">
-                                    <div className="text-lg font-bold text-foreground">{college.fees}</div>
-                                    <div className="text-sm text-muted-foreground">Total Fees</div>
-                                  </div>
                                 </div>
-                                
-                                <div className="flex items-center gap-2 mt-3">
-                                  <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
+                                <div className="text-right flex-shrink-0">
+                                  <div className="text-sm font-bold text-foreground">{college.fees}</div>
+                                  <div className="text-xs text-muted-foreground">Fees</div>
+                                </div>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <div className="flex flex-wrap gap-1">
+                                  <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">
                                     {college.type}
                                   </span>
-                                  <span className="bg-muted text-muted-foreground px-3 py-1 rounded-full text-sm">
-                                    NIRF Rank: #{college.rank.nirf}
+                                  <span className="bg-muted text-muted-foreground px-2 py-1 rounded-full text-xs">
+                                    Rank #{college.rank.nirf}
                                   </span>
-                                  <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                                  <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">
                                     {college.placement.percentage} Placed
                                   </span>
                                 </div>
                                 
-                                <div className="mt-3 text-sm text-muted-foreground">
-                                  <span className="font-medium">Courses:</span> {college.courses.slice(0, 3).join(", ")}
-                                  {college.courses.length > 3 && ` +${college.courses.length - 3} more`}
+                                <div className="text-xs text-muted-foreground">
+                                  <span className="font-medium">Courses:</span> {college.courses.slice(0, 2).join(", ")}
+                                  {college.courses.length > 2 && ` +${college.courses.length - 2} more`}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Desktop Layout */}
+                            <div className="hidden md:block">
+                              <div className="flex items-start gap-4">
+                                <img 
+                                  src={college.image} 
+                                  alt={college.name}
+                                  className="w-20 h-16 object-cover rounded-lg flex-shrink-0"
+                                />
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-start justify-between gap-4">
+                                    <div className="flex-1">
+                                      <h3 className="font-semibold text-foreground text-lg leading-tight">{college.name}</h3>
+                                      <div className="flex items-center gap-3 text-sm text-muted-foreground mt-2">
+                                        <div className="flex items-center gap-1">
+                                          <MapPin className="h-4 w-4" />
+                                          <span>{college.location}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                                          <span className="font-medium">{college.rating}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="text-right flex-shrink-0">
+                                      <div className="text-lg font-bold text-foreground">{college.fees}</div>
+                                      <div className="text-sm text-muted-foreground">Total Fees</div>
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="flex items-center gap-2 mt-3">
+                                    <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
+                                      {college.type}
+                                    </span>
+                                    <span className="bg-muted text-muted-foreground px-3 py-1 rounded-full text-sm">
+                                      NIRF Rank: #{college.rank.nirf}
+                                    </span>
+                                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                                      {college.placement.percentage} Placed
+                                    </span>
+                                  </div>
+                                  
+                                  <div className="mt-3 text-sm text-muted-foreground">
+                                    <span className="font-medium">Courses:</span> {college.courses.slice(0, 3).join(", ")}
+                                    {college.courses.length > 3 && ` +${college.courses.length - 3} more`}
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -507,10 +557,10 @@ const Home = () => {
                       </div>
                     </>
                   ) : (
-                    <div className="p-8 text-center">
-                      <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-50" />
-                      <h4 className="font-semibold text-foreground mb-2">No colleges found</h4>
-                      <p className="text-sm text-muted-foreground">
+                    <div className="p-6 md:p-8 text-center">
+                      <Search className="h-10 w-10 md:h-12 md:w-12 text-muted-foreground mx-auto mb-4 opacity-50" />
+                      <h4 className="font-semibold text-foreground mb-2 text-sm md:text-base">No colleges found</h4>
+                      <p className="text-xs md:text-sm text-muted-foreground">
                         Try adjusting your search criteria or browse our featured colleges below
                       </p>
                     </div>
