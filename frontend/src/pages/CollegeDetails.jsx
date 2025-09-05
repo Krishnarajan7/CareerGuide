@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { mockColleges } from "@/data/mockColleges";
+import { mockColleges} from "@/data/mockColleges";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -112,46 +112,83 @@ const CollegeDetails = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Left Column */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-6 lg:space-y-8">
             {/* Course Details */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5" />
+            <Card className="overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-primary/5 to-secondary/5 border-b border-primary/10">
+                <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+                  <BookOpen className="h-5 w-5 text-primary" />
                   Courses & Fee Structure
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 md:p-6">
                 <div className="space-y-4">
                   {college.courseDetails.map((course, index) => (
-                    <div key={index} className="border border-border rounded-lg p-4 bg-muted/20">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-foreground text-lg">{course.name}</h4>
-                          <div className="grid grid-cols-2 gap-4 mt-3 text-sm">
-                            <div className="flex items-center gap-2">
-                              <Clock className="h-4 w-4 text-muted-foreground" />
-                              <span className="text-muted-foreground">Duration:</span>
-                              <span className="font-medium">{course.duration}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Users2 className="h-4 w-4 text-muted-foreground" />
-                              <span className="text-muted-foreground">Seats:</span>
-                              <span className="font-medium">{course.seats}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                              <span className="text-muted-foreground">Eligibility:</span>
-                              <span className="font-medium">{course.eligibility}</span>
-                            </div>
+                    <div key={index} className="border border-border rounded-xl p-4 md:p-6 bg-gradient-to-r from-muted/30 to-transparent hover:from-primary/5 hover:to-secondary/5 transition-all duration-300">
+                      {/* Mobile Layout */}
+                      <div className="md:hidden space-y-3">
+                        <div>
+                          <h4 className="font-bold text-foreground text-base mb-2">{course.name}</h4>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-primary">{course.fees}</div>
+                            <div className="text-xs text-muted-foreground">Total Fees</div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="text-xl font-bold text-primary">{course.fees}</div>
-                          <div className="text-sm text-muted-foreground">Total Fees</div>
+                        <div className="grid grid-cols-1 gap-3 text-sm">
+                          <div className="flex items-center justify-between p-2 bg-background/50 rounded-lg">
+                            <div className="flex items-center gap-2">
+                              <Clock className="h-4 w-4 text-primary/70" />
+                              <span className="text-muted-foreground font-medium">Duration:</span>
+                            </div>
+                            <span className="font-semibold text-foreground">{course.duration}</span>
+                          </div>
+                          <div className="flex items-center justify-between p-2 bg-background/50 rounded-lg">
+                            <div className="flex items-center gap-2">
+                              <Users2 className="h-4 w-4 text-primary/70" />
+                              <span className="text-muted-foreground font-medium">Seats:</span>
+                            </div>
+                            <span className="font-semibold text-foreground">{course.seats}</span>
+                          </div>
+                          <div className="flex items-center justify-between p-2 bg-background/50 rounded-lg">
+                            <div className="flex items-center gap-2">
+                              <GraduationCap className="h-4 w-4 text-primary/70" />
+                              <span className="text-muted-foreground font-medium">Eligibility:</span>
+                            </div>
+                            <span className="font-semibold text-foreground text-right flex-1 ml-2">{course.eligibility}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Desktop Layout */}
+                      <div className="hidden md:block">
+                        <div className="flex items-start justify-between gap-6">
+                          <div className="flex-1">
+                            <h4 className="font-bold text-foreground text-lg mb-3">{course.name}</h4>
+                            <div className="grid grid-cols-2 gap-4 text-sm">
+                              <div className="flex items-center gap-2">
+                                <Clock className="h-4 w-4 text-primary/70" />
+                                <span className="text-muted-foreground font-medium">Duration:</span>
+                                <span className="font-semibold text-foreground">{course.duration}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Users2 className="h-4 w-4 text-primary/70" />
+                                <span className="text-muted-foreground font-medium">Seats:</span>
+                                <span className="font-semibold text-foreground">{course.seats}</span>
+                              </div>
+                              <div className="flex items-center gap-2 col-span-2">
+                                <GraduationCap className="h-4 w-4 text-primary/70" />
+                                <span className="text-muted-foreground font-medium">Eligibility:</span>
+                                <span className="font-semibold text-foreground">{course.eligibility}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right flex-shrink-0">
+                            <div className="text-2xl font-bold text-primary">{course.fees}</div>
+                            <div className="text-sm text-muted-foreground">Total Fees</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -161,65 +198,68 @@ const CollegeDetails = () => {
             </Card>
 
             {/* College Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Award className="h-5 w-5" />
+            <Card className="overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-primary/5 to-secondary/5 border-b border-primary/10">
+                <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+                  <Award className="h-5 w-5 text-primary" />
                   College Information
                 </CardTitle>
               </CardHeader>
-              <CardContent className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
+              <CardContent className="p-4 md:p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-bold text-foreground mb-3 text-base md:text-lg">Basic Details</h4>
+                      <div className="space-y-3 text-sm">
+                        <div className="flex justify-between p-2 bg-muted/30 rounded-lg">
+                          <span className="text-muted-foreground font-medium">Established:</span>
+                          <span className="font-semibold text-foreground">{college.established}</span>
+                        </div>
+                        <div className="flex justify-between p-2 bg-muted/30 rounded-lg">
+                          <span className="text-muted-foreground font-medium">Counselling Code:</span>
+                          <span className="font-semibold text-foreground">{college.counsellingCode}</span>
+                        </div>
+                        <div className="flex justify-between p-2 bg-muted/30 rounded-lg">
+                          <span className="text-muted-foreground font-medium">NIRF Rank:</span>
+                          <span className="font-semibold text-primary">#{college.rank.nirf}</span>
+                        </div>
+                        <div className="flex justify-between p-2 bg-muted/30 rounded-lg">
+                          <span className="text-muted-foreground font-medium">India Rank:</span>
+                          <span className="font-semibold text-primary">#{college.rank.india}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-foreground mb-3 text-base md:text-lg">Accreditation</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {college.accreditation.map((acc, index) => (
+                          <span key={index} className="bg-success/15 text-success px-3 py-1.5 rounded-full text-xs font-semibold border border-success/20">
+                            {acc}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  
                   <div>
-                    <h4 className="font-semibold text-foreground mb-2">Basic Details</h4>
+                    <h4 className="font-semibold text-foreground mb-2">Cutoff Scores (JEE Advanced Rank)</h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Established:</span>
-                        <span className="font-medium">{college.established}</span>
+                        <span className="text-muted-foreground">General:</span>
+                        <span className="font-medium">{college.cutoff.general}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Counselling Code:</span>
-                        <span className="font-medium">{college.counsellingCode}</span>
+                        <span className="text-muted-foreground">OBC:</span>
+                        <span className="font-medium">{college.cutoff.obc}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">NIRF Rank:</span>
-                        <span className="font-medium">#{college.rank.nirf}</span>
+                        <span className="text-muted-foreground">SC:</span>
+                        <span className="font-medium">{college.cutoff.sc}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">India Rank:</span>
-                        <span className="font-medium">#{college.rank.india}</span>
+                        <span className="text-muted-foreground">ST:</span>
+                        <span className="font-medium">{college.cutoff.st}</span>
                       </div>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-foreground mb-2">Accreditation</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {college.accreditation.map((acc, index) => (
-                        <span key={index} className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
-                          {acc}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">Cutoff Scores (JEE Advanced Rank)</h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">General:</span>
-                      <span className="font-medium">{college.cutoff.general}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">OBC:</span>
-                      <span className="font-medium">{college.cutoff.obc}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">SC:</span>
-                      <span className="font-medium">{college.cutoff.sc}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">ST:</span>
-                      <span className="font-medium">{college.cutoff.st}</span>
                     </div>
                   </div>
                 </div>
