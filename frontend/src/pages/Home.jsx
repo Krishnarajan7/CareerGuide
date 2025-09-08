@@ -1,19 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { ActionSearchBar } from "@/components/ui/action-search-bar";
 import { Link, useNavigate } from "react-router-dom";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { useState, useEffect, useRef } from "react";
-import { searchColleges } from "@/data/mockColleges";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import InfiniteCarousel from "@/components/InfiniteCarousel";
 import {
   ArrowRight,
@@ -28,7 +18,6 @@ import {
   Clock,
   CheckCircle,
   Sparkles,
-  Search,
   GraduationCap,
   Briefcase,
   Calculator,
@@ -36,8 +25,7 @@ import {
   Stethoscope,
   Code,
   Building,
-  Atom,
-  MapPin,
+  Atom
 } from "lucide-react";
 
 const Home = () => {
@@ -46,50 +34,10 @@ const Home = () => {
   const featuresRef = useScrollAnimation();
   const statsRef = useScrollAnimation();
   const testimonialsRef = useScrollAnimation();
-
-  // Search state
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedGoal, setSelectedGoal] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [showResults, setShowResults] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
-  const searchContainerRef = useRef(null);
-
-  // Handle search
-  const handleSearch = () => {
-    if (!searchQuery && !selectedGoal && !selectedCity) return;
-
-    setIsSearching(true);
-    setTimeout(() => {
-      const results = searchColleges(searchQuery, selectedGoal, selectedCity);
-      setSearchResults(results);
-      setShowResults(true);
-      setIsSearching(false);
-    }, 500);
+  
+  const handleCollegeSelect = (college) => {
+    navigate(`/college/${college.id}`);
   };
-
-  // Handle college selection
-  const handleCollegeSelect = (collegeId) => {
-    setShowResults(false);
-    setSearchQuery("");
-    navigate(`/college/${collegeId}`);
-  };
-
-  // Handle click outside to close results
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        searchContainerRef.current &&
-        !searchContainerRef.current.contains(event.target)
-      ) {
-        setShowResults(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const studyGoals = [
     {
@@ -98,23 +46,23 @@ const Home = () => {
       subtitle: "BE/B.Tech, Diploma, M.Tech",
       color: "from-blue-500 to-cyan-500",
       bgColor: "bg-blue-50",
-      iconColor: "text-blue-600",
+      iconColor: "text-blue-600"
     },
     {
       icon: Briefcase,
-      title: "Management",
+      title: "Management", 
       subtitle: "MBA, BBA, PGDM",
       color: "from-purple-500 to-pink-500",
       bgColor: "bg-purple-50",
-      iconColor: "text-purple-600",
+      iconColor: "text-purple-600"
     },
     {
       icon: Calculator,
       title: "Commerce",
       subtitle: "B.Com, M.Com, CA, CS",
       color: "from-green-500 to-emerald-500",
-      bgColor: "bg-green-50",
-      iconColor: "text-green-600",
+      bgColor: "bg-green-50", 
+      iconColor: "text-green-600"
     },
     {
       icon: Palette,
@@ -122,7 +70,7 @@ const Home = () => {
       subtitle: "BA, MA, Fine Arts, Design",
       color: "from-orange-500 to-red-500",
       bgColor: "bg-orange-50",
-      iconColor: "text-orange-600",
+      iconColor: "text-orange-600"
     },
     {
       icon: Stethoscope,
@@ -130,7 +78,7 @@ const Home = () => {
       subtitle: "MBBS, BDS, BAMS, Nursing",
       color: "from-red-500 to-pink-500",
       bgColor: "bg-red-50",
-      iconColor: "text-red-600",
+      iconColor: "text-red-600"
     },
     {
       icon: Atom,
@@ -138,7 +86,7 @@ const Home = () => {
       subtitle: "B.Sc, M.Sc, Research",
       color: "from-indigo-500 to-blue-500",
       bgColor: "bg-indigo-50",
-      iconColor: "text-indigo-600",
+      iconColor: "text-indigo-600"
     },
     {
       icon: Building,
@@ -146,7 +94,7 @@ const Home = () => {
       subtitle: "B.Arch, M.Arch, Planning",
       color: "from-teal-500 to-cyan-500",
       bgColor: "bg-teal-50",
-      iconColor: "text-teal-600",
+      iconColor: "text-teal-600"
     },
     {
       icon: GraduationCap,
@@ -154,206 +102,110 @@ const Home = () => {
       subtitle: "B.Ed, M.Ed, D.Ed",
       color: "from-yellow-500 to-orange-500",
       bgColor: "bg-yellow-50",
-      iconColor: "text-yellow-600",
-    },
-  ];
-
-  const goals = [
-    "Engineering",
-    "Management",
-    "Commerce",
-    "Arts",
-    "Medical",
-    "Science",
-    "Architecture",
-    "Education",
-    "Law",
-    "Pharmacy",
-  ];
-
-  const cities = [
-    "Delhi",
-    "Mumbai",
-    "Bangalore",
-    "Chennai",
-    "Kolkata",
-    "Hyderabad",
-    "Pune",
-    "Ahmedabad",
-    "Jaipur",
-    "Lucknow",
+      iconColor: "text-yellow-600"
+    }
   ];
 
   const userTypes = [
     {
       icon: "🎯",
       title: "College-Joining Students",
-      description:
-        "Get AI-powered guidance on college selection, course recommendations, and strategic career planning based on your interests and academic performance.",
-      features: [
-        "🏛️ College Recommendations",
-        "📚 Course Selection",
-        "🗺️ Career Mapping",
-        "💰 Scholarship Info",
-      ],
+      description: "Get AI-powered guidance on college selection, course recommendations, and strategic career planning based on your interests and academic performance.",
+      features: ["🏛️ College Recommendations", "📚 Course Selection", "🗺️ Career Mapping", "💰 Scholarship Info"]
     },
     {
       icon: "🚀",
-      title: "College Students",
-      description:
-        "Access premium internship opportunities, advanced skill development programs, and exclusive industry insights to accelerate your career trajectory.",
-      features: [
-        "💼 Internship Portal",
-        "📊 Skill Assessment",
-        "🤝 Industry Connect",
-        "🔬 Project Guidance",
-      ],
+      title: "College Students", 
+      description: "Access premium internship opportunities, advanced skill development programs, and exclusive industry insights to accelerate your career trajectory.",
+      features: ["💼 Internship Portal", "📊 Skill Assessment", "🤝 Industry Connect", "🔬 Project Guidance"]
     },
     {
       icon: "💎",
       title: "Freshers",
-      description:
-        "Land your dream job with professional interview preparation, expert resume optimization, and AI-driven personalized job recommendations.",
-      features: [
-        "🎯 Job Matching",
-        "🎤 Interview Prep",
-        "📋 Resume Builder",
-        "💸 Salary Insights",
-      ],
-    },
+      description: "Land your dream job with professional interview preparation, expert resume optimization, and AI-driven personalized job recommendations.",
+      features: ["🎯 Job Matching", "🎤 Interview Prep", "📋 Resume Builder", "💸 Salary Insights"]
+    }
   ];
 
   const stats = [
-    {
-      icon: Users,
-      value: "10,000+",
-      label: "Students Guided",
-      color: "text-primary",
-    },
-    {
-      icon: BookOpen,
-      value: "50+",
-      label: "Courses Available",
-      color: "text-secondary",
-    },
-    {
-      icon: TrendingUp,
-      value: "95%",
-      label: "Success Rate",
-      color: "text-accent",
-    },
-    {
-      icon: Award,
-      value: "500+",
-      label: "Companies Partner",
-      color: "text-success",
-    },
+    { icon: Users, value: "10,000+", label: "Students Guided", color: "text-primary" },
+    { icon: BookOpen, value: "50+", label: "Courses Available", color: "text-secondary" },
+    { icon: TrendingUp, value: "95%", label: "Success Rate", color: "text-accent" },
+    { icon: Award, value: "500+", label: "Companies Partner", color: "text-success" }
   ];
 
   const testimonials = [
     {
       name: "Priya Sharma",
       role: "Software Engineer at TCS",
-      image:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      content:
-        "CareerGuide helped me land my dream job! The personalized guidance and interview preparation were game-changers.",
-      rating: 5,
+      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      content: "CareerGuide helped me land my dream job! The personalized guidance and interview preparation were game-changers.",
+      rating: 5
     },
     {
       name: "Rohit Kumar",
       role: "Data Scientist at Flipkart",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      content:
-        "The AI-powered recommendations were spot-on. I got placed in my preferred company within 3 months!",
-      rating: 5,
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      content: "The AI-powered recommendations were spot-on. I got placed in my preferred company within 3 months!",
+      rating: 5
     },
     {
       name: "Anita Patel",
       role: "Product Manager at Zomato",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-      content:
-        "From college selection to job placement, CareerGuide was with me every step of the way. Highly recommended!",
-      rating: 5,
-    },
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      content: "From college selection to job placement, CareerGuide was with me every step of the way. Highly recommended!",
+      rating: 5
+    }
   ];
 
   const features = [
     {
       icon: Zap,
       title: "AI-Powered Matching",
-      description: "Advanced algorithms match you with perfect opportunities",
+      description: "Advanced algorithms match you with perfect opportunities"
     },
     {
       icon: Target,
       title: "Personalized Guidance",
-      description: "Tailored advice based on your unique profile and goals",
+      description: "Tailored advice based on your unique profile and goals"
     },
     {
       icon: Globe,
       title: "Industry Network",
-      description: "Connect with professionals and companies in your field",
+      description: "Connect with professionals and companies in your field"
     },
     {
       icon: Clock,
       title: "24/7 Support",
-      description: "Round-the-clock assistance for all your career queries",
-    },
+      description: "Round-the-clock assistance for all your career queries"
+    }
   ];
 
   const companyLogos = [
-    <div
-      key="google"
-      className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300"
-    >
-      <span className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-red-500 bg-clip-text text-transparent">
-        Google
-      </span>
+    <div key="google" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
+      <span className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-red-500 bg-clip-text text-transparent">Google</span>
     </div>,
-    <div
-      key="microsoft"
-      className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300"
-    >
+    <div key="microsoft" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
       <span className="text-2xl font-bold text-blue-600">Microsoft</span>
     </div>,
-    <div
-      key="amazon"
-      className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300"
-    >
+    <div key="amazon" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
       <span className="text-2xl font-bold text-orange-500">Amazon</span>
     </div>,
-    <div
-      key="apple"
-      className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300"
-    >
+    <div key="apple" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
       <span className="text-2xl font-bold text-gray-800">Apple</span>
     </div>,
-    <div
-      key="netflix"
-      className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300"
-    >
+    <div key="netflix" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
       <span className="text-2xl font-bold text-red-600">Netflix</span>
     </div>,
-    <div
-      key="tesla"
-      className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300"
-    >
+    <div key="tesla" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
       <span className="text-2xl font-bold text-gray-900">Tesla</span>
     </div>,
-    <div
-      key="spotify"
-      className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300"
-    >
+    <div key="spotify" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
       <span className="text-2xl font-bold text-green-600">Spotify</span>
     </div>,
-    <div
-      key="uber"
-      className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300"
-    >
+    <div key="uber" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
       <span className="text-2xl font-bold text-black">Uber</span>
-    </div>,
+    </div>
   ];
 
   return (
@@ -362,19 +214,13 @@ const Home = () => {
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-background overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-
+        
         {/* Floating bubbles */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-float floating-bubble"></div>
-        <div
-          className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-float floating-bubble"
-          style={{ animationDelay: "2s" }}
-        ></div>
-        <div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-accent/5 rounded-full blur-2xl animate-float floating-bubble"
-          style={{ animationDelay: "4s" }}
-        ></div>
-
-        <div
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-float floating-bubble" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-accent/5 rounded-full blur-2xl animate-float floating-bubble" style={{ animationDelay: '4s' }}></div>
+        
+        <div 
           ref={heroRef}
           className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-animate pt-20 w-full"
         >
@@ -382,387 +228,24 @@ const Home = () => {
             <Sparkles className="h-4 w-4 mr-2" />
             AI-Powered Career Guidance Platform
           </Badge>
-
+          
           <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-            Find Your <span className="gradient-text">Next Step</span>
+            Find Your{" "}
+            <span className="gradient-text">
+              Next Step
+            </span>
             <br />
             <span className="inline-block">in Your Career Journey</span>
           </h1>
-
+          
           <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-            Personalized AI-powered guidance for students and freshers to
-            navigate their career path with confidence and achieve their dreams
+            Personalized AI-powered guidance for students and freshers to navigate 
+            their career path with confidence and achieve their dreams
           </p>
 
-          {/* Search Bar Section */}
+          {/* Action Search Bar Section */}
           <div className="mb-16 animate-[fade-in_1s_ease-out_1.5s_both]">
-            {/* Search Header */}
-            <div className="text-center mb-6">
-              <h3 className="text-lg font-display font-semibold text-foreground mb-2">
-                Discover Your Future
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Search from 50,000+ colleges, courses & career opportunities
-              </p>
-            </div>
-
-            {/* Premium Search Container */}
-            <div
-              ref={searchContainerRef}
-              className="relative max-w-4xl mx-auto"
-            >
-              {/* Search Bar */}
-              <div className="relative bg-card border border-border/50 rounded-xl p-4 md:p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-primary/30">
-                {/* Desktop Search */}
-                <div className="hidden md:grid md:grid-cols-12 gap-4 items-center">
-                  {/* Goal Dropdown */}
-                  <div className="col-span-3">
-                    <label className="block text-xs font-medium text-muted-foreground mb-2">
-                      Study Goal
-                    </label>
-                    <Select onValueChange={setSelectedGoal}>
-                      <SelectTrigger className="group h-11 bg-background border border-input hover:border-primary/60 hover:bg-primary/5 rounded-lg font-medium text-foreground transition-all duration-300 focus:border-primary focus:ring-2 focus:ring-primary/10 focus:bg-primary/5">
-                        <SelectValue placeholder="Select Goal" />
-                      </SelectTrigger>
-                      <SelectContent className="z-[9999] bg-card border border-border shadow-xl rounded-lg min-w-[200px]">
-                        {goals.map((goal) => (
-                          <SelectItem
-                            key={goal}
-                            value={goal.toLowerCase()}
-                            className="font-medium hover:bg-primary/10 focus:bg-primary/10 cursor-pointer"
-                          >
-                            {goal}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* City Dropdown */}
-                  <div className="col-span-3">
-                    <label className="block text-xs font-medium text-muted-foreground mb-2">
-                      Location
-                    </label>
-                    <Select onValueChange={setSelectedCity}>
-                      <SelectTrigger className="group h-11 bg-background border border-input hover:border-primary/60 hover:bg-primary/5 rounded-lg font-medium text-foreground transition-all duration-300 focus:border-primary focus:ring-2 focus:ring-primary/10 focus:bg-primary/5">
-                        <SelectValue placeholder="Select City" />
-                      </SelectTrigger>
-                      <SelectContent className="z-[9999] bg-card border border-border shadow-xl rounded-lg min-w-[200px]">
-                        {cities.map((city) => (
-                          <SelectItem
-                            key={city}
-                            value={city.toLowerCase()}
-                            className="font-medium hover:bg-primary/10 focus:bg-primary/10 cursor-pointer"
-                          >
-                            {city}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Premium Search Input */}
-                  <div className="col-span-4">
-                    <label className="block text-xs font-medium text-muted-foreground mb-2">
-                      Search
-                    </label>
-                    <div className="relative group">
-                      <Search
-                        className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-all duration-300 ${
-                          searchQuery
-                            ? "text-primary"
-                            : "text-muted-foreground group-focus-within:text-primary"
-                        }`}
-                      />
-                      <Input
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Colleges, courses, exams..."
-                        className="h-11 pl-10 bg-background border border-input hover:border-primary/60 hover:bg-primary/5 rounded-lg font-medium text-foreground transition-all duration-300 focus:border-primary focus:ring-2 focus:ring-primary/10 focus:bg-primary/5 focus:outline-none placeholder:text-muted-foreground/60"
-                        onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                      />
-                      {searchQuery && (
-                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                          <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Enhanced Search Button */}
-                  <div className="col-span-2">
-                    <label className="block text-xs font-medium text-transparent mb-2 select-none">
-                      Action
-                    </label>
-                    <Button
-                      onClick={handleSearch}
-                      disabled={isSearching}
-                      className="w-full h-11 bg-primary hover:bg-primary/90 active:bg-primary/80 text-primary-foreground font-semibold rounded-lg shadow-sm hover:shadow-lg active:shadow-sm transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
-                    >
-                      {isSearching ? (
-                        <LoadingSpinner size="sm" className="mr-2" />
-                      ) : (
-                        <Search className="h-4 w-4 mr-2" />
-                      )}
-                      {isSearching ? "Searching..." : "Search"}
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Mobile Search - Premium Layout */}
-                <div className="md:hidden space-y-3">
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-xs font-medium text-muted-foreground mb-2">
-                        Study Goal
-                      </label>
-                      <Select onValueChange={setSelectedGoal}>
-                        <SelectTrigger className="group h-11 w-full bg-background border border-input hover:border-primary/60 hover:bg-primary/5 rounded-lg font-medium text-foreground transition-all duration-300 focus:border-primary focus:ring-2 focus:ring-primary/10 focus:bg-primary/5">
-                          <SelectValue placeholder="Select Study Goal" />
-                        </SelectTrigger>
-                        <SelectContent className="z-[9999] bg-card border border-border shadow-xl rounded-lg">
-                          {goals.map((goal) => (
-                            <SelectItem
-                              key={goal}
-                              value={goal.toLowerCase()}
-                              className="font-medium hover:bg-primary/10 focus:bg-primary/10 cursor-pointer"
-                            >
-                              {goal}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-medium text-muted-foreground mb-2">
-                        Location
-                      </label>
-                      <Select onValueChange={setSelectedCity}>
-                        <SelectTrigger className="group h-11 w-full bg-background border border-input hover:border-primary/60 hover:bg-primary/5 rounded-lg font-medium text-foreground transition-all duration-300 focus:border-primary focus:ring-2 focus:ring-primary/10 focus:bg-primary/5">
-                          <SelectValue placeholder="Select Location" />
-                        </SelectTrigger>
-                        <SelectContent className="z-[9999] bg-card border border-border shadow-xl rounded-lg">
-                          {cities.map((city) => (
-                            <SelectItem
-                              key={city}
-                              value={city.toLowerCase()}
-                              className="font-medium hover:bg-primary/10 focus:bg-primary/10 cursor-pointer"
-                            >
-                              {city}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-medium text-muted-foreground mb-2">
-                        Search
-                      </label>
-                      <div className="relative group">
-                        <Search
-                          className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-all duration-300 ${
-                            searchQuery
-                              ? "text-primary"
-                              : "text-muted-foreground group-focus-within:text-primary"
-                          }`}
-                        />
-                        <Input
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          placeholder="Colleges, courses, exams..."
-                          className="h-11 pl-10 w-full bg-background border border-input hover:border-primary/60 hover:bg-primary/5 rounded-lg font-medium text-foreground transition-all duration-300 focus:border-primary focus:ring-2 focus:ring-primary/10 focus:bg-primary/5 focus:outline-none placeholder:text-muted-foreground/60"
-                          onKeyPress={(e) =>
-                            e.key === "Enter" && handleSearch()
-                          }
-                        />
-                        {searchQuery && (
-                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                            <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <Button
-                    onClick={handleSearch}
-                    disabled={isSearching}
-                    className="w-full h-11 bg-primary hover:bg-primary/90 active:bg-primary/80 text-primary-foreground font-semibold rounded-lg shadow-sm hover:shadow-lg active:shadow-sm transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] mt-3"
-                  >
-                    {isSearching ? (
-                      <LoadingSpinner size="sm" className="mr-2" />
-                    ) : (
-                      <Search className="h-4 w-4 mr-2" />
-                    )}
-                    {isSearching ? "Searching..." : "Search"}
-                  </Button>
-                </div>
-              </div>
-
-              {/* Search Results - Clean Layout */}
-              {showResults && (
-                <div className="absolute top-full mt-2 w-full bg-card border border-border/50 rounded-xl shadow-xl max-h-[70vh] overflow-hidden z-[999]">
-                  {searchResults.length > 0 ? (
-                    <>
-                      <div className="p-4 border-b border-border/50 bg-muted/30">
-                        <h4 className="font-semibold text-foreground text-sm">
-                          Found {searchResults.length} colleges
-                        </h4>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Click on any college to view details
-                        </p>
-                      </div>
-                      <div className="divide-y divide-border/30 max-h-[50vh] overflow-y-auto">
-                        {searchResults.map((college) => (
-                          <div
-                            key={college.id}
-                            onClick={() => handleCollegeSelect(college.id)}
-                            className="p-4 hover:bg-muted/50 cursor-pointer transition-all duration-200 border-l-2 border-transparent hover:border-primary/30"
-                          >
-                            {/* Mobile Layout - Enhanced */}
-                            <div className="md:hidden">
-                              <div className="flex items-start gap-3 mb-3">
-                                <img
-                                  src={college.image}
-                                  alt={college.name}
-                                  className="w-16 h-14 object-cover rounded-xl flex-shrink-0 shadow-md border border-border/30"
-                                />
-                                <div className="flex-1 min-w-0">
-                                  <h3 className="font-bold text-foreground text-sm leading-tight line-clamp-2 mb-1">
-                                    {college.name}
-                                  </h3>
-                                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                    <div className="flex items-center gap-1">
-                                      <MapPin className="h-3 w-3 text-primary/70" />
-                                      <span>{college.location}</span>
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                      <span className="font-semibold">
-                                        {college.rating}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="text-right flex-shrink-0">
-                                  <div className="text-sm font-bold text-primary">
-                                    {college.fees}
-                                  </div>
-                                  <div className="text-xs text-muted-foreground">
-                                    Fees
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="space-y-2">
-                                <div className="flex flex-wrap gap-1.5">
-                                  <span className="bg-primary/15 text-primary px-2 py-1 rounded-full text-xs font-semibold border border-primary/20">
-                                    {college.type}
-                                  </span>
-                                  <span className="bg-muted/70 text-muted-foreground px-2 py-1 rounded-full text-xs font-medium">
-                                    #{college.rank.nirf}
-                                  </span>
-                                  <span className="bg-success/15 text-success px-2 py-1 rounded-full text-xs font-semibold border border-success/20">
-                                    {college.placement.percentage}%
-                                  </span>
-                                </div>
-
-                                <div className="text-xs text-muted-foreground bg-muted/20 rounded-lg p-2">
-                                  <span className="font-semibold text-foreground">
-                                    Courses:
-                                  </span>{" "}
-                                  {college.courses.slice(0, 2).join(", ")}
-                                  {college.courses.length > 2 &&
-                                    ` +${college.courses.length - 2} more`}
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Desktop Layout - Enhanced */}
-                            <div className="hidden md:block">
-                              <div className="flex items-start gap-4">
-                                <img
-                                  src={college.image}
-                                  alt={college.name}
-                                  className="w-24 h-18 object-cover rounded-xl flex-shrink-0 shadow-md border border-border/30"
-                                />
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-start justify-between gap-4">
-                                    <div className="flex-1">
-                                      <h3 className="font-bold text-foreground text-lg leading-tight mb-2">
-                                        {college.name}
-                                      </h3>
-                                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                        <div className="flex items-center gap-1">
-                                          <MapPin className="h-4 w-4 text-primary/70" />
-                                          <span className="font-medium">
-                                            {college.location}
-                                          </span>
-                                        </div>
-                                        <div className="flex items-center gap-1">
-                                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                                          <span className="font-bold">
-                                            {college.rating}
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="text-right flex-shrink-0">
-                                      <div className="text-xl font-bold text-primary">
-                                        {college.fees}
-                                      </div>
-                                      <div className="text-sm text-muted-foreground">
-                                        Total Fees
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div className="flex items-center gap-3 mt-3">
-                                    <span className="bg-primary/15 text-primary px-3 py-1.5 rounded-full text-sm font-semibold border border-primary/20">
-                                      {college.type}
-                                    </span>
-                                    <span className="bg-muted/70 text-muted-foreground px-3 py-1.5 rounded-full text-sm font-medium">
-                                      NIRF: #{college.rank.nirf}
-                                    </span>
-                                    <span className="bg-success/15 text-success px-3 py-1.5 rounded-full text-sm font-semibold border border-success/20">
-                                      {college.placement.percentage}% Placed
-                                    </span>
-                                  </div>
-
-                                  <div className="mt-3 text-sm text-muted-foreground bg-muted/20 rounded-lg p-3">
-                                    <span className="font-semibold text-foreground">
-                                      Courses:
-                                    </span>{" "}
-                                    {college.courses.slice(0, 3).join(", ")}
-                                    {college.courses.length > 3 &&
-                                      ` +${college.courses.length - 3} more`}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <div className="p-8 text-center">
-                      <div className="bg-muted/30 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                        <Search className="h-10 w-10 text-muted-foreground opacity-50" />
-                      </div>
-                      <h4 className="font-bold text-foreground mb-2 text-base">
-                        No colleges found
-                      </h4>
-                      <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                        Try adjusting your search criteria or browse our
-                        featured colleges below
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+            <ActionSearchBar onCollegeSelect={handleCollegeSelect} />
           </div>
 
           {/* Select Your Study Goal Section */}
@@ -770,17 +253,12 @@ const Home = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">
               Select Your Study Goal
             </h2>
-
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
               {studyGoals.map((goal, index) => (
-                <Card
-                  key={index}
-                  className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 border-gray-200 hover:border-primary/50"
-                >
+                <Card key={index} className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 border-gray-200 hover:border-primary/50">
                   <CardContent className="p-6 text-center">
-                    <div
-                      className={`w-16 h-16 mx-auto mb-4 rounded-2xl ${goal.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
-                    >
+                    <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl ${goal.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                       <goal.icon className={`h-8 w-8 ${goal.iconColor}`} />
                     </div>
                     <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">
@@ -789,18 +267,16 @@ const Home = () => {
                     <p className="text-sm text-muted-foreground group-hover:text-muted-foreground/80">
                       {goal.subtitle}
                     </p>
-                    <div
-                      className={`h-1 w-0 group-hover:w-full bg-gradient-to-r ${goal.color} rounded-full transition-all duration-500 mt-4 mx-auto`}
-                    ></div>
+                    <div className={`h-1 w-0 group-hover:w-full bg-gradient-to-r ${goal.color} rounded-full transition-all duration-500 mt-4 mx-auto`}></div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           </div>
-
+          
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 animate-[fade-in_1s_ease-out_2.5s_both]">
-            <Button
-              size="lg"
+            <Button 
+              size="lg" 
               className="bg-gradient-to-r from-primary to-secondary hover:from-primary-light hover:to-secondary-light shadow-xl text-lg px-8 py-4 h-auto hover-lift group"
               asChild
             >
@@ -810,10 +286,10 @@ const Home = () => {
                 <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
               </Link>
             </Button>
-
-            <Button
-              variant="outline"
-              size="lg"
+            
+            <Button 
+              variant="outline" 
+              size="lg" 
               className="border-primary/30 hover:border-primary/60 text-lg px-8 py-4 h-auto hover-lift"
               asChild
             >
@@ -830,9 +306,7 @@ const Home = () => {
               <div key={index} className="text-center hover-lift">
                 <stat.icon className={`h-8 w-8 mx-auto mb-2 ${stat.color}`} />
                 <div className="text-2xl font-bold">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">
-                  {stat.label}
-                </div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -841,34 +315,30 @@ const Home = () => {
 
       {/* User Types Section */}
       <section className="py-24 page-bg-alternate">
-        <div
+        <div 
           ref={featuresRef}
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
         >
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Designed for <span className="gradient-text">Every Journey</span>
+              Designed for{" "}
+              <span className="gradient-text">
+                Every Journey
+              </span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Whether you're starting college, currently studying, or ready to
-              enter the workforce, we have the perfect guidance for your career
-              stage
+              Whether you're starting college, currently studying, or ready to enter the workforce, 
+              we have the perfect guidance for your career stage
             </p>
           </div>
-
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {userTypes.map((type, index) => (
               <Card key={index} className="content-section hover-lift group">
                 <CardContent className="p-8">
-                  <div className="text-6xl mb-6 text-center group-hover:animate-bounce">
-                    {type.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4 text-center">
-                    {type.title}
-                  </h3>
-                  <p className="text-muted-foreground mb-6 text-center leading-relaxed">
-                    {type.description}
-                  </p>
+                  <div className="text-6xl mb-6 text-center group-hover:animate-bounce">{type.icon}</div>
+                  <h3 className="text-2xl font-bold mb-4 text-center">{type.title}</h3>
+                  <p className="text-muted-foreground mb-6 text-center leading-relaxed">{type.description}</p>
                   <div className="space-y-3">
                     {type.features.map((feature, idx) => (
                       <div key={idx} className="flex items-center">
@@ -887,7 +357,7 @@ const Home = () => {
       {/* Stats Section */}
       <section className="py-24 bg-gradient-to-r from-primary via-primary-light to-secondary text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
-        <div
+        <div 
           ref={statsRef}
           className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
         >
@@ -896,11 +366,10 @@ const Home = () => {
               Trusted by Thousands
             </h2>
             <p className="text-xl text-primary-foreground/90 max-w-3xl mx-auto">
-              Join our growing community of successful students and
-              professionals
+              Join our growing community of successful students and professionals
             </p>
           </div>
-
+          
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center group hover-lift">
@@ -920,16 +389,16 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Why Choose <span className="gradient-text">CareerGuide?</span>
+              Why Choose{" "}
+              <span className="gradient-text">
+                CareerGuide?
+              </span>
             </h2>
           </div>
-
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <Card
-                key={index}
-                className="content-section hover-lift group text-center"
-              >
+              <Card key={index} className="content-section hover-lift group text-center">
                 <CardContent className="p-8">
                   <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-4 rounded-2xl w-16 h-16 mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                     <feature.icon className="h-8 w-8 text-primary" />
@@ -945,48 +414,43 @@ const Home = () => {
 
       {/* Testimonials Section */}
       <section className="py-24 page-bg-alternate">
-        <div
+        <div 
           ref={testimonialsRef}
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
         >
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Success <span className="gradient-text">Stories</span>
+              Success{" "}
+              <span className="gradient-text">
+                Stories
+              </span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Hear from our students who have successfully transformed their
-              careers
+              Hear from our students who have successfully transformed their careers
             </p>
           </div>
-
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="content-section hover-lift">
                 <CardContent className="p-8">
                   <div className="flex items-center mb-6">
-                    <img
-                      src={testimonial.image}
+                    <img 
+                      src={testimonial.image} 
                       alt={testimonial.name}
                       className="w-16 h-16 rounded-full mr-4 object-cover"
                     />
                     <div>
                       <h4 className="font-bold">{testimonial.name}</h4>
-                      <p className="text-sm text-muted-foreground">
-                        {testimonial.role}
-                      </p>
+                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                     </div>
                   </div>
                   <div className="flex mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="h-5 w-5 text-yellow-400 fill-current"
-                      />
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                     ))}
                   </div>
-                  <p className="text-muted-foreground italic">
-                    "{testimonial.content}"
-                  </p>
+                  <p className="text-muted-foreground italic">"{testimonial.content}"</p>
                 </CardContent>
               </Card>
             ))}
@@ -1014,11 +478,10 @@ const Home = () => {
             Ready to Transform Your Career?
           </h2>
           <p className="text-xl mb-12 text-primary-foreground/90">
-            Join thousands of students who have already started their journey to
-            success
+            Join thousands of students who have already started their journey to success
           </p>
-          <Button
-            size="lg"
+          <Button 
+            size="lg" 
             className="bg-white text-primary hover:bg-white/90 shadow-xl text-lg px-8 py-4 h-auto hover-lift group"
             asChild
           >
