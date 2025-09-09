@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { searchColleges } from "@/data/mockColleges";
+import { collegeApi } from "@/services/api";
 import { Search, Send, MapPin, GraduationCap } from "lucide-react";
 
 // Debounce hook
@@ -42,7 +42,7 @@ function ActionSearchBar({
   const [isFocused, setIsFocused] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [selectedCollege, setSelectedCollege] = useState(null);
-  const [highlightIndex, setHighlightIndex] = useState(-1);
+  const [highlightIndex, setHighlightIndex] = useState(0);
   const containerRef = useRef(null);
 
   const debouncedQuery = useDebounce(query, 300);
@@ -53,16 +53,32 @@ function ActionSearchBar({
       return;
     }
 
-    if (!debouncedQuery.trim()) {
-      const popularColleges = searchColleges("", "", "").slice(0, 6);
-      setResult({ colleges: popularColleges });
-      return;
-    }
+    const fetchColleges = async () => {
+      setIsSearching(true);
+      try {
+        let response;
+        if (!debouncedQuery.trim()) {
+          // Show popular colleges when no query
+          response = await collegeApi.getPopularColleges(6);
+        } else {
+          // Search colleges with query
+          response = await collegeApi.searchSmart(debouncedQuery, "", "", 8);
+        }
+        
+        if (response.success) {
+          setResult({ colleges: response.data });
+        } else {
+          setResult({ colleges: [] });
+        }
+      } catch (error) {
+        console.error('Error fetching colleges:', error);
+        setResult({ colleges: [] });
+      } finally {
+        setIsSearching(false);
+      }
+    };
 
-    setIsSearching(true);
-    const colleges = searchColleges(debouncedQuery, "", "");
-    setResult({ colleges: colleges.slice(0, 8) });
-    setIsSearching(false);
+    fetchColleges();
   }, [debouncedQuery, isFocused]);
 
   // Handle outside click
@@ -91,10 +107,10 @@ function ActionSearchBar({
         setHighlightIndex((prev) =>
           prev > 0 ? prev - 1 : result.colleges.length - 1
         );
-      } else if (e.key === "Enter" && highlightIndex >= 0) {
+      } else if (e.key === "Enter") {
         e.preventDefault();
-        const selected = result.colleges[highlightIndex];
-        handleCollegeClick(selected);
+        const selected = result.colleges?.[highlightIndex] || result.colleges?.[0];
+        if (selected) handleCollegeClick(selected);
       } else if (e.key === "Escape") {
         setIsFocused(false);
       }
@@ -158,8 +174,8 @@ function ActionSearchBar({
                 type="button"
                 onClick={() => {
                   if (query.trim()) {
-                    console.log("Searching for:", query);
-                    // 🔹 You can trigger your search logic here
+                    const top = result?.colleges?.[highlightIndex] || result?.colleges?.[0];
+                    if (top) handleCollegeClick(top);
                   }
                 }}
                 className="cursor-pointer p-1 rounded-md hover:bg-muted transition"
@@ -224,7 +240,7 @@ function ActionSearchBar({
                             </div>
                             <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
                               <MapPin className="h-3 w-3" />
-                              <span>{college.location}</span>
+                              <span>{[college.address, college.city, college.state].filter(Boolean).join(", ")}</span>
                               <span>•</span>
                               <span>{college.type}</span>
                             </div>
