@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model College {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(512)
+  type      String   @db.VarChar(128)
+  address   String?  @db.VarChar(512)
+  city      String?  @db.VarChar(128)
+  state     String?  @db.VarChar(128)
+  estd      String?  @db.VarChar(64)
+  approvedBy String? @db.VarChar(128)
+  affiliatedUniversity String? @db.VarChar(256)
+  rankText  String?  @db.VarChar(512)
+  coursesAndFees String? @db.Text
+  email     String?  @db.VarChar(256)
+  phone     String?  @db.VarChar(64)
+  image     String?  @db.Text
+  brochure  String?  @db.Text
+
+  @@index([name])
+  @@index([city])
+  @@index([state])
+  @@index([type])
+  @@index([name, city, state])
+}
+
+

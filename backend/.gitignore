@@ -1,0 +1,28 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Prisma generated files
+prisma/migrations/
+prisma/dev.db
+
+# Build output (if you compile)
+dist/
+build/
+
+# CSV data files (optional: keep them out of Git)
+data/*.csv
+
+# OS files
+.DS_Store
+Thumbs.db
+
+/generated/prisma
