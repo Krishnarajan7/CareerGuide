@@ -23,7 +23,7 @@ import {
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const Dashboard = () => {
-  const [userType] = useState<"college-joining" | "college-student" | "fresher">("college-student");
+  const [userType] = useState("college-student");
   const headerRef = useScrollAnimation();
   const statsRef = useScrollAnimation();
   const contentRef = useScrollAnimation();

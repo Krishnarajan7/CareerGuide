@@ -9,6 +9,8 @@ import {
   Home,
   Rocket,
   X,
+  Briefcase,
+  Shield,
 } from "lucide-react";
 
 const Navigation = () => {
@@ -18,6 +20,7 @@ const Navigation = () => {
 
   const navItems = [
     { name: "Home", href: "/", icon: Home },
+    { name: "Careers", href: "/careers", icon: Briefcase },
     { name: "Courses", href: "/courses", icon: BookOpen },
     { name: "Resume Builder", href: "/resume-builder", icon: FileText },
     { name: "Contact", href: "/contact", icon: Phone },
@@ -103,7 +106,7 @@ const Navigation = () => {
                   <span className="whitespace-nowrap">{item.name}</span>
                   {isActive(item.href) && (
                     <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full shadow-lg -z-10"></div>
-                  )}  
+                  )}
                 </Link>
               ))}
             </div>
@@ -117,6 +120,17 @@ const Navigation = () => {
                 asChild
               >
                 <Link to="/register">Register</Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-accent/20 hover:border-accent/40 hover:bg-accent/5 transition-all duration-300"
+                asChild
+              >
+                <Link to="/admin" className="flex items-center space-x-2">
+                  <Shield className="h-4 w-4" />
+                  <span>Admin</span>
+                </Link>
               </Button>
               <Button
                 size="sm"
@@ -236,6 +250,16 @@ const Navigation = () => {
                 >
                   <Link to="/register" onClick={() => setIsOpen(false)}>
                     <span className="ml-2">Register</span>
+                  </Link>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start h-12 border-accent/20 hover:border-accent/40 hover:bg-accent/5"
+                  asChild
+                >
+                  <Link to="/admin" onClick={() => setIsOpen(false)}>
+                    <Shield className="h-5 w-5 mr-3" />
+                    Admin
                   </Link>
                 </Button>
                 <Button

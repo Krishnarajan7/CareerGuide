@@ -8,6 +8,8 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Admin from "./pages/Admin";
+import Careers from "./pages/Careers";
 import Courses from "./pages/Courses";
 import ResumeBuilder from "./pages/ResumeBuilder";
 import Contact from "./pages/Contact";
@@ -29,6 +31,8 @@ const App = () => (
               <Route path="/" element={<Home />} />
               <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/careers" element={<Careers />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/resume-builder" element={<ResumeBuilder />} />
               <Route path="/contact" element={<Contact />} />
