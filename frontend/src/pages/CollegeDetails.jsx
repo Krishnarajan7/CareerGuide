@@ -112,7 +112,7 @@ const CollegeDetails = () => {
           
           <div className="grid md:grid-cols-3 gap-8">
             <div className="md:col-span-2">
-              <h1 className="text-4xl font-bold mb-4">{college.name}</h1>
+              <h1 className="text-3xl md:text-4xl font-bold mb-4">{college.name}</h1>
               <div className="flex items-center gap-4 mb-4">
                 {[college.address, college.city, college.state].filter(Boolean).length > 0 && (
                   <div className="flex items-center gap-1 text-muted-foreground">

@@ -174,7 +174,7 @@ const Courses = () => {
           ref={headerRef}
           className="text-center mb-12 scroll-animate"
         >
-          <h1 className="text-4xl font-bold text-foreground mb-4 animate-fadeInUp">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 animate-fadeInUp">
             Explore Our{" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               Courses
@@ -187,7 +187,7 @@ const Courses = () => {
 
         {/* Featured Courses */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold text-foreground mb-8 animate-fadeInUp">Featured Courses</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8 animate-fadeInUp">Featured Courses</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredCourses.map((course, index) => (
               <Card key={course.id} className="content-section hover-lift group animate-bounce-in" style={{ animationDelay: `${index * 0.1}s` }}>
@@ -326,7 +326,7 @@ const Courses = () => {
           className="scroll-animate"
         >
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-foreground">All Courses</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">All Courses</h2>
             <div className="text-muted-foreground">
               {filteredCourses.length} course{filteredCourses.length !== 1 ? 's' : ''} found
             </div>
@@ -407,7 +407,7 @@ const Courses = () => {
 
         {/* CTA Section */}
         <div className="text-center bg-gradient-to-r from-primary to-secondary rounded-2xl p-8 mt-16 animate-fadeInUp">
-          <h2 className="text-3xl font-bold text-primary-foreground mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-4">
             Ready to Start Learning?
           </h2>
           <p className="text-primary-foreground/90 text-lg mb-6 max-w-2xl mx-auto">

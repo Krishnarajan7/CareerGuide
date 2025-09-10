@@ -118,7 +118,7 @@ const Contact = () => {
           ref={headerRef}
           className="text-center mb-12 scroll-animate"
         >
-          <h1 className="text-4xl font-bold text-foreground mb-4 animate-fadeInUp">Get In Touch</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 animate-fadeInUp">Get In Touch</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
             Have questions about your career journey? We're here to help. 
             Reach out to us and let's discuss how we can support your goals.
@@ -322,7 +322,7 @@ const Contact = () => {
 
         {/* CTA Section */}
         <div className="text-center bg-gradient-to-r from-primary to-secondary rounded-2xl p-8 animate-fadeInUp">
-          <h2 className="text-3xl font-bold text-primary-foreground mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-4">
             Still Have Questions?
           </h2>
           <p className="text-primary-foreground/90 text-lg mb-6 max-w-2xl mx-auto">

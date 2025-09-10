@@ -300,7 +300,7 @@ const Register = () => {
               <div className="flex items-center justify-center mb-4">
                 <UserPlus className="w-10 h-10 text-primary mr-3" />
               </div>
-              <CardTitle className="text-5xl font-bold gradient-text mb-6">
+              <CardTitle className="text-3xl md:text-4xl font-bold gradient-text mb-6">
                 Student Registration
               </CardTitle>
               <CardDescription className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">

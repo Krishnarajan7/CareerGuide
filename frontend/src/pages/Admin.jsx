@@ -643,7 +643,7 @@ const Admin = () => {
               <CardHeader className="pb-4">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0">
                   <div>
-                    <CardTitle className="text-2xl">Job Management</CardTitle>
+                    <CardTitle className="text-xl md:text-2xl">Job Management</CardTitle>
                     <p className="text-muted-foreground">
                       Create, edit, and manage job postings with advanced filtering and bulk actions
                     </p>
