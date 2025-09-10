@@ -181,7 +181,7 @@ const Footer = () => {
               </div>
               <div>
                 <div className="text-sm text-white/60">Visit us</div>
-                <span className="text-white">Bangalore, India</span>
+                <span className="text-white">Chennai, India</span>
               </div>
             </div>
           </div>

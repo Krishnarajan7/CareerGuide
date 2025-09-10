@@ -289,7 +289,7 @@ const Careers = () => {
         {/* Header */}
         <div ref={headerRef} className="scroll-animate mb-12">
           <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">
               Find Your Dream <span className="gradient-text">Career</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
@@ -300,19 +300,19 @@ const Careers = () => {
             {/* Quick Stats */}
             <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto mb-8">
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary mb-1">
+                <div className="text-2xl font-bold text-primary mb-1">
                   {mockJobs.length}+
                 </div>
                 <div className="text-sm text-muted-foreground">Active Jobs</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-secondary mb-1">
+                <div className="text-2xl font-bold text-secondary mb-1">
                   50+
                 </div>
                 <div className="text-sm text-muted-foreground">Companies</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-accent mb-1">95%</div>
+                <div className="text-2xl font-bold text-accent mb-1">95%</div>
                 <div className="text-sm text-muted-foreground">
                   Success Rate
                 </div>
@@ -413,7 +413,7 @@ const Careers = () => {
           {/* Jobs List */}
           <div ref={jobsRef} className="scroll-animate">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-2">
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-xl font-bold">
                 {filteredJobs.length} Job{filteredJobs.length !== 1 ? "s" : ""}{" "}
                 Found
               </h2>
@@ -561,7 +561,7 @@ const Careers = () => {
 
             {filteredJobs.length === 0 && (
               <div className="text-center py-12">
-                <div className="text-6xl mb-4">🔍</div>
+                <div className="text-5xl mb-4">🔍</div>
                 <h3 className="text-xl font-semibold mb-2">No Jobs Found</h3>
                 <p className="text-muted-foreground mb-4">
                   Try adjusting your search criteria or browse all available

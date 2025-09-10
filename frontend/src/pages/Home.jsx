@@ -229,7 +229,7 @@ const Home = () => {
             AI-Powered Career Guidance Platform
           </Badge>
           
-          <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+          <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
             Find Your{" "}
             <span className="gradient-text">
               Next Step
@@ -250,7 +250,7 @@ const Home = () => {
 
           {/* Select Your Study Goal Section */}
           <div className="mb-16 animate-[fade-in_1s_ease-out_2s_both]">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">
+            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-foreground">
               Select Your Study Goal
             </h2>
             
@@ -320,7 +320,7 @@ const Home = () => {
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
         >
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Designed for{" "}
               <span className="gradient-text">
                 Every Journey
@@ -336,8 +336,8 @@ const Home = () => {
             {userTypes.map((type, index) => (
               <Card key={index} className="content-section hover-lift group">
                 <CardContent className="p-8">
-                  <div className="text-6xl mb-6 text-center group-hover:animate-bounce">{type.icon}</div>
-                  <h3 className="text-2xl font-bold mb-4 text-center">{type.title}</h3>
+                  <div className="text-5xl mb-6 text-center group-hover:animate-bounce">{type.icon}</div>
+                  <h3 className="text-xl font-bold mb-4 text-center">{type.title}</h3>
                   <p className="text-muted-foreground mb-6 text-center leading-relaxed">{type.description}</p>
                   <div className="space-y-3">
                     {type.features.map((feature, idx) => (
@@ -362,7 +362,7 @@ const Home = () => {
           className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
         >
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Trusted by Thousands
             </h2>
             <p className="text-xl text-primary-foreground/90 max-w-3xl mx-auto">
@@ -375,7 +375,7 @@ const Home = () => {
               <div key={index} className="text-center group hover-lift">
                 <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl group-hover:bg-white/20 transition-all duration-300">
                   <stat.icon className="h-12 w-12 mx-auto mb-4 text-accent" />
-                  <div className="text-4xl font-bold mb-2">{stat.value}</div>
+                  <div className="text-3xl font-bold mb-2">{stat.value}</div>
                   <div className="text-primary-foreground/80">{stat.label}</div>
                 </div>
               </div>
@@ -388,7 +388,7 @@ const Home = () => {
       <section className="py-24 page-bg-gradient">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Why Choose{" "}
               <span className="gradient-text">
                 CareerGuide?
@@ -419,7 +419,7 @@ const Home = () => {
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
         >
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Success{" "}
               <span className="gradient-text">
                 Stories
@@ -461,7 +461,7 @@ const Home = () => {
       {/* Trusted Companies Section */}
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 className="text-3xl font-bold text-center mb-12 text-foreground">
+          <h3 className="text-2xl font-bold text-center mb-12 text-foreground">
             Trusted by Leading Companies
           </h3>
           <div className="content-section p-8">
@@ -474,7 +474,7 @@ const Home = () => {
       <section className="py-24 bg-gradient-to-r from-primary via-primary-light to-secondary text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-bold mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8">
             Ready to Transform Your Career?
           </h2>
           <p className="text-xl mb-12 text-primary-foreground/90">

@@ -548,7 +548,7 @@ const Admin = () => {
         {/* Header */}
         <div ref={headerRef} className="scroll-animate mb-12">
           <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">
               Admin <span className="gradient-text">Dashboard</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -571,7 +571,7 @@ const Admin = () => {
                     <p className="text-sm font-medium text-muted-foreground mb-2">
                       Total Jobs
                     </p>
-                    <p className="text-3xl font-bold text-primary">
+                    <p className="text-2xl font-bold text-primary">
                       {stats.total}
                     </p>
                   </div>
@@ -589,7 +589,7 @@ const Admin = () => {
                     <p className="text-sm font-medium text-muted-foreground mb-2">
                       Total Applications
                     </p>
-                    <p className="text-3xl font-bold text-secondary">
+                    <p className="text-2xl font-bold text-secondary">
                       {stats.totalApplications}
                     </p>
                   </div>
@@ -607,7 +607,7 @@ const Admin = () => {
                     <p className="text-sm font-medium text-muted-foreground mb-2">
                       Partner Companies
                     </p>
-                    <p className="text-3xl font-bold text-accent">
+                    <p className="text-2xl font-bold text-accent">
                       {stats.companies}
                     </p>
                   </div>
@@ -625,7 +625,7 @@ const Admin = () => {
                     <p className="text-sm font-medium text-muted-foreground mb-2">
                       Avg. Applications per Job
                     </p>
-                    <p className="text-3xl font-bold text-success">
+                    <p className="text-2xl font-bold text-success">
                       {stats.total > 0 ? Math.round(stats.totalApplications / stats.total) : 0}
                     </p>
                   </div>

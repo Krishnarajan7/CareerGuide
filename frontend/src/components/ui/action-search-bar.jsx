@@ -58,10 +58,9 @@ function ActionSearchBar({
       try {
         let response;
         if (!debouncedQuery.trim()) {
-          // Show popular colleges when no query
-          response = await collegeApi.getPopularColleges(6);
+
+          response = await collegeApi.getPopularColleges(5);
         } else {
-          // Search colleges with query
           response = await collegeApi.searchSmart(debouncedQuery, "", "", 8);
         }
         

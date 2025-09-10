@@ -229,7 +229,7 @@ const ResumeBuilder = () => {
                     ...prev,
                     personalInfo: { ...prev.personalInfo, location: e.target.value }
                   }))}
-                  placeholder="Bangalore, India"
+                  placeholder="Chennai, India"
                 />
               </div>
               <div className="space-y-2">
