@@ -88,6 +88,17 @@ export const collegeApi = {
       console.error('Error fetching popular colleges:', error);
       throw error;
     }
+  },
+
+  // Enrich college details from public datasets
+  async enrichCollegeById(id) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/colleges/${id}/enrich`);
+      return await handleResponse(response);
+    } catch (error) {
+      console.error('Error enriching college:', error);
+      throw error;
+    }
   }
 };
 

@@ -5,6 +5,7 @@ import { ActionSearchBar } from "@/components/ui/action-search-bar";
 import { Link, useNavigate } from "react-router-dom";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import InfiniteCarousel from "@/components/InfiniteCarousel";
+import SectionHeader from "@/components/SectionHeader";
 import {
   ArrowRight,
   BookOpen,
@@ -28,13 +29,180 @@ import {
   Atom
 } from "lucide-react";
 
+// Reusable Study Goal Card
+const StudyGoalCard = ({ goal, index }) => (
+  <Card
+    key={index}
+    className="group cursor-pointer hover:shadow-xl transition-all duration-300 border-2 border-gray-200 hover:border-primary/50"
+  >
+    <CardContent className="p-6 text-center">
+      <div
+        className={`w-16 h-16 mx-auto mb-4 rounded-2xl ${goal.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
+      >
+        <goal.icon className={`h-8 w-8 ${goal.iconColor}`} />
+      </div>
+      <h3 className="text-xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors">
+        {goal.title}
+      </h3>
+      <p className="text-sm text-muted-foreground group-hover:text-muted-foreground/80">
+        {goal.subtitle}
+      </p>
+      <div
+        className={`h-1 w-0 group-hover:w-full bg-gradient-to-r ${goal.color} rounded-full transition-all duration-500 mt-4 mx-auto`}
+      ></div>
+    </CardContent>
+  </Card>
+);
+
+// Reusable User Type Card
+const UserTypeCard = ({ type, index }) => (
+  <Card key={index} className="hover-lift group">
+    <CardContent className="p-8">
+      <div className="text-5xl mb-6 text-center group-hover:animate-bounce">{type.icon}</div>
+      <h3 className="text-xl font-bold mb-4 text-center">{type.title}</h3>
+      <p className="text-muted-foreground mb-6 text-center leading-relaxed">{type.description}</p>
+      <div className="space-y-3">
+        {type.features.map((feature, idx) => (
+          <div key={idx} className="flex items-center">
+            <CheckCircle className="h-5 w-5 text-success mr-3 flex-shrink-0" />
+            <span className="text-sm">{feature}</span>
+          </div>
+        ))}
+      </div>
+    </CardContent>
+  </Card>
+);
+
+// Reusable Stat Card
+const StatCard = ({ stat, index }) => (
+  <div key={index} className="text-center group hover-lift">
+    <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl group-hover:bg-white/20 transition-all duration-300">
+      <stat.icon className="h-10 w-10 mx-auto mb-4 text-accent" />
+      <div className="text-2xl font-bold mb-2">{stat.value}</div>
+      <div className="text-primary-foreground/80">{stat.label}</div>
+    </div>
+  </div>
+);
+
+// Reusable Feature Card
+const FeatureCard = ({ feature, index }) => (
+  <Card key={index} className="hover-lift group text-center">
+    <CardContent className="p-8">
+      <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-4 rounded-2xl w-16 h-16 mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+        <feature.icon className="h-8 w-8 text-primary" />
+      </div>
+      <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
+      <p className="text-muted-foreground">{feature.description}</p>
+    </CardContent>
+  </Card>
+);
+
+// Reusable Testimonial Card
+const TestimonialCard = ({ testimonial, index }) => (
+  <Card key={index} className="hover-lift">
+    <CardContent className="p-8">
+      <div className="flex items-center mb-6">
+        <img 
+          src={testimonial.image} 
+          alt={testimonial.name}
+          className="w-16 h-16 rounded-full mr-4 object-cover"
+          loading="lazy"
+        />
+        <div>
+          <h4 className="font-bold">{testimonial.name}</h4>
+          <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+        </div>
+      </div>
+      <div className="flex mb-4">
+        {[...Array(testimonial.rating)].map((_, i) => (
+          <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+        ))}
+      </div>
+      <p className="text-muted-foreground italic">"{testimonial.content}"</p>
+    </CardContent>
+  </Card>
+);
+
+// Hero Section (adjusted padding to avoid navbar overlap)
+const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals }) => {
+  const navigate = useNavigate();
+
+  return (
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/20 to-background overflow-hidden py-12 md:py-16">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
+
+      <div
+        ref={heroRef}
+        className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-animate z-10 pt-12 sm:pt-16 md:pt-12 lg:pt-12" 
+      >
+        <Badge className="mb-6 inline-flex items-center px-4 py-2 text-sm font-medium bg-primary/10 text-primary border-primary/20 shadow-lg">
+          <Sparkles className="h-5 w-5 mr-2" />
+          AI-Powered Career Guidance
+        </Badge>
+
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight">
+          Discover Your{" "}
+          <span className="gradient-text">Career Path</span>
+          <br />
+          <span className="inline-block">with Confidence</span>
+        </h1>
+
+        <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
+          Unlock your potential with personalized, AI-driven guidance to navigate your career journey and achieve your dreams.
+        </p>
+
+        <div className="mb-12 max-w-2xl mx-auto">
+          <ActionSearchBar onCollegeSelect={handleCollegeSelect} />
+        </div>
+
+        <div className="mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-10 text-foreground">
+            Choose Your Study Goal
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {studyGoals.map((goal, index) => (
+              <StudyGoalCard goal={goal} index={index} key={index} />
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+          <Button
+            size="lg"
+            className="bg-gradient-to-r from-primary to-secondary hover:from-primary-light hover:to-secondary-light shadow-xl text-lg px-8 py-3 h-auto hover-lift group w-full sm:w-auto"
+            asChild
+          >
+            <Link to="/register">
+              <Zap className="h-5 w-5 mr-2 group-hover:animate-bounce" />
+              Start Your Journey
+              <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+            </Link>
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            className="border-primary/30 hover:border-primary/60 text-lg px-8 py-3 h-auto hover-lift w-full sm:w-auto"
+            asChild
+          >
+            <Link to="/courses">
+              <BookOpen className="h-5 w-5 mr-2" />
+              Explore Courses
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Home = () => {
   const navigate = useNavigate();
   const heroRef = useScrollAnimation();
   const featuresRef = useScrollAnimation();
   const statsRef = useScrollAnimation();
   const testimonialsRef = useScrollAnimation();
-  
+
   const handleCollegeSelect = (college) => {
     navigate(`/college/${college.id}`);
   };
@@ -205,254 +373,84 @@ const Home = () => {
     </div>,
     <div key="uber" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
       <span className="text-2xl font-bold text-black">Uber</span>
-    </div>
+    </div>,
   ];
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-background overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-        
-        {/* Floating bubbles */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-float floating-bubble"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-float floating-bubble" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-accent/5 rounded-full blur-2xl animate-float floating-bubble" style={{ animationDelay: '4s' }}></div>
-        
-        <div 
-          ref={heroRef}
-          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-animate pt-20 w-full"
-        >
-          <Badge className="mb-8 bg-primary/10 text-primary border-primary/20 shadow-md">
-            <Sparkles className="h-4 w-4 mr-2" />
-            AI-Powered Career Guidance Platform
-          </Badge>
-          
-          <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
-            Find Your{" "}
-            <span className="gradient-text">
-              Next Step
-            </span>
-            <br />
-            <span className="inline-block">in Your Career Journey</span>
-          </h1>
-          
-          <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-            Personalized AI-powered guidance for students and freshers to navigate 
-            their career path with confidence and achieve their dreams
-          </p>
-
-          {/* Action Search Bar Section */}
-          <div className="mb-16 animate-[fade-in_1s_ease-out_1.5s_both]">
-            <ActionSearchBar onCollegeSelect={handleCollegeSelect} />
-          </div>
-
-          {/* Select Your Study Goal Section */}
-          <div className="mb-16 animate-[fade-in_1s_ease-out_2s_both]">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-foreground">
-              Select Your Study Goal
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-              {studyGoals.map((goal, index) => (
-                <Card key={index} className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 border-gray-200 hover:border-primary/50">
-                  <CardContent className="p-6 text-center">
-                    <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl ${goal.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                      <goal.icon className={`h-8 w-8 ${goal.iconColor}`} />
-                    </div>
-                    <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">
-                      {goal.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground group-hover:text-muted-foreground/80">
-                      {goal.subtitle}
-                    </p>
-                    <div className={`h-1 w-0 group-hover:w-full bg-gradient-to-r ${goal.color} rounded-full transition-all duration-500 mt-4 mx-auto`}></div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 animate-[fade-in_1s_ease-out_2.5s_both]">
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-primary to-secondary hover:from-primary-light hover:to-secondary-light shadow-xl text-lg px-8 py-4 h-auto hover-lift group"
-              asChild
-            >
-              <Link to="/register">
-                <Zap className="h-5 w-5 mr-2 group-hover:animate-bounce" />
-                Start Your Journey
-                <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="border-primary/30 hover:border-primary/60 text-lg px-8 py-4 h-auto hover-lift"
-              asChild
-            >
-              <Link to="/courses">
-                <BookOpen className="h-5 w-5 mr-2" />
-                Explore Courses
-              </Link>
-            </Button>
-          </div>
-
-          {/* Quick stats */}
-          <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
-            {stats.slice(0, 3).map((stat, index) => (
-              <div key={index} className="text-center hover-lift">
-                <stat.icon className={`h-8 w-8 mx-auto mb-2 ${stat.color}`} />
-                <div className="text-2xl font-bold">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        heroRef={heroRef}
+        handleCollegeSelect={handleCollegeSelect}
+        studyGoals={studyGoals}
+      />
 
       {/* User Types Section */}
-      <section className="py-24 page-bg-alternate">
-        <div 
-          ref={featuresRef}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
-        >
-          <div className="text-center mb-16">
+      <section className="py-20 bg-background/50">
+        <div ref={featuresRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Designed for{" "}
-              <span className="gradient-text">
-                Every Journey
-              </span>
+              Designed for <span className="gradient-text">Every Journey</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Whether you're starting college, currently studying, or ready to enter the workforce, 
-              we have the perfect guidance for your career stage
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
+              Whether you're starting college, currently studying, or entering the workforce, we provide tailored guidance for your career stage.
             </p>
           </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {userTypes.map((type, index) => (
-              <Card key={index} className="content-section hover-lift group">
-                <CardContent className="p-8">
-                  <div className="text-5xl mb-6 text-center group-hover:animate-bounce">{type.icon}</div>
-                  <h3 className="text-xl font-bold mb-4 text-center">{type.title}</h3>
-                  <p className="text-muted-foreground mb-6 text-center leading-relaxed">{type.description}</p>
-                  <div className="space-y-3">
-                    {type.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center">
-                        <CheckCircle className="h-5 w-5 text-success mr-3 flex-shrink-0" />
-                        <span className="text-sm">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              <UserTypeCard type={type} index={index} key={index} />
             ))}
           </div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-24 bg-gradient-to-r from-primary via-primary-light to-secondary text-primary-foreground relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-r from-primary to-secondary text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
-        <div 
-          ref={statsRef}
-          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
-        >
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Trusted by Thousands
-            </h2>
-            <p className="text-xl text-primary-foreground/90 max-w-3xl mx-auto">
-              Join our growing community of successful students and professionals
+        <div ref={statsRef} className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Trusted by Thousands</h2>
+            <p className="text-lg md:text-xl text-primary-foreground/90 max-w-3xl mx-auto">
+              Join our growing community of successful students and professionals.
             </p>
           </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center group hover-lift">
-                <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl group-hover:bg-white/20 transition-all duration-300">
-                  <stat.icon className="h-12 w-12 mx-auto mb-4 text-accent" />
-                  <div className="text-3xl font-bold mb-2">{stat.value}</div>
-                  <div className="text-primary-foreground/80">{stat.label}</div>
-                </div>
-              </div>
+              <StatCard stat={stat} index={index} key={index} />
             ))}
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-24 page-bg-gradient">
+      <section className="py-20 bg-background/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Why Choose{" "}
-              <span className="gradient-text">
-                CareerGuide?
-              </span>
+              Why Choose <span className="gradient-text">CareerGuide?</span>
             </h2>
           </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="content-section hover-lift group text-center">
-                <CardContent className="p-8">
-                  <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-4 rounded-2xl w-16 h-16 mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <feature.icon className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
-                </CardContent>
-              </Card>
+              <FeatureCard feature={feature} index={index} key={index} />
             ))}
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 page-bg-alternate">
-        <div 
-          ref={testimonialsRef}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
-        >
-          <div className="text-center mb-16">
+      <section className="py-20 bg-background/50">
+        <div ref={testimonialsRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Success{" "}
-              <span className="gradient-text">
-                Stories
-              </span>
+              Success <span className="gradient-text">Stories</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
               Hear from our students who have successfully transformed their careers
             </p>
           </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="content-section hover-lift">
-                <CardContent className="p-8">
-                  <div className="flex items-center mb-6">
-                    <img 
-                      src={testimonial.image} 
-                      alt={testimonial.name}
-                      className="w-16 h-16 rounded-full mr-4 object-cover"
-                    />
-                    <div>
-                      <h4 className="font-bold">{testimonial.name}</h4>
-                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                    </div>
-                  </div>
-                  <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground italic">"{testimonial.content}"</p>
-                </CardContent>
-              </Card>
+              <TestimonialCard testimonial={testimonial} index={index} key={index} />
             ))}
           </div>
         </div>
@@ -461,28 +459,30 @@ const Home = () => {
       {/* Trusted Companies Section */}
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 className="text-2xl font-bold text-center mb-12 text-foreground">
-            Trusted by Leading Companies
-          </h3>
-          <div className="content-section p-8">
-            <InfiniteCarousel items={companyLogos} speed="normal" />
+          <SectionHeader
+            eyebrow="Our Partners"
+            title="Trusted by Leading Companies"
+            subtitle="Industry leaders that trust graduates using our platform"
+          />
+          <div className="p-8 mt-6">
+            <InfiniteCarousel items={companyLogos} speed="normal" ariaLabel="trusted companies logos" />
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-r from-primary via-primary-light to-secondary text-primary-foreground relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-r from-primary to-secondary text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-8">
             Ready to Transform Your Career?
           </h2>
-          <p className="text-xl mb-12 text-primary-foreground/90">
+          <p className="text-lg md:text-xl mb-12 text-primary-foreground/90">
             Join thousands of students who have already started their journey to success
           </p>
           <Button 
             size="lg" 
-            className="bg-white text-primary hover:bg-white/90 shadow-xl text-lg px-8 py-4 h-auto hover-lift group"
+            className="bg-white text-primary hover:bg-white/90 shadow-xl text-lg px-8 py-3 h-auto hover-lift group w-full sm:w-auto"
             asChild
           >
             <Link to="/register">

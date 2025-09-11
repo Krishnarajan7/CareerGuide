@@ -152,7 +152,7 @@ function ActionSearchBar({
               Discover Your Future
             </h3>
             <p className="text-sm text-muted-foreground">
-              Search from 50,000+ colleges, courses & career opportunities
+              Search from 10,000+ colleges, courses & career opportunities
             </p>
           </div>
 
