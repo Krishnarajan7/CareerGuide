@@ -1,4 +1,5 @@
 import { getCollegeById, listColleges, searchColleges } from "../services/collegeService.js";
+import { enrichCollege } from "../services/enrichmentService.js";
 
 export async function handleListColleges(req, res, next) {
   try {
@@ -28,6 +29,17 @@ export async function handleGetCollegeById(req, res, next) {
     res.json({ success: true, data: college });
   } catch (error) {
     console.error("Error fetching college:", error);
+    next(error);
+  }
+}
+
+export async function handleEnrichCollege(req, res, next) {
+  try {
+    const { id } = req.params;
+    const result = await enrichCollege(id);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    console.error("Error enriching college:", error);
     next(error);
   }
 }

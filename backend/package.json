@@ -11,13 +11,14 @@
     "db:import": "node scripts/import-colleges.js"
   },
   "dependencies": {
+    "@prisma/client": "^6.14.0",
     "cors": "^2.8.5",
+    "csv-parser": "^3.0.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "csv-parser": "^3.0.0",
-    "@prisma/client": "^6.14.0",
-    "prisma": "^6.14.0",
-    "pg": "^8.16.3"
+    "node-fetch": "^3.3.2",
+    "pg": "^8.16.3",
+    "prisma": "^6.14.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
