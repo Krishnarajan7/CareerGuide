@@ -118,7 +118,12 @@ const Contact = () => {
           ref={headerRef}
           className="text-center mb-12 scroll-animate"
         >
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 animate-fadeInUp">Get In Touch</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 animate-fadeInUp">
+            Get in {" "}
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Touch
+            </span>
+          </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
             Have questions about your career journey? We're here to help. 
             Reach out to us and let's discuss how we can support your goals.

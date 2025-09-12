@@ -136,7 +136,7 @@ const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals }) => {
         ref={heroRef}
         className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-animate z-10 pt-12 sm:pt-16 md:pt-12 lg:pt-12" 
       >
-        <Badge className="mb-6 inline-flex items-center px-4 py-2 text-sm font-medium bg-primary/10 text-primary border-primary/20 shadow-lg">
+        <Badge className="mb-6 inline-flex items-center px-4 py-2 text-sm font-medium bg-primary/10 text-primary border-primary/20 shadow-lg hover:text-white" >
           <Sparkles className="h-5 w-5 mr-2" />
           AI-Powered Career Guidance
         </Badge>

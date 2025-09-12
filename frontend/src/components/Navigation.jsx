@@ -124,7 +124,7 @@ const Navigation = () => {
               <Button
                 variant="outline"
                 size="sm"
-                className="border-accent/20 hover:border-accent/40 hover:bg-accent/5 transition-all duration-300"
+                className="border-accent/20 hover:border-accent/40 hover:bg-accent/50 hover:text-black transition-all duration-300"
                 asChild
               >
                 <Link to="/admin" className="flex items-center space-x-2">
@@ -254,7 +254,7 @@ const Navigation = () => {
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full justify-start h-12 border-accent/20 hover:border-accent/40 hover:bg-accent/5"
+                  className="w-full justify-start h-12 border-accent/20 hover:border-accent/40 hover:bg-accent/50 hover:text-black"
                   asChild
                 >
                   <Link to="/admin" onClick={() => setIsOpen(false)}>
