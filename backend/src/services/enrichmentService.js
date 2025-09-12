@@ -1,7 +1,6 @@
 import fetch from "node-fetch";
 import { getCollegeById } from "./collegeService.js";
 
-// Try multiple public sources to enrich Indian college data.
 export async function enrichCollege(id) {
   const base = await getCollegeById(id);
   if (!base) {
@@ -13,13 +12,8 @@ export async function enrichCollege(id) {
   const city = base.city || "";
   const state = base.state || "";
 
-  // Hipolabs Universities API (India)
-  // https://universities.hipolabs.com/search?country=India&name=NAME
   const hipolabsUrl = `https://universities.hipolabs.com/search?country=India&name=${encodeURIComponent(name)}`;
   queries.push(fetch(hipolabsUrl).then(r => r.json()).catch(() => null));
-
-  // Wikipedia summary
-  // https://en.wikipedia.org/api/rest_v1/page/summary/{title}
   const wikiTitle = encodeURIComponent(`${name} ${city} ${state}`.trim());
   const wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${wikiTitle}`;
   queries.push(fetch(wikiUrl).then(r => r.ok ? r.json() : null).catch(() => null));
@@ -28,7 +22,6 @@ export async function enrichCollege(id) {
 
   let website = null;
   if (Array.isArray(hipolabs) && hipolabs.length > 0) {
-    // naive match on city/state if available
     const best = hipolabs.find(u => {
       const m1 = city && (u["state-province"]?.toLowerCase().includes(city.toLowerCase()) || u.name?.toLowerCase().includes(city.toLowerCase()));
       const m2 = state && (u["state-province"]?.toLowerCase().includes(state.toLowerCase()) || u.name?.toLowerCase().includes(state.toLowerCase()));
