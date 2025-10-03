@@ -1,5 +1,5 @@
-import { getCollegeById, listColleges, searchColleges } from "../services/collegeService.js";
-import { enrichCollege } from "../services/enrichmentService.js";
+import { getCollegeById, listColleges, searchColleges } from "../services/college.service.js";
+import { enrichCollege } from "../services/enrichment.service.js";
 
 export async function handleListColleges(req, res, next) {
   try {

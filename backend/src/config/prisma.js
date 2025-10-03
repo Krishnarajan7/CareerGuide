@@ -1,6 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-
-// Ensure a single Prisma client instance across the app
 const globalForPrisma = globalThis;
 
 export const prisma = globalForPrisma.prisma || new PrismaClient();
@@ -13,7 +11,6 @@ export async function disconnectPrisma() {
   try {
     await prisma.$disconnect();
   } catch (_) {
-    // ignore disconnect errors
   }
 }
 

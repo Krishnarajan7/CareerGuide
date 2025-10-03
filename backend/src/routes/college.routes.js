@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { handleGetCollegeById, handleListColleges, handleSearchColleges, handleEnrichCollege } from "../controllers/collegeController.js";
+import { handleGetCollegeById, handleListColleges, handleSearchColleges, handleEnrichCollege } from "../controllers/college.controller.js";
 
 const router = Router();
 

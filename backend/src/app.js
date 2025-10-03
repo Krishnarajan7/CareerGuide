@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import collegeRoutes from "./routes/collegeRoutes.js";
+import collegeRoutes from "./routes/college.routes.js";
 import { prisma } from "./config/prisma.js";
 import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
 

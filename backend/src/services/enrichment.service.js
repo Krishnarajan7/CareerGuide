@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { getCollegeById } from "./collegeService.js";
+import { getCollegeById } from "./college.service.js";
 
 export async function enrichCollege(id) {
   const base = await getCollegeById(id);
