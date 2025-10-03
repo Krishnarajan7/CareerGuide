@@ -205,7 +205,7 @@ export const mockJobs = [
   }
 ];
 
-export const searchJobs = (query, category, experience, type) => {
+export const searchJobs = (query = "", category, experience, type)=> {
   let filteredJobs = mockJobs.filter(job => job.isActive);
 
   if (query) {
@@ -244,7 +244,7 @@ export const getJobStats = () => {
       acc[job.category] = (acc[job.category] || 0) + 1;
     }
     return acc;
-  }, {});
+  }, {} );
   
   const totalApplications = mockJobs.reduce((sum, job) => sum + job.applicationsCount, 0);
   
