@@ -26,7 +26,7 @@ export function JobManagement() {
   const [jobs, setJobs] = useState(mockJobs);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
-  const [editingJob, setEditingJob] = useState<Job | null>(null);
+  const [editingJob, setEditingJob] = useState(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const filteredJobs = jobs.filter(job => {

@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -9,7 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
+  useSidebar
 } from "@/components/ui/sidebar";
 import {
   Plus,
@@ -21,10 +21,10 @@ import {
   Shield,
   Home,
   LogOut,
-  X,
+  X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useToast } from "@/hooks/use-toast";
 
 const adminMenuItems = [
   {
@@ -61,59 +61,75 @@ const adminMenuItems = [
 ];
 
 export function AdminSidebar() {
-  const { open, isMobile, setOpenMobile } = useSidebar();
+  const { open, isMobile, setOpenMobile, state } = useSidebar();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const isCollapsed = state === "collapsed";
+
+  const handleLogout = () => {
+    toast({
+      title: "Logged out successfully",
+      description: "Redirecting to login page...",
+    });
+    setTimeout(() => {
+      navigate("/admin/login");
+    }, 500);
+  };
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b border-border/20">
-        <div className="flex items-center justify-between p-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg">
-              <Shield className="h-5 w-5 text-white" />
+    <Sidebar collapsible="icon" className="transition-all duration-300 ease-in-out border-r border-sidebar-border">
+      <SidebarHeader className="border-b border-sidebar-border bg-sidebar-background">
+        <div className={`flex items-center p-4 ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
+          <div className={`flex items-center min-w-0 ${isCollapsed ? 'justify-center' : 'space-x-3'}`}>
+            <div className={`bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg shrink-0 transition-all duration-300 ${isCollapsed ? 'w-9 h-9' : 'w-10 h-10'}`}>
+              <Shield className={`text-white ${isCollapsed ? 'h-4 w-4' : 'h-5 w-5'}`} />
             </div>
-            <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-              <span className="text-lg font-bold gradient-text">Admin Panel</span>
-              <span className="text-xs text-muted-foreground">Management Dashboard</span>
-            </div>
+            {!isCollapsed && (
+              <div className="flex flex-col min-w-0 ml-3">
+                <span className="text-lg font-bold gradient-text truncate">Admin Panel</span>
+                <span className="text-xs text-sidebar-foreground/60 truncate">Management Dashboard</span>
+              </div>
+            )}
           </div>
-          {isMobile && (
+          {isMobile && open && (
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8"
+              aria-label="Close sidebar"
               onClick={() => setOpenMobile(false)}
+              className="shrink-0 ml-2 md:hidden"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4 text-sidebar-foreground" />
             </Button>
           )}
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="p-2">
+      <SidebarContent className="p-3 bg-sidebar-background">
         <SidebarGroup>
-          <SidebarGroupLabel className="group-data-[collapsible=icon]:sr-only">
+          <SidebarGroupLabel className={isCollapsed ? "sr-only" : "px-2 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wider mb-2"}>
             Admin Functions
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="space-y-1">
               {adminMenuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild tooltip={item.title}>
+                  <SidebarMenuButton asChild tooltip={isCollapsed ? item.title : undefined}>
                     <NavLink 
                       to={item.url} 
                       end={item.isExact}
                       className={({ isActive }) => 
-                        `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                        `flex items-center rounded-lg transition-all duration-200 ${
                           isActive 
-                            ? "bg-gradient-to-r from-primary to-secondary text-black shadow-lg" 
-                            : "hover:bg-muted/80 text-foreground hover:text-foreground"
-                        }`
+                            ? "bg-gradient-to-r from-primary to-secondary text-black shadow-md" 
+                            : "text-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                        } ${isCollapsed ? 'justify-center w-full h-12' : 'gap-3 px-4 py-3'}`
                       }
                       onClick={() => isMobile && setOpenMobile(false)}
                     >
-                      <item.icon className="h-5 w-5 flex-shrink-0" />
-                      <span className="font-medium group-data-[collapsible=icon]:hidden">{item.title}</span>
+                      <item.icon className="h-5 w-5 shrink-0" />
+                      {!isCollapsed && <span className="font-medium truncate">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -122,32 +138,32 @@ export function AdminSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup className="mt-auto">
+        <SidebarGroup className="mt-auto pt-4 border-t border-sidebar-border">
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="space-y-1">
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Back to Site">
+                <SidebarMenuButton asChild tooltip={isCollapsed ? "Back to Site" : undefined}>
                   <NavLink 
                     to="/" 
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 hover:bg-muted/80 text-foreground hover:text-foreground"
+                    className={`flex items-center rounded-lg transition-all duration-200 hover:bg-sidebar-accent text-sidebar-foreground hover:text-sidebar-accent-foreground ${isCollapsed ? 'justify-center h-12' : 'gap-3 px-4 py-3'}`}
                     onClick={() => isMobile && setOpenMobile(false)}
                   >
-                    <Home className="h-5 w-5 flex-shrink-0" />
-                    <span className="font-medium group-data-[collapsible=icon]:hidden">Back to Site</span>
+                    <Home className="h-5 w-5 shrink-0" />
+                    {!isCollapsed && <span className="font-medium truncate">Back to Site</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Logout">
+                <SidebarMenuButton asChild tooltip={isCollapsed ? "Logout" : undefined}>
                   <button 
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 hover:bg-destructive/10 text-destructive hover:text-destructive w-full"
+                    className={`flex items-center rounded-lg transition-all duration-200 hover:bg-destructive/10 text-destructive hover:text-destructive w-full ${isCollapsed ? 'justify-center h-12' : 'gap-3 px-4 py-3'}`}
                     onClick={() => {
-                      console.log('Logout clicked');
+                      handleLogout();
                       isMobile && setOpenMobile(false);
                     }}
                   >
-                    <LogOut className="h-5 w-5 flex-shrink-0" />
-                    <span className="font-medium group-data-[collapsible=icon]:hidden">Logout</span>
+                    <LogOut className="h-5 w-5 shrink-0" />
+                    {!isCollapsed && <span className="font-medium truncate">Logout</span>}
                   </button>
                 </SidebarMenuButton>
               </SidebarMenuItem>
