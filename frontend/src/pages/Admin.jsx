@@ -1,11 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { AdminDashboard } from "@/components/admin/AdminDashboard";
 import { JobManagement } from "@/components/admin/JobManagement";
 import { UsersManagement } from "@/components/admin/UsersManagement";
 import { AdminProfile } from "@/components/admin/AdminProfile";
 import { AdminSettings } from "@/components/admin/AdminSettings";
+import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { mockJobs } from "@/data/mockJobs";
-import { Plus } from "lucide-react";
+import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
 
 const AddJobPage = () => {
   const [isAddJobOpen, setIsAddJobOpen] = useState(false);
@@ -110,7 +111,7 @@ const AddJobPage = () => {
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="text-sm font-medium">Job Type</label>
-            <Select value={formData.type} onValueChange={(value) => setFormData({...formData, type})}>
+            <Select value={formData.type} onValueChange={(value) => setFormData({...formData, type: value })}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -124,7 +125,7 @@ const AddJobPage = () => {
           </div>
           <div>
             <label className="text-sm font-medium">Category</label>
-            <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category})}>
+            <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value })}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -137,7 +138,7 @@ const AddJobPage = () => {
           </div>
           <div>
             <label className="text-sm font-medium">Experience</label>
-            <Select value={formData.experience} onValueChange={(value) => setFormData({...formData, experience})}>
+            <Select value={formData.experience} onValueChange={(value) => setFormData({...formData, experience: value })}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -246,29 +247,47 @@ const AddJobPage = () => {
 };
 
 
+const AdminContent = () => {
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
+  
+  return (
+    <>
+      <AdminSidebar />
+      <SidebarInset className="flex-1 overflow-x-hidden">
+        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 px-6 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2">
+            <SidebarTrigger className="shrink-0" aria-label="Toggle sidebar">
+              {isCollapsed ? (
+                <ChevronRight className="h-4 w-4 text-foreground" />
+              ) : (
+                <ChevronLeft className="h-4 w-4 text-foreground" />
+              )}
+            </SidebarTrigger>
+            <Separator orientation="vertical" className="mr-2 h-6" />
+            <h1 className="text-2xl font-bold gradient-text">Admin Dashboard</h1>
+          </div>
+        </header>
+        <main className="flex-1 p-6 max-w-full">
+          <Routes>
+            <Route index element={<AdminDashboard />} />
+            <Route path="add-job" element={<AddJobPage />} />
+            <Route path="jobs" element={<JobManagement />} />
+            <Route path="users" element={<UsersManagement />} />
+            <Route path="profile" element={<AdminProfile />} />
+            <Route path="settings" element={<AdminSettings />} />
+          </Routes>
+        </main>
+      </SidebarInset>
+    </>
+  );
+};
+
 const Admin = () => {
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen flex w-full bg-background">
-        <AdminSidebar />
-        <SidebarInset className="flex-1 overflow-x-hidden">
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 bg-card">
-            <SidebarTrigger className="ml-2" />
-            <div className="flex items-center gap-2 text-sm">
-              <span className="font-semibold gradient-text">Admin Dashboard</span>
-            </div>
-          </header>
-          <main className="p-4 md:p-6 w-full max-w-full">
-            <Routes>
-              <Route index element={<AdminDashboard />} />
-              <Route path="add-job" element={<AddJobPage />} />
-              <Route path="jobs" element={<JobManagement />} />
-              <Route path="users" element={<UsersManagement />} />
-              <Route path="profile" element={<AdminProfile />} />
-              <Route path="settings" element={<AdminSettings />} />
-            </Routes>
-          </main>
-        </SidebarInset>
+      <div className="flex min-h-screen w-full bg-background">
+        <AdminContent />
       </div>
     </SidebarProvider>
   );

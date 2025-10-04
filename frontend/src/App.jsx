@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
+import AdminLogin from "./pages/AdminLogin";
 import Careers from "./pages/Careers";
 import Courses from "./pages/Courses";
 import ResumeBuilder from "./pages/ResumeBuilder";
@@ -33,6 +34,7 @@ const AppContent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<Admin />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/courses" element={<Courses />} />

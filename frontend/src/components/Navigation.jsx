@@ -127,7 +127,7 @@ const Navigation = () => {
                 className="border-accent/20 hover:border-accent/40 hover:bg-accent/50 hover:text-black transition-all duration-300"
                 asChild
               >
-                <Link to="/admin" className="flex items-center space-x-2">
+                <Link to="/admin/login" className="flex items-center space-x-2">
                   <Shield className="h-4 w-4" />
                   <span>Admin</span>
                 </Link>
@@ -257,7 +257,7 @@ const Navigation = () => {
                   className="w-full justify-start h-12 border-accent/20 hover:border-accent/40 hover:bg-accent/50 hover:text-black"
                   asChild
                 >
-                  <Link to="/admin" onClick={() => setIsOpen(false)}>
+                  <Link to="/admin/login" onClick={() => setIsOpen(false)}>
                     <Shield className="h-5 w-5 mr-3" />
                     Admin
                   </Link>
