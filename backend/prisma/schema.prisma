@@ -8,21 +8,21 @@ datasource db {
 }
 
 model College {
-  id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(512)
-  type      String   @db.VarChar(128)
-  address   String?  @db.VarChar(512)
-  city      String?  @db.VarChar(128)
-  state     String?  @db.VarChar(128)
-  estd      String?  @db.VarChar(64)
-  approvedBy String? @db.VarChar(128)
+  id                   Int     @id @default(autoincrement())
+  name                 String  @db.VarChar(512)
+  type                 String  @db.VarChar(128)
+  address              String? @db.VarChar(512)
+  city                 String? @db.VarChar(128)
+  state                String? @db.VarChar(128)
+  estd                 String? @db.VarChar(64)
+  approvedBy           String? @db.VarChar(128)
   affiliatedUniversity String? @db.VarChar(256)
-  rankText  String?  @db.VarChar(512)
-  coursesAndFees String? @db.Text
-  email     String?  @db.VarChar(256)
-  phone     String?  @db.VarChar(64)
-  image     String?  @db.Text
-  brochure  String?  @db.Text
+  rankText             String? @db.VarChar(512)
+  coursesAndFees       String?
+  email                String? @db.VarChar(256)
+  phone                String? @db.VarChar(64)
+  image                String?
+  brochure             String?
 
   @@index([name])
   @@index([city])
@@ -31,4 +31,12 @@ model College {
   @@index([name, city, state])
 }
 
-
+model Admin {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(128)
+  email     String   @unique @db.VarChar(256)
+  password  String   @db.VarChar(256)
+  role      String   @default("admin") @db.VarChar(64)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
