@@ -1,4 +1,5 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -25,39 +26,16 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 const adminMenuItems = [
-  {
-    title: "Dashboard",
-    url: "/admin",
-    icon: BarChart3,
-    isExact: true,
-  },
-  {
-    title: "Add Job",
-    url: "/admin/add-job",
-    icon: Plus,
-  },
-  {
-    title: "Manage Jobs",
-    url: "/admin/jobs",
-    icon: Briefcase,
-  },
-  {
-    title: "Users",
-    url: "/admin/users",
-    icon: Users,
-  },
-  {
-    title: "Profile",
-    url: "/admin/profile",
-    icon: User,
-  },
-  {
-    title: "Settings",
-    url: "/admin/settings",
-    icon: Settings,
-  },
+  { title: "Dashboard", url: "/admin", icon: BarChart3, isExact: true },
+  { title: "Add Job", url: "/admin/add-job", icon: Plus },
+  { title: "Manage Jobs", url: "/admin/jobs", icon: Briefcase },
+  { title: "Users", url: "/admin/users", icon: Users },
+  { title: "Profile", url: "/admin/profile", icon: User },
+  { title: "Settings", url: "/admin/settings", icon: Settings },
 ];
 
 export function AdminSidebar() {
@@ -65,16 +43,29 @@ export function AdminSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { logout } = useAuth();
   const isCollapsed = state === "collapsed";
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const handleLogout = () => {
-    toast({
-      title: "Logged out successfully",
-      description: "Redirecting to login page...",
-    });
-    setTimeout(() => {
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout(); // calls AuthContext logout, clears admin state & cookie
+      if (isMobile) setOpenMobile(false);
+      toast({
+        title: "Logged out successfully",
+        description: "Redirecting to login page...",
+      });
       navigate("/admin/login");
-    }, 500);
+    } catch (err) {
+      toast({
+        title: "Logout failed",
+        description: err?.response?.data?.message || "Something went wrong",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   return (
@@ -124,7 +115,7 @@ export function AdminSidebar() {
                           isActive 
                             ? "bg-gradient-to-r from-primary to-secondary text-black shadow-md" 
                             : "text-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                        } ${isCollapsed ? 'justify-center w-full h-12' : 'gap-3 px-4 py-3'}`
+                        } ${isCollapsed ? 'justify-center px-2 py-3' : 'gap-3 px-4 py-3'}`
                       }
                       onClick={() => isMobile && setOpenMobile(false)}
                     >
@@ -145,7 +136,7 @@ export function AdminSidebar() {
                 <SidebarMenuButton asChild tooltip={isCollapsed ? "Back to Site" : undefined}>
                   <NavLink 
                     to="/" 
-                    className={`flex items-center rounded-lg transition-all duration-200 hover:bg-sidebar-accent text-sidebar-foreground hover:text-sidebar-accent-foreground ${isCollapsed ? 'justify-center h-12' : 'gap-3 px-4 py-3'}`}
+                    className={`flex items-center rounded-lg transition-all duration-200 hover:bg-sidebar-accent text-sidebar-foreground hover:text-sidebar-accent-foreground ${isCollapsed ? 'justify-center px-2 py-3' : 'gap-3 px-4 py-3'}`}
                     onClick={() => isMobile && setOpenMobile(false)}
                   >
                     <Home className="h-5 w-5 shrink-0" />
@@ -156,14 +147,16 @@ export function AdminSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip={isCollapsed ? "Logout" : undefined}>
                   <button 
-                    className={`flex items-center rounded-lg transition-all duration-200 hover:bg-destructive/10 text-destructive hover:text-destructive w-full ${isCollapsed ? 'justify-center h-12' : 'gap-3 px-4 py-3'}`}
-                    onClick={() => {
-                      handleLogout();
-                      isMobile && setOpenMobile(false);
-                    }}
+                    className={`flex items-center rounded-lg transition-all duration-200 hover:bg-destructive/10 text-destructive hover:text-destructive w-full ${isCollapsed ? 'justify-center px-2 py-3' : 'gap-3 px-4 py-3'}`}
+                    onClick={handleLogout}
+                    disabled={isLoggingOut}
                   >
-                    <LogOut className="h-5 w-5 shrink-0" />
-                    {!isCollapsed && <span className="font-medium truncate">Logout</span>}
+                    {isLoggingOut ? (
+                      <LoadingSpinner size="sm" className="h-5 w-5 shrink-0" />
+                    ) : (
+                      <LogOut className="h-5 w-5 shrink-0" />
+                    )}
+                    {!isCollapsed && <span className="font-medium truncate">{isLoggingOut ? "Logging out..." : "Logout"}</span>}
                   </button>
                 </SidebarMenuButton>
               </SidebarMenuItem>
