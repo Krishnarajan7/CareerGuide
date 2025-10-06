@@ -17,7 +17,7 @@ const createToken = (admin) => {
 
 // --- SERVICE FUNCTIONS ---
 
-/*Create a new admin (transactional) */
+/* Create a new admin (transactional) */
 export const createAdminService = async (data) => {
   const { password, role = "ADMIN", ...adminData } = data;
 
@@ -75,6 +75,13 @@ export const getAllAdminsService = async () => {
 
 /* Update an admin */
 export const updateAdminService = async (id, updates) => {
+  const adminId = parseInt(id);
+  if (isNaN(adminId)) {
+    const error = new Error("Invalid admin ID");
+    error.status = 400;
+    throw error;
+  }
+
   const data = {};
 
   if (updates.name) data.name = updates.name;
@@ -88,9 +95,19 @@ export const updateAdminService = async (id, updates) => {
     throw error;
   }
 
+  // Check email uniqueness if email is being updated
+  if (updates.email) {
+    const existingAdmin = await prisma.admin.findUnique({ where: { email: updates.email } });
+    if (existingAdmin && existingAdmin.id !== adminId) {
+      const error = new Error("Another admin with this email already exists");
+      error.status = 400;
+      throw error;
+    }
+  }
+
   try {
     const updatedAdmin = await prisma.admin.update({
-      where: { id: parseInt(id) },
+      where: { id: adminId },
       data,
       select: { id: true, name: true, email: true, role: true, createdAt: true },
     });
@@ -107,8 +124,15 @@ export const updateAdminService = async (id, updates) => {
 
 /* Delete an admin */
 export const deleteAdminService = async (id) => {
+  const adminId = parseInt(id);
+  if (isNaN(adminId)) {
+    const error = new Error("Invalid admin ID");
+    error.status = 400;
+    throw error;
+  }
+
   try {
-    await prisma.admin.delete({ where: { id: parseInt(id) } });
+    await prisma.admin.delete({ where: { id: adminId } });
     return true;
   } catch (err) {
     if (err.code === "P2025") {
@@ -116,6 +140,6 @@ export const deleteAdminService = async (id) => {
       error.status = 404;
       throw error;
     }
-    throw err; 
+    throw err;
   }
 };

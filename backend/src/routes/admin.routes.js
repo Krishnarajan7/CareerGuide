@@ -1,5 +1,3 @@
-// src/routes/admin.routes.js
-
 import express from "express";
 import {
   createAdmin,
@@ -8,6 +6,7 @@ import {
   updateAdmin,
   deleteAdmin,
   logoutAdmin,
+  getCurrentAdmin,
 } from "../controllers/admin.controller.js";
 import { authenticate, authorize } from "../middlewares/auth.middleware.js";
 import { validate } from "../utils/validate.js";
@@ -22,8 +21,9 @@ const router = express.Router();
 // Public Routes
 router.post("/login", validate(loginSchema), loginAdmin);
 
-// Protected Routes
+// Authenticated routes
 router.post("/logout", authenticate, logoutAdmin);
+router.get("/me", authenticate, getCurrentAdmin);
 
 // Admin management routes (SUPER_ADMIN only)
 router.post(
