@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { SidebarProvider, SidebarInset, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { AdminDashboard } from "@/components/admin/AdminDashboard";
@@ -7,7 +7,7 @@ import { UsersManagement } from "@/components/admin/UsersManagement";
 import { AdminProfile } from "@/components/admin/AdminProfile";
 import { AdminSettings } from "@/components/admin/AdminSettings";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { mockJobs } from "@/data/mockJobs";
 import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 const AddJobPage = () => {
   const [isAddJobOpen, setIsAddJobOpen] = useState(false);
@@ -111,7 +112,7 @@ const AddJobPage = () => {
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="text-sm font-medium">Job Type</label>
-            <Select value={formData.type} onValueChange={(value) => setFormData({...formData, type: value })}>
+            <Select value={formData.type} onValueChange={(value) => setFormData({...formData, type: value})}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -125,7 +126,7 @@ const AddJobPage = () => {
           </div>
           <div>
             <label className="text-sm font-medium">Category</label>
-            <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value })}>
+            <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -138,7 +139,7 @@ const AddJobPage = () => {
           </div>
           <div>
             <label className="text-sm font-medium">Experience</label>
-            <Select value={formData.experience} onValueChange={(value) => setFormData({...formData, experience: value })}>
+            <Select value={formData.experience} onValueChange={(value) => setFormData({...formData, experience: value})}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -247,9 +248,26 @@ const AddJobPage = () => {
 };
 
 
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-[400px]">
+    <div className="flex flex-col items-center gap-3">
+      <LoadingSpinner size="lg" />
+      <p className="text-sm text-muted-foreground">Loading...</p>
+    </div>
+  </div>
+);
+
 const AdminContent = () => {
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
+  const location = useLocation();
+  const [isPageLoading, setIsPageLoading] = useState(true);
+
+  useEffect(() => {
+    setIsPageLoading(true);
+    const timer = setTimeout(() => setIsPageLoading(false), 300);
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
   
   return (
     <>
@@ -269,14 +287,18 @@ const AdminContent = () => {
           </div>
         </header>
         <main className="flex-1 p-6 max-w-full">
-          <Routes>
-            <Route index element={<AdminDashboard />} />
-            <Route path="add-job" element={<AddJobPage />} />
-            <Route path="jobs" element={<JobManagement />} />
-            <Route path="users" element={<UsersManagement />} />
-            <Route path="profile" element={<AdminProfile />} />
-            <Route path="settings" element={<AdminSettings />} />
-          </Routes>
+          {isPageLoading ? (
+            <PageLoader />
+          ) : (
+            <Routes>
+              <Route index element={<AdminDashboard />} />
+              <Route path="add-job" element={<AddJobPage />} />
+              <Route path="jobs" element={<JobManagement />} />
+              <Route path="users" element={<UsersManagement />} />
+              <Route path="profile" element={<AdminProfile />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Routes>
+          )}
         </main>
       </SidebarInset>
     </>

@@ -7,6 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+
+// Utility to add a slight delay
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -18,27 +22,17 @@ const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
 
-    try {
-      const res = await login(email, password); // AuthContext handles API call
-      toast({
-        title: "Login Successful",
-        description: `Welcome back, ${res.data.admin.email}`,
-      });
-      navigate("/admin"); // Redirect to admin dashboard
-    } catch (error) {
-      toast({
-        title: "Login Failed",
-        description: error.response?.data?.message || "Invalid credentials",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  try {
+    await login(email, password); 
+  } catch (error) {
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-background p-4">
@@ -103,7 +97,14 @@ const AdminLogin = () => {
               className="w-full h-12 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-semibold shadow-lg hover:shadow-xl transition-all"
               disabled={isLoading}
             >
-              {isLoading ? "Signing in..." : "Sign In"}
+              {isLoading ? (
+                <>
+                  <LoadingSpinner size="sm" className="mr-2" />
+                  Signing in...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
         </CardContent>

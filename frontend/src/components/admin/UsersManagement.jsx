@@ -8,7 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
   Edit,
   Trash2,
@@ -17,10 +20,11 @@ import {
   Filter,
   Mail,
   Phone,
-  Shield,
+  MoreHorizontal,
   UserX,
   UserCheck,
 } from "lucide-react";
+
 
 const mockUsers = [
   {
@@ -73,6 +77,10 @@ export function UsersManagement() {
   const [filterStatus, setFilterStatus] = useState("All");
   const [editingUser, setEditingUser] = useState(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [viewingUser, setViewingUser] = useState(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [deletingUserId, setDeletingUserId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
@@ -83,12 +91,22 @@ export function UsersManagement() {
     return matchesSearch && matchesRole && matchesStatus;
   });
 
-  const handleDeleteUser = (userIdg) => {
-    setUsers(users.filter((user) => user.id !== userId));
-    toast({
-      title: "User Deleted",
-      description: "The user has been removed successfully.",
-    });
+  const handleDeleteUser = (userId) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setUsers(users.filter((user) => user.id !== userId));
+      setDeletingUserId(null);
+      setIsLoading(false);
+      toast({
+        title: "User Deleted",
+        description: "The user has been removed successfully.",
+      });
+    }, 500);
+  };
+
+  const handleViewUser = (user) => {
+    setViewingUser(user);
+    setIsViewDialogOpen(true);
   };
 
   const handleToggleStatus = (userId) => {
@@ -290,39 +308,45 @@ export function UsersManagement() {
                       {new Date(user.registeredDate).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-8 w-8 p-0"
-                          onClick={() => handleEditUser(user)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0"
-                          onClick={() => handleToggleStatus(user.id)}
-                        >
-                          {user.status === "active" ? (
-                            <UserX className="h-4 w-4 text-warning" />
-                          ) : (
-                            <UserCheck className="h-4 w-4 text-success" />
-                          )}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                          onClick={() => handleDeleteUser(user.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                          <DropdownMenuItem onClick={() => handleViewUser(user)}>
+                            <Eye className="h-4 w-4 mr-2" />
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleEditUser(user)}>
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit User
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => handleToggleStatus(user.id)}>
+                            {user.status === "active" ? (
+                              <>
+                                <UserX className="h-4 w-4 mr-2 text-warning" />
+                                Suspend User
+                              </>
+                            ) : (
+                              <>
+                                <UserCheck className="h-4 w-4 mr-2 text-success" />
+                                Activate User
+                              </>
+                            )}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => setDeletingUserId(user.id)}
+                            className="text-destructive focus:text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete User
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -331,6 +355,53 @@ export function UsersManagement() {
           </div>
         </CardContent>
       </Card>
+
+      {/* View User Dialog */}
+      {viewingUser && (
+        <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>User Details</DialogTitle>
+              <DialogDescription>Complete information about {viewingUser.name}</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <Avatar className="h-16 w-16">
+                  <AvatarFallback className="text-lg">
+                    {viewingUser.name.split(" ").map(n => n[0]).join("")}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-xl font-semibold">{viewingUser.name}</h3>
+                  <Badge variant={getStatusColor(viewingUser.status)}>{viewingUser.status}</Badge>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Email</p>
+                  <p className="flex items-center gap-2"><Mail className="h-4 w-4" />{viewingUser.email}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Phone</p>
+                  <p className="flex items-center gap-2"><Phone className="h-4 w-4" />{viewingUser.phone}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Role</p>
+                  <p>{getRoleLabel(viewingUser.role)}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Applications</p>
+                  <p className="font-semibold">{viewingUser.applicationsCount}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Registered Date</p>
+                  <p>{new Date(viewingUser.registeredDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
 
       {/* Edit User Dialog */}
       {editingUser && (
@@ -346,6 +417,30 @@ export function UsersManagement() {
           </DialogContent>
         </Dialog>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!deletingUserId} onOpenChange={() => setDeletingUserId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this user account
+              and remove all associated data from the system.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deletingUserId && handleDeleteUser(deletingUserId)}
+              disabled={isLoading}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isLoading ? <LoadingSpinner size="sm" className="mr-2" /> : null}
+              Delete User
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -391,7 +486,7 @@ function UserEditForm({ user, onSave, onCancel }) {
         </div>
         <div className="space-y-2">
           <Label>Role</Label>
-          <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role})}>
+          <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value})}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -406,7 +501,7 @@ function UserEditForm({ user, onSave, onCancel }) {
 
       <div className="space-y-2">
         <Label>Status</Label>
-        <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status})}>
+        <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value})}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>

@@ -8,8 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { mockJobs } from "@/data/mockJobs";
 import { useToast } from "@/hooks/use-toast";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
   Edit,
   Trash2,
@@ -19,6 +22,8 @@ import {
   Filter,
   MoreHorizontal,
   MapPin,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
 
 export function JobManagement() {
@@ -28,10 +33,14 @@ export function JobManagement() {
   const [filterCategory, setFilterCategory] = useState("All");
   const [editingJob, setEditingJob] = useState(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [viewingJob, setViewingJob] = useState(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [deletingJobId, setDeletingJobId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const filteredJobs = jobs.filter(job => {
     const matchesSearch = job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        job.company.toLowerCase().includes(searchQuery.toLowerCase());
+                          job.company.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = filterCategory === "All" || job.category === filterCategory;
     return matchesSearch && matchesCategory;
   });
@@ -39,11 +48,21 @@ export function JobManagement() {
   const categories = ["All", "Engineering", "Management", "Design", "Marketing", "Sales", "Data Science", "Product"];
 
   const handleDeleteJob = (jobId) => {
-    setJobs(jobs.filter(job => job.id !== jobId));
-    toast({
-      title: "Job Deleted",
-      description: "The job posting has been removed successfully.",
-    });
+    setIsLoading(true);
+    setTimeout(() => {
+      setJobs(jobs.filter(job => job.id !== jobId));
+      setDeletingJobId(null);
+      setIsLoading(false);
+      toast({
+        title: "Job Deleted",
+        description: "The job posting has been removed successfully.",
+      });
+    }, 500);
+  };
+
+  const handleViewJob = (job) => {
+    setViewingJob(job);
+    setIsViewDialogOpen(true);
   };
 
   const handleToggleJobStatus = (jobId) => {
@@ -158,39 +177,45 @@ export function JobManagement() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0"
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0"
-                          onClick={() => handleEditJob(job)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                          onClick={() => handleDeleteJob(job.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0"
-                          onClick={() => handleToggleJobStatus(job.id)}
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                          <DropdownMenuItem onClick={() => handleViewJob(job)}>
+                            <Eye className="h-4 w-4 mr-2" />
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleEditJob(job)}>
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit Job
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => handleToggleJobStatus(job.id)}>
+                            {job.isActive ? (
+                              <>
+                                <XCircle className="h-4 w-4 mr-2 text-warning" />
+                                Mark Inactive
+                              </>
+                            ) : (
+                              <>
+                                <CheckCircle className="h-4 w-4 mr-2 text-success" />
+                                Mark Active
+                              </>
+                            )}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => setDeletingJobId(job.id)}
+                            className="text-destructive focus:text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete Job
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -199,6 +224,57 @@ export function JobManagement() {
           </div>
         </CardContent>
       </Card>
+
+      {/* View Job Dialog */}
+      {viewingJob && (
+        <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>{viewingJob.title}</DialogTitle>
+              <DialogDescription>{viewingJob.company} • {viewingJob.location}</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="flex flex-wrap gap-2">
+                <Badge>{viewingJob.type}</Badge>
+                <Badge variant="secondary">{viewingJob.category}</Badge>
+                <Badge variant={viewingJob.isActive ? "default" : "destructive"}>
+                  {viewingJob.isActive ? "Active" : "Inactive"}
+                </Badge>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-2">Description</h4>
+                <p className="text-sm text-muted-foreground">{viewingJob.description}</p>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-2">Requirements</h4>
+                <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                  {viewingJob.requirements.map((req, i) => (
+                    <li key={i}>{req}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-2">Benefits</h4>
+                <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                  {viewingJob.benefits.map((benefit, i) => (
+                    <li key={i}>{benefit}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex gap-4 text-sm">
+                <div>
+                  <span className="font-semibold">Salary: </span>
+                  ₹{viewingJob.salary.min.toLocaleString()} - ₹{viewingJob.salary.max.toLocaleString()}
+                </div>
+                <div>
+                  <span className="font-semibold">Experience: </span>
+                  {viewingJob.experience}
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
 
       {/* Edit Job Dialog */}
       {editingJob && (
@@ -214,6 +290,30 @@ export function JobManagement() {
           </DialogContent>
         </Dialog>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!deletingJobId} onOpenChange={() => setDeletingJobId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this job posting
+              and remove all associated data from the system.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deletingJobId && handleDeleteJob(deletingJobId)}
+              disabled={isLoading}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isLoading ? <LoadingSpinner size="sm" className="mr-2" /> : null}
+              Delete Job
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -281,7 +381,7 @@ function JobEditForm({ job, onSave, onCancel }) {
       <div className="grid grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label>Job Type</Label>
-          <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type})}>
+          <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -295,7 +395,7 @@ function JobEditForm({ job, onSave, onCancel }) {
         </div>
         <div className="space-y-2">
           <Label>Category</Label>
-          <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category})}>
+          <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -312,7 +412,7 @@ function JobEditForm({ job, onSave, onCancel }) {
         </div>
         <div className="space-y-2">
           <Label>Experience</Label>
-          <Select value={formData.experience} onValueChange={(value) => setFormData({ ...formData, experience})}>
+          <Select value={formData.experience} onValueChange={(value) => setFormData({ ...formData, experience: value })}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
