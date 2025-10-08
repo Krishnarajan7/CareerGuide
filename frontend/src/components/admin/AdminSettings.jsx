@@ -20,8 +20,8 @@ export function AdminSettings() {
   const { toast } = useToast();
   const [settings, setSettings] = useState({
     siteName: "Career Guidance Platform",
-    adminEmail: "admin@careerguide.com",
-    supportEmail: "support@careerguide.com",
+    adminEmail: "admin@p2p.com",
+    supportEmail: "support@p2p.com",
     emailNotifications: true,
     applicationAlerts: true,
     weeklyReports: false,

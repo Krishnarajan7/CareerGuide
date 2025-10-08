@@ -78,7 +78,7 @@ const Footer = () => {
               <div className="bg-primary/20 backdrop-blur-lg p-3 rounded-xl border border-primary/30">
                 <Sparkles className="h-8 w-8 text-primary" />
               </div>
-              <span className="text-2xl font-bold">CareerGuide</span>
+              <span className="text-2xl font-bold">P2P Career Guidance</span>
             </div>
             <p className="text-white/80 text-lg leading-relaxed max-w-md">
               Empowering students and freshers with personalized AI-powered career guidance 
@@ -157,8 +157,8 @@ const Footer = () => {
               </div>
               <div>
                 <div className="text-sm text-white/60">Email us</div>
-                <a href="mailto:support@careerguide.com" className="text-white hover:text-primary transition-colors duration-300">
-                  support@careerguide.com
+                <a href="mailto:support@P2P Career Guidance.com" className="text-white hover:text-primary transition-colors duration-300">
+                  support@p2pcareerguidance.com
                 </a>
               </div>
             </div>
@@ -191,7 +191,7 @@ const Footer = () => {
         <div className="border-t border-white/10 py-8">
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
             <div className="flex items-center space-x-2 text-white/80">
-              <span>© {currentYear} CareerGuide.</span>
+              <span>© {currentYear} P2P Career Guidance.</span>
               <span>All rights reserved.</span>
             </div>
             <div className="flex space-x-8">

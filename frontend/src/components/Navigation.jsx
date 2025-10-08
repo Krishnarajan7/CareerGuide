@@ -82,10 +82,10 @@ const Navigation = () => {
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  CareerGuide
+                  P2P Career Guidance
                 </span>
                 <span className="text-xs text-muted-foreground/70 -mt-1">
-                  Professional Growth
+                  Passion to Profession
                 </span>
               </div>
             </Link>
@@ -198,7 +198,7 @@ const Navigation = () => {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-lg font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    CareerGuide
+                    P2P-Career Guidance
                   </span>
                   <span className="text-xs text-muted-foreground/70 -mt-0.5">
                     Professional Growth

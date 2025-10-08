@@ -21,7 +21,7 @@ export function AdminProfile() {
   const { toast } = useToast();
   const [profile, setProfile] = useState({
     name: "Admin User",
-    email: "admin@careerguide.com",
+    email: "admin@p2p.com",
     phone: "+91 98765 43210",
     location: "Chennai, Tamil Nadu",
     role: "System Administrator",

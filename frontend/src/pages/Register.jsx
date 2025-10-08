@@ -1,22 +1,62 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { UserPlus, Upload, GraduationCap, School, Briefcase, Link2, FileText } from "lucide-react";
-
+import {
+  UserPlus,
+  GraduationCap,
+  School,
+  Briefcase,
+  Link2,
+} from "lucide-react";
 
 const tamilNaduDistricts = [
-  "Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli",
-  "Tiruppur", "Erode", "Vellore", "Thoothukudi", "Dindigul", "Thanjavur",
-  "Ranipet", "Sivaganga", "Karur", "Udhagamandalam", "Hosur", "Nagercoil",
-  "Kanchipuram", "Kumarapalayam", "Karaikkudi", "Neyveli", "Cuddalore",
-  "Kumbakonam", "Tiruvannamalai", "Pollachi", "Rajapalayam", "Gudiyatham",
-  "Pudukkottai", "Vaniyambadi", "Ambur", "Nagapattinam"
+  "Chennai",
+  "Coimbatore",
+  "Madurai",
+  "Tiruchirappalli",
+  "Salem",
+  "Tirunelveli",
+  "Tiruppur",
+  "Erode",
+  "Vellore",
+  "Thoothukudi",
+  "Dindigul",
+  "Thanjavur",
+  "Ranipet",
+  "Sivaganga",
+  "Karur",
+  "Udhagamandalam",
+  "Hosur",
+  "Nagercoil",
+  "Kanchipuram",
+  "Kumarapalayam",
+  "Karaikkudi",
+  "Neyveli",
+  "Cuddalore",
+  "Kumbakonam",
+  "Tiruvannamalai",
+  "Pollachi",
+  "Rajapalayam",
+  "Gudiyatham",
+  "Pudukkottai",
+  "Vaniyambadi",
+  "Ambur",
+  "Nagapattinam",
 ];
 
 const Register = () => {
@@ -41,51 +81,120 @@ const Register = () => {
     // Fresher specific
     skills: "",
     fresherExperience: "",
-    resume: null ,
     resumeLink: "",
-    uploadType: "file" 
   });
 
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files?.[0] || null;
-    setFormData(prev => ({ ...prev, resume: file }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    toast({
-      title: "Registration Successful!",
-      description: "Thank you for registering. Our team will contact you soon with personalized guidance.",
-    });
-    // Reset form after successful submission
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      school: "",
-      cutoff: "",
-      district: "",
-      college: "",
-      department: "",
-      cgpa: "",
-      interestedJob: "",
-      trainingType: "",
-      experience: "",
-      projects: "",
-      currentCompany: "",
-      skills: "",
-      fresherExperience: "",
-      resume: null,
-      resumeLink: "",
-      uploadType: "file"
-    });
-    setUserType("");
+    setIsLoading(true);
+
+    const scriptURLs = {
+      "college-joining":
+        "https://script.google.com/macros/s/AKfycbx9p-rZnIWCoMMbf2hYhFlVWsiDlWXE-ikdIGgo_4sSSsBvF9xohvIJAZIiUkqHkggW/exec",
+      "college-student":
+        "https://script.google.com/macros/s/AKfycbz-xlzBpAUJI-bnQxRr2HTIO63XeHL7-feP945iYDn-Cmug1utcMsLtK_j5Pyx50LBV/exec",
+      fresher:
+        "https://script.google.com/macros/s/AKfycbw2dssdElD_siMCzFbBKGuxJ039I6egX8lhO4xuGEDk4V2tJfw7gwq4yP7Y5Oh0DjlbHQ/exec",
+    };
+
+    try {
+      let payload = new FormData();
+      let scriptURL = "";
+
+      if (userType === "college-joining") {
+        scriptURL = scriptURLs["college-joining"];
+        payload.append("name", formData.name);
+        payload.append("email", formData.email);
+        payload.append("phone", formData.phone);
+        payload.append("district", formData.district);
+        payload.append("cutoff", formData.cutoff);
+        payload.append("school", formData.school);
+      } else if (userType === "college-student") {
+        scriptURL = scriptURLs["college-student"];
+        payload.append("name", formData.name);
+        payload.append("email", formData.email);
+        payload.append("phone", formData.phone);
+        payload.append("college", formData.college);
+        payload.append("department", formData.department);
+        payload.append("cgpa", formData.cgpa);
+        payload.append("job", formData.interestedJob);
+        payload.append("training", formData.trainingType);
+      } else if (userType === "fresher") {
+        scriptURL = scriptURLs["fresher"];
+        payload.append("name", formData.name);
+        payload.append("email", formData.email);
+        payload.append("phone", formData.phone);
+        payload.append("skills", formData.skills);
+        payload.append("projects", formData.fresherExperience);
+        payload.append("experience", formData.experience);
+        payload.append("currentCompany", formData.currentCompany);
+        payload.append("resumeLink", formData.resumeLink);
+      } else {
+        toast({
+          title: "Select a Category",
+          description:
+            "Please select a registration category before submitting.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      const response = await fetch(scriptURL, {
+        method: "POST",
+        body: payload,
+      });
+
+      const result = await response.json();
+
+      if (result.result === "success") {
+        toast({
+          title: "Registration Successful!",
+          description:
+            "Your data has been saved successfully to Google Sheets.",
+        });
+      } else {
+        throw new Error(result.message || "Error saving to Google Sheets");
+      }
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        school: "",
+        cutoff: "",
+        district: "",
+        college: "",
+        department: "",
+        cgpa: "",
+        interestedJob: "",
+        trainingType: "",
+        skills: "",
+        fresherExperience: "",
+        experience: "",
+        currentCompany: "",
+        resumeLink: "",
+      });
+      setUserType("");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Submission Failed",
+        description:
+          "There was an issue submitting your data. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const renderFormContent = () => {
@@ -160,7 +269,11 @@ const Register = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="district">District (Tamil Nadu) *</Label>
-                <Select onValueChange={(value) => handleInputChange("district", value)}>
+                <Select
+                  onValueChange={(value) =>
+                    handleInputChange("district", value)
+                  }
+                >
                   <SelectTrigger className="h-11">
                     <SelectValue placeholder="Select district" />
                   </SelectTrigger>
@@ -193,15 +306,23 @@ const Register = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="department">Department *</Label>
-                <Select onValueChange={(value) => handleInputChange("department", value)}>
+                <Select
+                  onValueChange={(value) =>
+                    handleInputChange("department", value)
+                  }
+                >
                   <SelectTrigger className="h-11">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="cse">Computer Science</SelectItem>
                     <SelectItem value="it">Information Technology</SelectItem>
-                    <SelectItem value="ece">Electronics & Communication</SelectItem>
-                    <SelectItem value="eee">Electrical & Electronics</SelectItem>
+                    <SelectItem value="ece">
+                      Electronics & Communication
+                    </SelectItem>
+                    <SelectItem value="eee">
+                      Electrical & Electronics
+                    </SelectItem>
                     <SelectItem value="mech">Mechanical Engineering</SelectItem>
                     <SelectItem value="civil">Civil Engineering</SelectItem>
                     <SelectItem value="other">Other</SelectItem>
@@ -227,12 +348,18 @@ const Register = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="interestedJob">Interested Job Role *</Label>
-                <Select onValueChange={(value) => handleInputChange("interestedJob", value)}>
+                <Select
+                  onValueChange={(value) =>
+                    handleInputChange("interestedJob", value)
+                  }
+                >
                   <SelectTrigger className="h-11">
                     <SelectValue placeholder="Select job role" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="fullstack">Full Stack Developer</SelectItem>
+                    <SelectItem value="fullstack">
+                      Full Stack Developer
+                    </SelectItem>
                     <SelectItem value="frontend">Frontend Developer</SelectItem>
                     <SelectItem value="backend">Backend Developer</SelectItem>
                     <SelectItem value="mobile">Mobile Developer</SelectItem>
@@ -244,56 +371,34 @@ const Register = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="trainingType">Training Looking For *</Label>
-                <Select onValueChange={(value) => handleInputChange("trainingType", value)}>
+                <Select
+                  onValueChange={(value) =>
+                    handleInputChange("trainingType", value)
+                  }
+                >
                   <SelectTrigger className="h-11">
                     <SelectValue placeholder="Select training type" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="technical">Technical Skills</SelectItem>
                     <SelectItem value="softskills">Soft Skills</SelectItem>
-                    <SelectItem value="interview">Interview Preparation</SelectItem>
-                    <SelectItem value="placement">Placement Training</SelectItem>
-                    <SelectItem value="certification">Certification Courses</SelectItem>
+                    <SelectItem value="interview">
+                      Interview Preparation
+                    </SelectItem>
+                    <SelectItem value="placement">
+                      Placement Training
+                    </SelectItem>
+                    <SelectItem value="certification">
+                      Certification Courses
+                    </SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="experience">Work Experience</Label>
-              <Textarea
-                id="experience"
-                placeholder="Internships, part-time jobs..."
-                value={formData.experience}
-                onChange={(e) => handleInputChange("experience", e.target.value)}
-                className="min-h-[60px] resize-none"
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="projects">Projects</Label>
-                <Textarea
-                  id="projects"
-                  placeholder="Your academic/personal projects"
-                  value={formData.projects}
-                  onChange={(e) => handleInputChange("projects", e.target.value)}
-                  className="min-h-[60px] resize-none"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="currentCompany">Previous/Current Company</Label>
-                <Input
-                  id="currentCompany"
-                  placeholder="Company name (if any)"
-                  value={formData.currentCompany}
-                  onChange={(e) => handleInputChange("currentCompany", e.target.value)}
-                  className="h-11"
-                />
               </div>
             </div>
           </>
         )}
 
-        {userType === "fresher"  && (
+        {userType === "fresher" && (
           <>
             <div className="space-y-2">
               <Label htmlFor="skills">Technical Skills *</Label>
@@ -307,76 +412,93 @@ const Register = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="fresherExperience">Experience & Projects</Label>
+              <Label htmlFor="fresherExperience">Projects</Label>
               <Textarea
                 id="fresherExperience"
-                placeholder="Internships, projects, certifications..."
+                placeholder="projects, certifications..."
                 value={formData.fresherExperience}
-                onChange={(e) => handleInputChange("fresherExperience", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("fresherExperience", e.target.value)
+                }
                 className="min-h-[70px] resize-none"
               />
             </div>
-            <div className="space-y-3">
-              <Label>Resume/Portfolio (Optional)</Label>
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant={formData.uploadType === "file" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => handleInputChange("uploadType", "file")}
-                  className="flex-1"
-                >
-                  <FileText className="h-4 w-4 mr-2" />
-                  Upload
-                </Button>
-                <Button
-                  type="button"
-                  variant={formData.uploadType === "link" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => handleInputChange("uploadType", "link")}
-                  className="flex-1"
-                >
-                  <Link2 className="h-4 w-4 mr-2" />
-                  Link
-                </Button>
-              </div>
-
-              {formData.uploadType === "file" ? (
-                <div>
-                  <Input
-                    id="resume"
-                    type="file"
-                    accept=".pdf,.doc,.docx"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => document.getElementById("resume")?.click()}
-                    className="w-full h-12 border-dashed"
-                  >
-                    <Upload className="h-4 w-4 mr-2" />
-                    {formData.resume ? formData.resume.name : "Choose file"}
-                  </Button>
-                </div>
-              ) : (
-                <Input
-                  id="resumeLink"
-                  type="url"
-                  placeholder="https://your-portfolio.com"
-                  value={formData.resumeLink}
-                  onChange={(e) => handleInputChange("resumeLink", e.target.value)}
-                  className="h-11"
-                />
-              )}
+            <div className="space-y-2">
+              <Label htmlFor="experience">Work Experience</Label>
+              <Textarea
+                id="experience"
+                placeholder="Internships, part-time jobs..."
+                value={formData.experience}
+                onChange={(e) =>
+                  handleInputChange("experience", e.target.value)
+                }
+                className="min-h-[60px] resize-none"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="currentCompany">Previous/Current Company</Label>
+              <Input
+                id="currentCompany"
+                placeholder="Company name (if any) or Nill"
+                value={formData.currentCompany}
+                onChange={(e) =>
+                  handleInputChange("currentCompany", e.target.value)
+                }
+                className="h-11"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="resumeLink">Resume/Portfolio Link (Optional)</Label>
+              <Input
+                id="resumeLink"
+                type="url"
+                placeholder="https://your-portfolio.com"
+                value={formData.resumeLink}
+                onChange={(e) =>
+                  handleInputChange("resumeLink", e.target.value)
+                }
+                className="h-11"
+              />
             </div>
           </>
         )}
 
-        <Button type="submit" className="w-full h-12 mt-6" size="lg">
-          <UserPlus className="h-5 w-5 mr-2" />
-          Register Now
+        <Button
+          type="submit"
+          className="w-full h-12 mt-6"
+          size="lg"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <svg
+                className="animate-spin h-5 w-5 mr-2 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+              Submitting...
+            </>
+          ) : (
+            <>
+              <UserPlus className="h-5 w-5 mr-2" />
+              Register Now
+            </>
+          )}
         </Button>
       </form>
     );
@@ -390,29 +512,38 @@ const Register = () => {
             Register Here Based on Your Profession
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Choose your category below and fill in your details to get personalized career guidance and exclusive opportunities
+            Choose your category below and fill in your details to get
+            personalized career guidance and exclusive opportunities
           </p>
         </div>
 
         <Card className="shadow-xl border-2">
           <CardContent className="p-6">
-            <Tabs value={userType} onValueChange={(value) => setUserType(value)} className="w-full">
+            <Tabs
+              value={userType}
+              onValueChange={(value) => setUserType(value)}
+              className="w-full"
+            >
               <TabsList className="grid w-full grid-cols-3 h-auto p-1 bg-muted/50">
-                <TabsTrigger 
-                  value="college-joining" 
+                <TabsTrigger
+                  value="college-joining"
                   className="flex flex-col items-center gap-2 py-3 data-[state=active]:bg-background"
                 >
                   <School className="h-5 w-5" />
-                  <div className="text-xs md:text-sm font-medium">College Joining</div>
+                  <div className="text-xs md:text-sm font-medium">
+                    College Joining
+                  </div>
                 </TabsTrigger>
-                <TabsTrigger 
+                <TabsTrigger
                   value="college-student"
                   className="flex flex-col items-center gap-2 py-3 data-[state=active]:bg-background"
                 >
                   <GraduationCap className="h-5 w-5" />
-                  <div className="text-xs md:text-sm font-medium">College Student</div>
+                  <div className="text-xs md:text-sm font-medium">
+                    College Student
+                  </div>
                 </TabsTrigger>
-                <TabsTrigger 
+                <TabsTrigger
                   value="fresher"
                   className="flex flex-col items-center gap-2 py-3 data-[state=active]:bg-background"
                 >
@@ -422,14 +553,20 @@ const Register = () => {
               </TabsList>
 
               <div className="mt-6">
-                <TabsContent value="college-joining" className="mt-0 animate-fade-in">
-                  {renderFormContent("college-joining")}
+                <TabsContent
+                  value="college-joining"
+                  className="mt-0 animate-fade-in"
+                >
+                  {renderFormContent()}
                 </TabsContent>
-                <TabsContent value="college-student" className="mt-0 animate-fade-in">
-                  {renderFormContent("college-student")}
+                <TabsContent
+                  value="college-student"
+                  className="mt-0 animate-fade-in"
+                >
+                  {renderFormContent()}
                 </TabsContent>
                 <TabsContent value="fresher" className="mt-0 animate-fade-in">
-                  {renderFormContent("fresher")}
+                  {renderFormContent()}
                 </TabsContent>
               </div>
             </Tabs>

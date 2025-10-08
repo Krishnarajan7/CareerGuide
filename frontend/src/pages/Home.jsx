@@ -4,8 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { ActionSearchBar } from "@/components/ui/action-search-bar";
 import { Link, useNavigate } from "react-router-dom";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import InfiniteCarousel from "@/components/InfiniteCarousel";
+import { LogoCarousel } from "@/components/ui/logo-carousel";
+import { GradientHeading } from "@/components/ui/gradient-heading";
+import { companyLogos } from "@/components/CompanyLogos";
 import SectionHeader from "@/components/SectionHeader";
+import ScrollToTop from "@/components/ScrollToTop";
 import {
   ArrowRight,
   BookOpen,
@@ -26,7 +29,7 @@ import {
   Stethoscope,
   Code,
   Building,
-  Atom
+  Atom,
 } from "lucide-react";
 
 // Reusable Study Goal Card
@@ -58,9 +61,13 @@ const StudyGoalCard = ({ goal, index }) => (
 const UserTypeCard = ({ type, index }) => (
   <Card key={index} className="hover-lift group">
     <CardContent className="p-8">
-      <div className="text-5xl mb-6 text-center group-hover:animate-bounce">{type.icon}</div>
+      <div className="text-5xl mb-6 text-center group-hover:animate-bounce">
+        {type.icon}
+      </div>
       <h3 className="text-xl font-bold mb-4 text-center">{type.title}</h3>
-      <p className="text-muted-foreground mb-6 text-center leading-relaxed">{type.description}</p>
+      <p className="text-muted-foreground mb-6 text-center leading-relaxed">
+        {type.description}
+      </p>
       <div className="space-y-3">
         {type.features.map((feature, idx) => (
           <div key={idx} className="flex items-center">
@@ -102,8 +109,8 @@ const TestimonialCard = ({ testimonial, index }) => (
   <Card key={index} className="hover-lift">
     <CardContent className="p-8">
       <div className="flex items-center mb-6">
-        <img 
-          src={testimonial.image} 
+        <img
+          src={testimonial.image}
           alt={testimonial.name}
           className="w-16 h-16 rounded-full mr-4 object-cover"
           loading="lazy"
@@ -134,22 +141,22 @@ const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals }) => {
 
       <div
         ref={heroRef}
-        className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-animate z-10 pt-12 sm:pt-16 md:pt-12 lg:pt-12" 
+        className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-animate z-10 pt-12 sm:pt-16 md:pt-12 lg:pt-12"
       >
-        <Badge className="mb-6 inline-flex items-center px-4 py-2 text-sm font-medium bg-primary/10 text-primary border-primary/20 shadow-lg hover:text-white" >
+        <Badge className="mb-6 inline-flex items-center px-4 py-2 text-sm font-medium bg-primary/10 text-primary border-primary/20 shadow-lg hover:text-white">
           <Sparkles className="h-5 w-5 mr-2" />
           AI-Powered Career Guidance
         </Badge>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight">
-          Discover Your{" "}
-          <span className="gradient-text">Career Path</span>
+          Discover Your <span className="gradient-text">Career Path</span>
           <br />
           <span className="inline-block">with Confidence</span>
         </h1>
 
         <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-          Unlock your potential with personalized, AI-driven guidance to navigate your career journey and achieve your dreams.
+          Unlock your potential with personalized, AI-driven guidance to
+          navigate your career journey and achieve your dreams.
         </p>
 
         <div className="mb-12 max-w-2xl mx-auto">
@@ -214,23 +221,23 @@ const Home = () => {
       subtitle: "BE/B.Tech, Diploma, M.Tech",
       color: "from-blue-500 to-cyan-500",
       bgColor: "bg-blue-50",
-      iconColor: "text-blue-600"
+      iconColor: "text-blue-600",
     },
     {
       icon: Briefcase,
-      title: "Management", 
+      title: "Management",
       subtitle: "MBA, BBA, PGDM",
       color: "from-purple-500 to-pink-500",
       bgColor: "bg-purple-50",
-      iconColor: "text-purple-600"
+      iconColor: "text-purple-600",
     },
     {
       icon: Calculator,
       title: "Commerce",
       subtitle: "B.Com, M.Com, CA, CS",
       color: "from-green-500 to-emerald-500",
-      bgColor: "bg-green-50", 
-      iconColor: "text-green-600"
+      bgColor: "bg-green-50",
+      iconColor: "text-green-600",
     },
     {
       icon: Palette,
@@ -238,7 +245,7 @@ const Home = () => {
       subtitle: "BA, MA, Fine Arts, Design",
       color: "from-orange-500 to-red-500",
       bgColor: "bg-orange-50",
-      iconColor: "text-orange-600"
+      iconColor: "text-orange-600",
     },
     {
       icon: Stethoscope,
@@ -246,7 +253,7 @@ const Home = () => {
       subtitle: "MBBS, BDS, BAMS, Nursing",
       color: "from-red-500 to-pink-500",
       bgColor: "bg-red-50",
-      iconColor: "text-red-600"
+      iconColor: "text-red-600",
     },
     {
       icon: Atom,
@@ -254,7 +261,7 @@ const Home = () => {
       subtitle: "B.Sc, M.Sc, Research",
       color: "from-indigo-500 to-blue-500",
       bgColor: "bg-indigo-50",
-      iconColor: "text-indigo-600"
+      iconColor: "text-indigo-600",
     },
     {
       icon: Building,
@@ -262,7 +269,7 @@ const Home = () => {
       subtitle: "B.Arch, M.Arch, Planning",
       color: "from-teal-500 to-cyan-500",
       bgColor: "bg-teal-50",
-      iconColor: "text-teal-600"
+      iconColor: "text-teal-600",
     },
     {
       icon: GraduationCap,
@@ -270,110 +277,127 @@ const Home = () => {
       subtitle: "B.Ed, M.Ed, D.Ed",
       color: "from-yellow-500 to-orange-500",
       bgColor: "bg-yellow-50",
-      iconColor: "text-yellow-600"
-    }
+      iconColor: "text-yellow-600",
+    },
   ];
 
   const userTypes = [
     {
       icon: "🎯",
       title: "College-Joining Students",
-      description: "Get AI-powered guidance on college selection, course recommendations, and strategic career planning based on your interests and academic performance.",
-      features: ["🏛️ College Recommendations", "📚 Course Selection", "🗺️ Career Mapping", "💰 Scholarship Info"]
+      description:
+        "Get AI-powered guidance on college selection, course recommendations, and strategic career planning based on your interests and academic performance.",
+      features: [
+        "🏛️ College Recommendations",
+        "📚 Course Selection",
+        "🗺️ Career Mapping",
+        "💰 Scholarship Info",
+      ],
     },
     {
       icon: "🚀",
-      title: "College Students", 
-      description: "Access premium internship opportunities, advanced skill development programs, and exclusive industry insights to accelerate your career trajectory.",
-      features: ["💼 Internship Portal", "📊 Skill Assessment", "🤝 Industry Connect", "🔬 Project Guidance"]
+      title: "College Students",
+      description:
+        "Access premium internship opportunities, advanced skill development programs, and exclusive industry insights to accelerate your career trajectory.",
+      features: [
+        "💼 Internship Portal",
+        "📊 Skill Assessment",
+        "🤝 Industry Connect",
+        "🔬 Project Guidance",
+      ],
     },
     {
       icon: "💎",
       title: "Freshers",
-      description: "Land your dream job with professional interview preparation, expert resume optimization, and AI-driven personalized job recommendations.",
-      features: ["🎯 Job Matching", "🎤 Interview Prep", "📋 Resume Builder", "💸 Salary Insights"]
-    }
+      description:
+        "Land your dream job with professional interview preparation, expert resume optimization, and AI-driven personalized job recommendations.",
+      features: [
+        "🎯 Job Matching",
+        "🎤 Interview Prep",
+        "📋 Resume Builder",
+        "💸 Salary Insights",
+      ],
+    },
   ];
 
   const stats = [
-    { icon: Users, value: "10,000+", label: "Students Guided", color: "text-primary" },
-    { icon: BookOpen, value: "50+", label: "Courses Available", color: "text-secondary" },
-    { icon: TrendingUp, value: "95%", label: "Success Rate", color: "text-accent" },
-    { icon: Award, value: "500+", label: "Companies Partner", color: "text-success" }
+    {
+      icon: Users,
+      value: "10,000+",
+      label: "Students Guided",
+      color: "text-primary",
+    },
+    {
+      icon: BookOpen,
+      value: "50+",
+      label: "Courses Available",
+      color: "text-secondary",
+    },
+    {
+      icon: TrendingUp,
+      value: "95%",
+      label: "Success Rate",
+      color: "text-accent",
+    },
+    {
+      icon: Award,
+      value: "500+",
+      label: "Companies Partner",
+      color: "text-success",
+    },
   ];
 
   const testimonials = [
     {
       name: "Priya Sharma",
       role: "Software Engineer at TCS",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      content: "CareerGuide helped me land my dream job! The personalized guidance and interview preparation were game-changers.",
-      rating: 5
+      image:
+        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      content:
+        "P2P Career Guidance helped me land my dream job! The personalized guidance and interview preparation were game-changers.",
+      rating: 5,
     },
     {
       name: "Rohit Kumar",
       role: "Data Scientist at Flipkart",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      content: "The AI-powered recommendations were spot-on. I got placed in my preferred company within 3 months!",
-      rating: 5
+      image:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      content:
+        "The AI-powered recommendations were spot-on. I got placed in my preferred company within 3 months!",
+      rating: 5,
     },
     {
       name: "Anita Patel",
       role: "Product Manager at Zomato",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-      content: "From college selection to job placement, CareerGuide was with me every step of the way. Highly recommended!",
-      rating: 5
-    }
+      image:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      content:
+        "From college selection to job placement, P2P Career Guidance was with me every step of the way. Highly recommended!",
+      rating: 5,
+    },
   ];
 
   const features = [
     {
       icon: Zap,
       title: "AI-Powered Matching",
-      description: "Advanced algorithms match you with perfect opportunities"
+      description: "Advanced algorithms match you with perfect opportunities",
     },
     {
       icon: Target,
       title: "Personalized Guidance",
-      description: "Tailored advice based on your unique profile and goals"
+      description: "Tailored advice based on your unique profile and goals",
     },
     {
       icon: Globe,
       title: "Industry Network",
-      description: "Connect with professionals and companies in your field"
+      description: "Connect with professionals and companies in your field",
     },
     {
       icon: Clock,
       title: "24/7 Support",
-      description: "Round-the-clock assistance for all your career queries"
-    }
-  ];
-
-  const companyLogos = [
-    <div key="google" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
-      <span className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-red-500 bg-clip-text text-transparent">Google</span>
-    </div>,
-    <div key="microsoft" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
-      <span className="text-2xl font-bold text-blue-600">Microsoft</span>
-    </div>,
-    <div key="amazon" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
-      <span className="text-2xl font-bold text-orange-500">Amazon</span>
-    </div>,
-    <div key="apple" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
-      <span className="text-2xl font-bold text-gray-800">Apple</span>
-    </div>,
-    <div key="netflix" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
-      <span className="text-2xl font-bold text-red-600">Netflix</span>
-    </div>,
-    <div key="tesla" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
-      <span className="text-2xl font-bold text-gray-900">Tesla</span>
-    </div>,
-    <div key="spotify" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
-      <span className="text-2xl font-bold text-green-600">Spotify</span>
-    </div>,
-    <div key="uber" className="flex items-center justify-center h-20 w-40 bg-card rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300">
-      <span className="text-2xl font-bold text-black">Uber</span>
-    </div>,
+      description: "Round-the-clock assistance for all your career queries",
+    },
   ];
 
   return (
@@ -386,13 +410,17 @@ const Home = () => {
 
       {/* User Types Section */}
       <section className="py-20 bg-background/50">
-        <div ref={featuresRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate">
+        <div
+          ref={featuresRef}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
+        >
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Designed for <span className="gradient-text">Every Journey</span>
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Whether you're starting college, currently studying, or entering the workforce, we provide tailored guidance for your career stage.
+              Whether you're starting college, currently studying, or entering
+              the workforce, we provide tailored guidance for your career stage.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -406,11 +434,17 @@ const Home = () => {
       {/* Stats Section */}
       <section className="py-20 bg-gradient-to-r from-primary to-secondary text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
-        <div ref={statsRef} className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate">
+        <div
+          ref={statsRef}
+          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
+        >
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Trusted by Thousands</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Trusted by Thousands
+            </h2>
             <p className="text-lg md:text-xl text-primary-foreground/90 max-w-3xl mx-auto">
-              Join our growing community of successful students and professionals.
+              Join our growing community of successful students and
+              professionals.
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -426,7 +460,8 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Why Choose <span className="gradient-text">CareerGuide?</span>
+              Why Choose{" "}
+              <span className="gradient-text">P2P Career Guidance?</span>
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -439,37 +474,44 @@ const Home = () => {
 
       {/* Testimonials Section */}
       <section className="py-20 bg-background/50">
-        <div ref={testimonialsRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate">
+        <div
+          ref={testimonialsRef}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
+        >
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Success <span className="gradient-text">Stories</span>
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Hear from our students who have successfully transformed their careers
+              Hear from our students who have successfully transformed their
+              careers
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <TestimonialCard testimonial={testimonial} index={index} key={index} />
+              <TestimonialCard
+                testimonial={testimonial}
+                index={index}
+                key={index}
+              />
             ))}
           </div>
         </div>
       </section>
 
       {/* Trusted Companies Section */}
-      <section className="py-20 bg-background">
+      <section className="py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            eyebrow="Our Partners"
-            title="Trusted by Leading Companies"
-            subtitle="Industry leaders that trust graduates using our platform"
-          />
-          <div className="p-8 mt-6">
-            <InfiniteCarousel items={companyLogos} speed="normal" ariaLabel="trusted companies logos" />
+          <div className="text-center mb-12">
+            <GradientHeading size="lg" variant="default">
+              Trusted by <span className="gradient-text" size="lg">Leading Tech Companies</span>
+            </GradientHeading>
+          </div>
+          <div className="flex justify-center">
+            <LogoCarousel columnCount={3} logos={companyLogos} />
           </div>
         </div>
       </section>
-
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-primary to-secondary text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
@@ -478,10 +520,11 @@ const Home = () => {
             Ready to Transform Your Career?
           </h2>
           <p className="text-lg md:text-xl mb-12 text-primary-foreground/90">
-            Join thousands of students who have already started their journey to success
+            Join thousands of students who have already started their journey to
+            success
           </p>
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             className="bg-white text-primary hover:bg-white/90 shadow-xl text-lg px-8 py-3 h-auto hover-lift group w-full sm:w-auto"
             asChild
           >
@@ -492,7 +535,10 @@ const Home = () => {
           </Button>
         </div>
       </section>
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
+    
   );
 };
 
