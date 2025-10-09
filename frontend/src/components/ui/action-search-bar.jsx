@@ -35,7 +35,7 @@ const highlightText = (text, query) => {
 
 function ActionSearchBar({
   onCollegeSelect,
-  placeholder = "Search colleges, courses & career guidance...",
+  placeholder = "Search colleges by name or district...",
 }) {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState(null);

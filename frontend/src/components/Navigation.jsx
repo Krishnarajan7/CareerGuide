@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
-  Sparkles,
   BookOpen,
   FileText,
   Phone,
@@ -42,24 +41,16 @@ const Navigation = () => {
 
   // Block scrolling when mobile menu is open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    document.body.style.overflow = isOpen ? "hidden" : "unset";
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleMenu = () => setIsOpen(!isOpen);
 
   // Close menu on route change
-  useEffect(() => {
-    setIsOpen(false);
-  }, [location.pathname]);
+  useEffect(() => setIsOpen(false), [location.pathname]);
 
   return (
     <>
@@ -70,23 +61,22 @@ const Navigation = () => {
             : "bg-background/90 backdrop-blur-lg"
         }`}
       >
-        <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-12">
+        <div className="max-w-[90rem] mx-auto px-4 lg:px-0">
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-3 group relative">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-xl blur-md opacity-70 group-hover:opacity-100 transition-all duration-300 animate-pulse"></div>
-                <div className="relative bg-gradient-to-r from-primary to-secondary p-3 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                  <Sparkles className="h-6 w-6 text-white" />
-                </div>
-              </div>
+            <Link to="/" className="flex items-center space-x-3">
+              <img
+                src="/logos/P2P.png" // <-- Your image logo path
+                alt="P2P Career Guidance"
+                className="h-52 w-auto  object-contain relative right-10 mt-4"
+              />
               <div className="flex flex-col">
-                <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  P2P Career Guidance
+                {/* <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  Career Guidance
                 </span>
                 <span className="text-xs text-muted-foreground/70 -mt-1">
                   Passion to Profession
-                </span>
+                </span> */}
               </div>
             </Link>
 
@@ -185,17 +175,17 @@ const Navigation = () => {
         <div className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-background/95 backdrop-blur-xl border-l border-border shadow-2xl transform transition-all duration-500">
           <div className="flex flex-col h-full">
             {/* Mobile Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gradient-to-r from-primary/20 to-secondary/20">
+            <div className="flex items-center p-6 border-b border-gradient-to-r from-primary/20 to-secondary/20">
               <Link
                 to="/"
-                className="flex items-center space-x-3 group"
+                className="flex items-center space-x-3"
                 onClick={() => setIsOpen(false)}
               >
-                <div className="relative">
-                  <div className="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center shadow-md">
-                    <Sparkles className="h-4 w-4 text-white" />
-                  </div>
-                </div>
+                <img
+                  src="/logo.png" // <-- Mobile logo
+                  alt="P2P Career Guidance"
+                  className="w-10 h-10 object-contain"
+                />
                 <div className="flex flex-col">
                   <span className="text-lg font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                     P2P-Career Guidance
@@ -245,7 +235,7 @@ const Navigation = () => {
               <div className="mt-8 pt-6 border-t border-gradient-to-r from-primary/20 to-secondary/20 space-y-4">
                 <Button
                   variant="outline"
-                  className="w-full justify-start h-12 border-primary/20 hover:border-primary/40 hover:coli hover:bg-primary/5 "
+                  className="w-full justify-start h-12 border-primary/20 hover:border-primary/40 hover:bg-primary/5"
                   asChild
                 >
                   <Link to="/register" onClick={() => setIsOpen(false)}>

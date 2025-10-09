@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
+// Shuffle logos randomly
 const shuffleArray = (array) => {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -12,6 +13,7 @@ const shuffleArray = (array) => {
   return shuffled;
 };
 
+// Distribute logos evenly across columns
 const distributeLogos = (allLogos, columnCount) => {
   const shuffled = shuffleArray(allLogos);
   const columns = Array.from({ length: columnCount }, () => []);
@@ -30,12 +32,14 @@ const distributeLogos = (allLogos, columnCount) => {
   return columns;
 };
 
+// Single column of logos
 const LogoColumn = React.memo(({ logos, index, currentTime }) => {
-  const cycleInterval = 2000;
-  const columnDelay = index * 200;
+  const cycleInterval = 2000; // 2 seconds per logo
+  const columnDelay = index * 200; // stagger columns
   const adjustedTime = (currentTime + columnDelay) % (cycleInterval * logos.length);
   const currentIndex = Math.floor(adjustedTime / cycleInterval);
-  const CurrentLogo = useMemo(() => logos[currentIndex].img, [logos, currentIndex]);
+
+  const currentLogo = useMemo(() => logos[currentIndex], [logos, currentIndex]);
 
   return (
     <motion.div
@@ -50,7 +54,7 @@ const LogoColumn = React.memo(({ logos, index, currentTime }) => {
     >
       <AnimatePresence mode="wait">
         <motion.div
-          key={`${logos[currentIndex].id}-${currentIndex}`}
+          key={`${currentLogo.id}-${currentIndex}`}
           className="absolute inset-0 flex items-center justify-center"
           initial={{ y: "10%", opacity: 0, filter: "blur(8px)" }}
           animate={{
@@ -77,7 +81,12 @@ const LogoColumn = React.memo(({ logos, index, currentTime }) => {
             },
           }}
         >
-          <CurrentLogo className="h-20 w-20 max-h-[80%] max-w-[80%] object-contain md:h-32 md:w-32" />
+          {/* ✅ Render logo as <img> */}
+          <img
+            src={currentLogo.img}
+            alt={currentLogo.name}
+            className="h-20 w-20 max-h-[80%] max-w-[80%] object-contain md:h-32 md:w-32"
+          />
         </motion.div>
       </AnimatePresence>
     </motion.div>
@@ -86,6 +95,7 @@ const LogoColumn = React.memo(({ logos, index, currentTime }) => {
 
 LogoColumn.displayName = "LogoColumn";
 
+// Main carousel component
 export function LogoCarousel({ columnCount = 2, logos }) {
   const [logoSets, setLogoSets] = useState([]);
   const [currentTime, setCurrentTime] = useState(0);
@@ -100,8 +110,8 @@ export function LogoCarousel({ columnCount = 2, logos }) {
   }, [updateTime]);
 
   useEffect(() => {
-    const distributedLogos = distributeLogos(logos, columnCount);
-    setLogoSets(distributedLogos);
+    const distributed = distributeLogos(logos, columnCount);
+    setLogoSets(distributed);
   }, [logos, columnCount]);
 
   return (

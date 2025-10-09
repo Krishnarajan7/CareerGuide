@@ -284,7 +284,7 @@ const Home = () => {
   const userTypes = [
     {
       icon: "🎯",
-      title: "College-Joining Students",
+      title: "12th Students",
       description:
         "Get AI-powered guidance on college selection, course recommendations, and strategic career planning based on your interests and academic performance.",
       features: [
@@ -500,7 +500,7 @@ const Home = () => {
       </section>
 
       {/* Trusted Companies Section */}
-      <section className="py-24 bg-background">
+      <section className="pt-20 pb-40  bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <GradientHeading size="lg" variant="default">

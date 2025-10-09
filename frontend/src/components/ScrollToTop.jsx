@@ -10,17 +10,17 @@ const ScrollToTop = () => {
 
   return (
     <section className="relative w-full py-16 md:py-20 lg:py-24 bg-background overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-[100%] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Diagonal Line */}
-        <div className="relative w-full h-[3px] flex items-center">
+        <div className="relative w-[100%] h-[3px] flex items-center">
           <div
             className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-secondary"
             style={{
               transform: "skewY(-1deg)",
               transformOrigin: "left",
             }}
+            
           />
-
           {/* Scroll Button */}
           <div className="absolute right-6 -translate-y-0 sm:-translate-y-4 md:-translate-y-3.5 flex flex-col items-center group">
             <button

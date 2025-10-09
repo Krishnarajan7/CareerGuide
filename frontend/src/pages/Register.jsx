@@ -65,7 +65,7 @@ const Register = () => {
     name: "",
     email: "",
     phone: "",
-    // College joining specific
+    // 12th student specific
     school: "",
     cutoff: "",
     district: "",
@@ -531,7 +531,7 @@ const Register = () => {
                 >
                   <School className="h-5 w-5" />
                   <div className="text-xs md:text-sm font-medium">
-                    College Joining
+                    12th Student
                   </div>
                 </TabsTrigger>
                 <TabsTrigger
