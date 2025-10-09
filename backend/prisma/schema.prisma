@@ -39,4 +39,61 @@ model Admin {
   role      String   @default("admin") @db.VarChar(64)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  jobs      Job[]    // Relation to jobs posted by this admin
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  INTERNSHIP
+  CONTRACT
+}
+
+enum JobCategory {
+  ENGINEERING
+  MANAGEMENT
+  DESIGN
+  MARKETING
+  SALES
+  DATA_SCIENCE
+  PRODUCT
+}
+
+enum ExperienceLevel {
+  FRESHER
+  ZERO_TO_ONE
+  ONE_TO_THREE
+  THREE_TO_FIVE
+}
+
+model Job {
+  id                   Int             @id @default(autoincrement())
+  title                String          @db.VarChar(256)
+  company              String          @db.VarChar(256)
+  location             String          @db.VarChar(128)
+  type                 JobType
+  category             JobCategory
+  experience           ExperienceLevel
+  minSalary            Int             // In INR, assuming no decimal for simplicity
+  maxSalary            Int             // In INR
+  description          String          @db.Text
+  requirements         String[]        // Array of requirement strings
+  benefits             String[]        // Array of benefit strings
+  skills               String[]        // Array of skill strings
+  applicationDeadline  DateTime
+  isActive             Boolean         @default(true)
+  applicationsCount    Int             @default(0) // For now, a counter; can be computed from relations later
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  postedBy             Admin?          @relation(fields: [postedById], references: [id], onDelete: SetNull)
+  postedById           Int?
+
+  @@index([title])
+  @@index([company])
+  @@index([location])
+  @@index([category])
+  @@index([type])
+  @@index([postedById])
 }
