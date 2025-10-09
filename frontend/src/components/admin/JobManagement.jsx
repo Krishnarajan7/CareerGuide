@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,9 +10,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { mockJobs } from "@/data/mockJobs";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { useAuth } from "@/context/AuthContext";
+import api from "@/api/axios";
 import {
   Edit,
   Trash2,
@@ -28,7 +29,8 @@ import {
 
 export function JobManagement() {
   const { toast } = useToast();
-  const [jobs, setJobs] = useState(mockJobs);
+  const { admin } = useAuth(); // Get admin from AuthContext
+  const [jobs, setJobs] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
   const [editingJob, setEditingJob] = useState(null);
@@ -38,26 +40,60 @@ export function JobManagement() {
   const [deletingJobId, setDeletingJobId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const filteredJobs = jobs.filter(job => {
-    const matchesSearch = job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          job.company.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = filterCategory === "All" || job.category === filterCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // Fetch jobs from backend on mount
+  useEffect(() => {
+    const fetchJobs = async () => {
+      setIsLoading(true);
+      try {
+        const response = await api.get("/jobs", {
+          params: { searchQuery, category: filterCategory === "All" ? undefined : filterCategory },
+        });
+        setJobs(response.data.data);
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: error.response?.data?.message || "Failed to fetch jobs",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchJobs();
+  }, [searchQuery, filterCategory, toast]);
 
-  const categories = ["All", "Engineering", "Management", "Design", "Marketing", "Sales", "Data Science", "Product"];
+  const filteredJobs = jobs; // Backend handles filtering via query params
 
-  const handleDeleteJob = (jobId) => {
+  const categories = [
+    "All",
+    "ENGINEERING",
+    "MANAGEMENT",
+    "DESIGN",
+    "MARKETING",
+    "SALES",
+    "DATA_SCIENCE",
+    "PRODUCT",
+  ];
+
+  const handleDeleteJob = async (jobId) => {
     setIsLoading(true);
-    setTimeout(() => {
-      setJobs(jobs.filter(job => job.id !== jobId));
+    try {
+      await api.delete(`/jobs/${jobId}`);
+      setJobs(jobs.filter((job) => job.id !== jobId));
       setDeletingJobId(null);
-      setIsLoading(false);
       toast({
         title: "Job Deleted",
         description: "The job posting has been removed successfully.",
       });
-    }, 500);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to delete job",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleViewJob = (job) => {
@@ -65,14 +101,21 @@ export function JobManagement() {
     setIsViewDialogOpen(true);
   };
 
-  const handleToggleJobStatus = (jobId) => {
-    setJobs(jobs.map(job => 
-      job.id === jobId ? { ...job, isActive: !job.isActive } : job
-    ));
-    toast({
-      title: "Job Status Updated",
-      description: "The job status has been changed successfully.",
-    });
+  const handleToggleJobStatus = async (jobId) => {
+    try {
+      const response = await api.patch(`/jobs/${jobId}/status`);
+      setJobs(jobs.map((job) => (job.id === jobId ? { ...job, isActive: response.data.data.isActive } : job)));
+      toast({
+        title: "Job Status Updated",
+        description: `The job status has been changed to ${response.data.data.isActive ? "active" : "inactive"}.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to update job status",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleEditJob = (job) => {
@@ -80,14 +123,23 @@ export function JobManagement() {
     setIsEditDialogOpen(true);
   };
 
-  const handleSaveEdit = (updatedJob) => {
-    setJobs(jobs.map(job => job.id === updatedJob.id ? updatedJob : job));
-    setIsEditDialogOpen(false);
-    setEditingJob(null);
-    toast({
-      title: "Job Updated",
-      description: "The job posting has been updated successfully.",
-    });
+  const handleSaveEdit = async (updatedJob) => {
+    try {
+      const response = await api.put(`/jobs/${updatedJob.id}`, updatedJob);
+      setJobs(jobs.map((job) => (job.id === updatedJob.id ? response.data.data : job)));
+      setIsEditDialogOpen(false);
+      setEditingJob(null);
+      toast({
+        title: "Job Updated",
+        description: "The job posting has been updated successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to update job",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -122,8 +174,10 @@ export function JobManagement() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {categories.map(category => (
-                  <SelectItem key={category} value={category}>{category}</SelectItem>
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category === "All" ? "All" : category.replace("_", " ")}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -131,97 +185,107 @@ export function JobManagement() {
         </CardHeader>
 
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="min-w-[200px]">Job Title</TableHead>
-                  <TableHead className="min-w-[150px]">Company</TableHead>
-                  <TableHead className="min-w-[120px]">Category</TableHead>
-                  <TableHead className="min-w-[100px]">Type</TableHead>
-                  <TableHead className="min-w-[120px]">Applications</TableHead>
-                  <TableHead className="min-w-[100px]">Status</TableHead>
-                  <TableHead className="min-w-[150px]">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredJobs.map((job) => (
-                  <TableRow key={job.id}>
-                    <TableCell>
-                      <div>
-                        <div className="font-medium">{job.title}</div>
-                        <div className="text-sm text-muted-foreground flex items-center">
-                          <MapPin className="h-3 w-3 mr-1" />
-                          {job.location}
+          {isLoading ? (
+            <div className="flex justify-center py-8">
+              <LoadingSpinner size="lg" />
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[200px]">Job Title</TableHead>
+                    <TableHead className="min-w-[150px]">Company</TableHead>
+                    <TableHead className="min-w-[120px]">Category</TableHead>
+                    <TableHead className="min-w-[100px]">Type</TableHead>
+                    <TableHead className="min-w-[120px]">Applications</TableHead>
+                    <TableHead className="min-w-[100px]">Status</TableHead>
+                    <TableHead className="min-w-[150px]">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredJobs.map((job) => (
+                    <TableRow key={job.id}>
+                      <TableCell>
+                        <div>
+                          <div className="font-medium">{job.title}</div>
+                          <div className="text-sm text-muted-foreground flex items-center">
+                            <MapPin className="h-3 w-3 mr-1" />
+                            {job.location}
+                          </div>
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-medium">{job.company}</TableCell>
-                    <TableCell>
-                      <Badge variant="secondary">{job.category}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={job.type === "Full-time" ? "default" : "outline"}>
-                        {job.type}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center">
-                        <Users className="h-4 w-4 mr-1 text-muted-foreground" />
-                        {job.applicationsCount}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={job.isActive ? "default" : "destructive"}>
-                        {job.isActive ? "Active" : "Inactive"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48">
-                          <DropdownMenuItem onClick={() => handleViewJob(job)}>
-                            <Eye className="h-4 w-4 mr-2" />
-                            View Details
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleEditJob(job)}>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit Job
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem onClick={() => handleToggleJobStatus(job.id)}>
-                            {job.isActive ? (
+                      </TableCell>
+                      <TableCell className="font-medium">{job.company}</TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">{job.category.replace("_", " ")}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={job.type === "FULL_TIME" ? "default" : "outline"}>
+                          {job.type.replace("_", " ")}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center">
+                          <Users className="h-4 w-4 mr-1 text-muted-foreground" />
+                          {job.applicationsCount}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={job.isActive ? "default" : "destructive"}>
+                          {job.isActive ? "Active" : "Inactive"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuItem onClick={() => handleViewJob(job)}>
+                              <Eye className="h-4 w-4 mr-2" />
+                              View Details
+                            </DropdownMenuItem>
+                            {admin && (
                               <>
-                                <XCircle className="h-4 w-4 mr-2 text-warning" />
-                                Mark Inactive
-                              </>
-                            ) : (
-                              <>
-                                <CheckCircle className="h-4 w-4 mr-2 text-success" />
-                                Mark Active
+                                <DropdownMenuItem onClick={() => handleEditJob(job)}>
+                                  <Edit className="h-4 w-4 mr-2" />
+                                  Edit Job
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => handleToggleJobStatus(job.id)}>
+                                  {job.isActive ? (
+                                    <>
+                                      <XCircle className="h-4 w-4 mr-2 text-warning" />
+                                      Mark Inactive
+                                    </>
+                                  ) : (
+                                    <>
+                                      <CheckCircle className="h-4 w-4 mr-2 text-success" />
+                                      Mark Active
+                                    </>
+                                  )}
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onClick={() => setDeletingJobId(job.id)}
+                                  className="text-destructive focus:text-destructive"
+                                >
+                                  <Trash2 className="h-4 w-4 mr-2" />
+                                  Delete Job
+                                </DropdownMenuItem>
                               </>
                             )}
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            onClick={() => setDeletingJobId(job.id)}
-                            className="text-destructive focus:text-destructive"
-                          >
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            Delete Job
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -231,12 +295,14 @@ export function JobManagement() {
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{viewingJob.title}</DialogTitle>
-              <DialogDescription>{viewingJob.company} • {viewingJob.location}</DialogDescription>
+              <DialogDescription>
+                {viewingJob.company} • {viewingJob.location}
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="flex flex-wrap gap-2">
-                <Badge>{viewingJob.type}</Badge>
-                <Badge variant="secondary">{viewingJob.category}</Badge>
+                <Badge>{viewingJob.type.replace("_", " ")}</Badge>
+                <Badge variant="secondary">{viewingJob.category.replace("_", " ")}</Badge>
                 <Badge variant={viewingJob.isActive ? "default" : "destructive"}>
                   {viewingJob.isActive ? "Active" : "Inactive"}
                 </Badge>
@@ -261,14 +327,22 @@ export function JobManagement() {
                   ))}
                 </ul>
               </div>
+              <div>
+                <h4 className="font-semibold mb-2">Skills</h4>
+                <div className="flex flex-wrap gap-2">
+                  {viewingJob.skills.map((skill, i) => (
+                    <Badge key={i} variant="outline">{skill}</Badge>
+                  ))}
+                </div>
+              </div>
               <div className="flex gap-4 text-sm">
                 <div>
                   <span className="font-semibold">Salary: </span>
-                  ₹{viewingJob.salary.min.toLocaleString()} - ₹{viewingJob.salary.max.toLocaleString()}
+                  ₹{viewingJob.minSalary.toLocaleString()} - ₹{viewingJob.maxSalary.toLocaleString()}
                 </div>
                 <div>
                   <span className="font-semibold">Experience: </span>
-                  {viewingJob.experience}
+                  {viewingJob.experience.replace("_", " ")}
                 </div>
               </div>
             </div>
@@ -282,9 +356,7 @@ export function JobManagement() {
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Edit Job Posting</DialogTitle>
-              <DialogDescription>
-                Update the job details below
-              </DialogDescription>
+              <DialogDescription>Update the job details below</DialogDescription>
             </DialogHeader>
             <JobEditForm job={editingJob} onSave={handleSaveEdit} onCancel={() => setIsEditDialogOpen(false)} />
           </DialogContent>
@@ -320,21 +392,55 @@ export function JobManagement() {
 
 function JobEditForm({ job, onSave, onCancel }) {
   const [formData, setFormData] = useState({
-    ...job,
+    id: job.id,
+    title: job.title,
+    company: job.company,
+    location: job.location,
+    type: job.type,
+    category: job.category,
+    experience: job.experience,
+    minSalary: job.minSalary,
+    maxSalary: job.maxSalary,
+    description: job.description,
     requirements: job.requirements.join("\n"),
     benefits: job.benefits.join("\n"),
     skills: job.skills.join(", "),
+    applicationDeadline: new Date(job.applicationDeadline).toISOString().split("T")[0],
   });
 
-  const handleSubmit = (e) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedJob = {
-      ...formData,
-      requirements: formData.requirements.split("\n").filter(r => r.trim()),
-      benefits: formData.benefits.split("\n").filter(b => b.trim()),
-      skills: formData.skills.split(", ").map(s => s.trim()).filter(s => s),
-    };
-    onSave(updatedJob);
+    setIsSubmitting(true);
+    try {
+      const updatedJob = {
+        id: formData.id,
+        title: formData.title,
+        company: formData.company,
+        location: formData.location,
+        type: formData.type,
+        category: formData.category,
+        experience: formData.experience,
+        minSalary: parseInt(formData.minSalary),
+        maxSalary: parseInt(formData.maxSalary),
+        description: formData.description,
+        requirements: formData.requirements.split("\n").map((r) => r.trim()).filter((r) => r),
+        benefits: formData.benefits.split("\n").map((b) => b.trim()).filter((b) => b),
+        skills: formData.skills.split(",").map((s) => s.trim()).filter((s) => s),
+        applicationDeadline: new Date(formData.applicationDeadline).toISOString(),
+      };
+      await onSave(updatedJob);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to save job",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -386,10 +492,10 @@ function JobEditForm({ job, onSave, onCancel }) {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Full-time">Full-time</SelectItem>
-              <SelectItem value="Part-time">Part-time</SelectItem>
-              <SelectItem value="Internship">Internship</SelectItem>
-              <SelectItem value="Contract">Contract</SelectItem>
+              <SelectItem value="FULL_TIME">Full Time</SelectItem>
+              <SelectItem value="PART_TIME">Part Time</SelectItem>
+              <SelectItem value="INTERNSHIP">Internship</SelectItem>
+              <SelectItem value="CONTRACT">Contract</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -400,27 +506,30 @@ function JobEditForm({ job, onSave, onCancel }) {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Engineering">Engineering</SelectItem>
-              <SelectItem value="Management">Management</SelectItem>
-              <SelectItem value="Design">Design</SelectItem>
-              <SelectItem value="Marketing">Marketing</SelectItem>
-              <SelectItem value="Sales">Sales</SelectItem>
-              <SelectItem value="Data Science">Data Science</SelectItem>
-              <SelectItem value="Product">Product</SelectItem>
+              <SelectItem value="ENGINEERING">Engineering</SelectItem>
+              <SelectItem value="MANAGEMENT">Management</SelectItem>
+              <SelectItem value="DESIGN">Design</SelectItem>
+              <SelectItem value="MARKETING">Marketing</SelectItem>
+              <SelectItem value="SALES">Sales</SelectItem>
+              <SelectItem value="DATA_SCIENCE">Data Science</SelectItem>
+              <SelectItem value="PRODUCT">Product</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
           <Label>Experience</Label>
-          <Select value={formData.experience} onValueChange={(value) => setFormData({ ...formData, experience: value })}>
+          <Select
+            value={formData.experience}
+            onValueChange={(value) => setFormData({ ...formData, experience: value })}
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Fresher">Fresher</SelectItem>
-              <SelectItem value="0-1 years">0-1 years</SelectItem>
-              <SelectItem value="1-3 years">1-3 years</SelectItem>
-              <SelectItem value="3-5 years">3-5 years</SelectItem>
+              <SelectItem value="FRESHER">Fresher</SelectItem>
+              <SelectItem value="ZERO_TO_ONE">0-1 years</SelectItem>
+              <SelectItem value="ONE_TO_THREE">1-3 years</SelectItem>
+              <SelectItem value="THREE_TO_FIVE">3-5 years</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -431,8 +540,8 @@ function JobEditForm({ job, onSave, onCancel }) {
           <Label>Min Salary (INR)</Label>
           <Input
             type="number"
-            value={formData.salary.min}
-            onChange={(e) => setFormData({ ...formData, salary: { ...formData.salary, min: parseInt(e.target.value) } })}
+            value={formData.minSalary}
+            onChange={(e) => setFormData({ ...formData, minSalary: e.target.value })}
             required
           />
         </div>
@@ -440,8 +549,8 @@ function JobEditForm({ job, onSave, onCancel }) {
           <Label>Max Salary (INR)</Label>
           <Input
             type="number"
-            value={formData.salary.max}
-            onChange={(e) => setFormData({ ...formData, salary: { ...formData.salary, max: parseInt(e.target.value) } })}
+            value={formData.maxSalary}
+            onChange={(e) => setFormData({ ...formData, maxSalary: e.target.value })}
             required
           />
         </div>
@@ -485,10 +594,11 @@ function JobEditForm({ job, onSave, onCancel }) {
       </div>
 
       <div className="flex justify-end gap-2 pt-4">
-        <Button type="button" variant="outline" onClick={onCancel}>
+        <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
           Cancel
         </Button>
-        <Button type="submit">
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? <LoadingSpinner size="sm" className="mr-2" /> : null}
           Save Changes
         </Button>
       </div>
