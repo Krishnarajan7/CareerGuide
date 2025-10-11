@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { UnauthorizedError, ForbiddenError } from "../utils/errors.js";
 
 dotenv.config();
 
@@ -10,18 +11,21 @@ if (!JWT_SECRET) throw new Error("JWT_SECRET is not defined in environment varia
 export const authenticate = (req, res, next) => {
   try {
     let token;
+    const authHeader = req.headers.authorization;
 
-    // Check cookie first
-    if (req.cookies?.token) {
-      token = req.cookies.token;
+    // Check cookies first (accessToken or refreshToken)
+    if (req.cookies?.accessToken) {
+      token = req.cookies.accessToken;
+    } else if (req.cookies?.refreshToken) {
+      token = req.cookies.refreshToken;
     } 
     // Then Authorization header
-    else if (req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
-      token = req.headers.authorization.split(" ")[1];
+    else if (authHeader?.startsWith("Bearer ")) {
+      token = authHeader.substring(7); // Extract token after "Bearer "
     }
 
     if (!token) {
-      return res.status(401).json({ message: "Access denied. No token provided." });
+      throw new UnauthorizedError("Access denied. No token provided.");
     }
 
     // Verify token
@@ -29,7 +33,7 @@ export const authenticate = (req, res, next) => {
     req.admin = decoded;
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Invalid or expired token." });
+    next(error); // Pass to global error handler
   }
 };
 
@@ -40,11 +44,11 @@ export const authenticate = (req, res, next) => {
 export const authorize = (roles = []) => {
   return (req, res, next) => {
     if (!req.admin) {
-      return res.status(401).json({ message: "Unauthorized: admin info missing" });
+      throw new UnauthorizedError("Unauthorized: admin info missing");
     }
 
     if (roles.length > 0 && !roles.includes(req.admin.role)) {
-      return res.status(403).json({ message: "Forbidden: insufficient permissions" });
+      throw new ForbiddenError("Forbidden: insufficient permissions");
     }
 
     next();

@@ -1,25 +1,23 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { prisma } from "../config/prisma.js";
+import { ValidationError, NotFoundError } from "../utils/errors.js";
 
 // Ensure JWT_SECRET is defined
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) throw new Error("JWT_SECRET is not defined in environment variables!");
 
-// Helper: Create JWT token
+// Helper: Create JWT tokens
 const createToken = (admin) => {
-  return jwt.sign(
-    { id: admin.id, email: admin.email, role: admin.role },
-    JWT_SECRET,
-    { expiresIn: "7d" }
-  );
+  const payload = { id: admin.id, email: admin.email, role: admin.role };
+  const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "15m" });
+  const refreshToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+  return { accessToken, refreshToken };
 };
-
-// --- SERVICE FUNCTIONS ---
 
 /* Create a new admin (transactional) */
 export const createAdminService = async (data) => {
-  const { password, role = "ADMIN", ...adminData } = data;
+  const { password, ...adminData } = data;
 
   return await prisma.$transaction(async (prismaTx) => {
     // Check for existing admin
@@ -27,9 +25,7 @@ export const createAdminService = async (data) => {
       where: { email: adminData.email },
     });
     if (existingAdmin) {
-      const error = new Error("Admin already exists with this email");
-      error.status = 400;
-      throw error;
+      throw new ValidationError("Admin already exists with this email");
     }
 
     // Hash password
@@ -37,7 +33,7 @@ export const createAdminService = async (data) => {
 
     // Create admin
     const admin = await prismaTx.admin.create({
-      data: { ...adminData, password: hashedPassword, role },
+      data: { ...adminData, password: hashedPassword },
     });
 
     return { id: admin.id, name: admin.name, email: admin.email, role: admin.role };
@@ -48,21 +44,21 @@ export const createAdminService = async (data) => {
 export const loginAdminService = async ({ email, password }) => {
   const admin = await prisma.admin.findUnique({ where: { email } });
   if (!admin) {
-    const error = new Error("Invalid email or password");
-    error.status = 401;
-    throw error;
+    throw new ValidationError("Invalid email or password");
   }
 
   const passwordMatch = await bcrypt.compare(password, admin.password);
   if (!passwordMatch) {
-    const error = new Error("Invalid email or password");
-    error.status = 401;
-    throw error;
+    throw new ValidationError("Invalid email or password");
   }
 
-  const token = createToken(admin);
+  const { accessToken, refreshToken } = createToken(admin);
 
-  return { token, admin: { id: admin.id, name: admin.name, email: admin.email, role: admin.role } };
+  return { 
+    accessToken, 
+    refreshToken, 
+    admin: { id: admin.id, name: admin.name, email: admin.email, role: admin.role } 
+  };
 };
 
 /* Get all admins */
@@ -77,9 +73,7 @@ export const getAllAdminsService = async () => {
 export const updateAdminService = async (id, updates) => {
   const adminId = parseInt(id);
   if (isNaN(adminId)) {
-    const error = new Error("Invalid admin ID");
-    error.status = 400;
-    throw error;
+    throw new ValidationError("Invalid admin ID");
   }
 
   const data = {};
@@ -90,18 +84,14 @@ export const updateAdminService = async (id, updates) => {
   if (updates.password) data.password = await bcrypt.hash(updates.password, 10);
 
   if (Object.keys(data).length === 0) {
-    const error = new Error("No valid fields provided for update");
-    error.status = 400;
-    throw error;
+    throw new ValidationError("No valid fields provided for update");
   }
 
   // Check email uniqueness if email is being updated
   if (updates.email) {
     const existingAdmin = await prisma.admin.findUnique({ where: { email: updates.email } });
     if (existingAdmin && existingAdmin.id !== adminId) {
-      const error = new Error("Another admin with this email already exists");
-      error.status = 400;
-      throw error;
+      throw new ValidationError("Another admin with this email already exists");
     }
   }
 
@@ -114,9 +104,7 @@ export const updateAdminService = async (id, updates) => {
     return updatedAdmin;
   } catch (err) {
     if (err.code === "P2025") {
-      const error = new Error("Admin not found");
-      error.status = 404;
-      throw error;
+      throw new NotFoundError("Admin not found");
     }
     throw err; // unexpected errors
   }
@@ -126,9 +114,7 @@ export const updateAdminService = async (id, updates) => {
 export const deleteAdminService = async (id) => {
   const adminId = parseInt(id);
   if (isNaN(adminId)) {
-    const error = new Error("Invalid admin ID");
-    error.status = 400;
-    throw error;
+    throw new ValidationError("Invalid admin ID");
   }
 
   try {
@@ -136,10 +122,22 @@ export const deleteAdminService = async (id) => {
     return true;
   } catch (err) {
     if (err.code === "P2025") {
-      const error = new Error("Admin not found");
-      error.status = 404;
-      throw error;
+      throw new NotFoundError("Admin not found");
     }
     throw err;
   }
+};
+
+/* Get current admin */
+export const getCurrentAdminService = async (adminId) => {
+  const admin = await prisma.admin.findUnique({
+    where: { id: adminId },
+    select: { id: true, name: true, email: true, role: true, createdAt: true },
+  });
+
+  if (!admin) {
+    throw new NotFoundError("Admin not found");
+  }
+
+  return admin;
 };
