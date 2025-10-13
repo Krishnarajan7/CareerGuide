@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +18,7 @@ import {
   TrendingUp,
   Award,
   CheckCircle,
-  Play
+  Download
 } from "lucide-react";
 
 const Courses = () => {
@@ -25,6 +26,8 @@ const Courses = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedLevel, setSelectedLevel] = useState("all");
   const [selectedDuration, setSelectedDuration] = useState("all");
+
+  const navigate = useNavigate();
 
   const headerRef = useScrollAnimation();
   const filtersRef = useScrollAnimation();
@@ -57,36 +60,70 @@ const Courses = () => {
   const courses = [
     {
       id: 1,
-      title: "Complete Web Development Bootcamp",
-      description: "Learn HTML, CSS, JavaScript, React, and Node.js from scratch to build modern web applications.",
+      title: "Android App Development Masterclass",
+      description: "Build native Android apps using Kotlin and Jetpack Compose.",
       category: "programming",
-      level: "beginner",
-      duration: "45 hours",
-      price: "Free",
+      level: "intermediate",
+      duration: "40 hours",
+      price: "₹3,499",
       rating: 4.8,
-      students: 12500,
-      instructor: "Sarah Johnson",
-      image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=300&h=200&fit=crop",
-      skills: ["HTML", "CSS", "JavaScript", "React", "Node.js"],
-      featured: true
+      students: 4500,
+      instructor: "Mike Chen",
+      image: "/images/Android-App-Development-Course.png",
+      skills: ["Kotlin", "Jetpack Compose", "Android Studio", "Firebase"],
+      featured: true,
+      syllabus: "/pdfs/Visa_and_Flight_Ticketing_Course.pdf"
     },
     {
       id: 2,
-      title: "Data Science Fundamentals",
-      description: "Master Python, pandas, matplotlib, and machine learning basics for data analysis.",
-      category: "data-science",
+      title: "MERN Stack Development Bootcamp",
+      description: "Complete guide to MongoDB, Express, React, Node.js for full-stack web apps.",
+      category: "programming",
       level: "intermediate",
-      duration: "32 hours",
-      price: "₹2,999",
+      duration: "50 hours",
+      price: "₹4,999",
       rating: 4.9,
-      students: 8750,
-      instructor: "Dr. Rajesh Kumar",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=200&fit=crop",
-      skills: ["Python", "Pandas", "Machine Learning", "Statistics"],
-      featured: true
+      students: 6800,
+      instructor: "Alex Rivera",
+      image: "images/MERN_stack.jpg",
+      skills: ["MongoDB", "Express", "React", "Node.js"],
+      featured: true,
+      syllabus: "/pdfs/Visa_and_Flight_Ticketing_Course.pdf"
     },
     {
       id: 3,
+      title: "iOS App Development with Swift",
+      description: "Learn Swift, SwiftUI, and Core Data to create iOS applications.",
+      category: "programming",
+      level: "intermediate",
+      duration: "35 hours",
+      price: "₹3,999",
+      rating: 4.7,
+      students: 3200,
+      instructor: "Emma Wilson",
+      image: "images/ios.png",
+      skills: ["Swift", "SwiftUI", "Xcode", "Core Data"],
+      featured: true,
+      syllabus: "/pdfs/Visa_and_Flight_Ticketing_Course.pdf"
+    },
+    {
+      id: 4,
+      title: "Modern Web Development with JavaScript",
+      description: "Dive deep into JavaScript frameworks, APIs, and performance optimization.",
+      category: "programming",
+      level: "advanced",
+      duration: "30 hours",
+      price: "₹2,999",
+      rating: 4.8,
+      students: 5200,
+      instructor: "David Lee",
+      image: "images/web-dev.jpeg",
+      skills: ["JavaScript", "TypeScript", "Vue.js", "APIs"],
+      featured: true,
+      syllabus: "/pdfs/Visa_and_Flight_Ticketing_Course.pdf"
+    },
+    {
+      id: 5,
       title: "UI/UX Design Masterclass",
       description: "Learn design thinking, wireframing, prototyping, and user research methodologies.",
       category: "design",
@@ -98,10 +135,11 @@ const Courses = () => {
       instructor: "Priya Sharma",
       image: "https://images.unsplash.com/photo-1559028006-448665bd7c7f?w=300&h=200&fit=crop",
       skills: ["Figma", "User Research", "Prototyping", "Design Thinking"],
-      featured: false
+      featured: false,
+      syllabus: "/pdfs/Visa_and_Flight_Ticketing_Course.pdf"
     },
     {
-      id: 4,
+      id: 6,
       title: "Digital Marketing Strategy",
       description: "Comprehensive guide to SEO, SEM, social media marketing, and content strategy.",
       category: "marketing",
@@ -113,25 +151,11 @@ const Courses = () => {
       instructor: "Amit Patel",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&h=200&fit=crop",
       skills: ["SEO", "Google Ads", "Social Media", "Analytics"],
-      featured: false
+      featured: false,
+      syllabus: "/pdfs/Visa_and_Flight_Ticketing_Course.pdf"
     },
     {
-      id: 5,
-      title: "Resume Building & Interview Skills",
-      description: "Create compelling resumes and master interview techniques for landing your dream job.",
-      category: "career-skills",
-      level: "beginner",
-      duration: "8 hours",
-      price: "Free",
-      rating: 4.9,
-      students: 15600,
-      instructor: "Neha Gupta",
-      image: "https://images.unsplash.com/photo-1486312338219-ce68e2c6b913?w=300&h=200&fit=crop",
-      skills: ["Resume Writing", "Interview Prep", "Career Planning"],
-      featured: true
-    },
-    {
-      id: 6,
+      id: 7,
       title: "Business Analytics with Excel",
       description: "Advanced Excel techniques for business analysis, data visualization, and reporting.",
       category: "business",
@@ -143,13 +167,62 @@ const Courses = () => {
       instructor: "Vikram Singh",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&h=200&fit=crop",
       skills: ["Excel", "Data Analysis", "Pivot Tables", "Dashboards"],
-      featured: false
+      featured: false,
+      syllabus: "/pdfs/Visa_and_Flight_Ticketing_Course.pdf"
+    },
+    {
+      id: 8,
+      title: "Visa Processing & Flight Ticketing Certification",
+      description: "Learn visa application processes, ticketing systems, and travel documentation.",
+      category: "business",
+      level: "beginner",
+      duration: "15 hours",
+      price: "₹1,299",
+      rating: 4.6,
+      students: 2100,
+      instructor: "Rita Fernandez",
+      image: "images/visa.jpeg",
+      skills: ["Visa Processing", "GDS Systems", "Travel Documentation", "Customer Service"],
+      featured: false,
+      syllabus: "/pdfs/Visa_and_Flight_Ticketing_Course.pdf"
+    },
+    {
+      id: 9,
+      title: "Professional English Communication Skills",
+      description: "Enhance your spoken and written English for workplace success.",
+      category: "career-skills",
+      level: "beginner",
+      duration: "12 hours",
+      price: "₹999",
+      rating: 4.7,
+      students: 8900,
+      instructor: "Lisa Brown",
+      image: "images/english.jpg",
+      skills: ["Public Speaking", "Business English", "Email Writing", "Negotiation"],
+      featured: false,
+      syllabus: "/pdfs/Visa_and_Flight_Ticketing_Course.pdf"
+    },
+    {
+      id: 10,
+      title: "Python Programming in 10 Days",
+      description: "Crash course on Python basics, data structures, and simple projects.",
+      category: "programming",
+      level: "beginner",
+      duration: "10 hours",
+      price: "Free",
+      rating: 4.9,
+      students: 23400,
+      instructor: "Python Guru",
+      image: "/images/python.png",
+      skills: ["Python Basics", "Data Structures", "File Handling", "OOP"],
+      featured: false,
+      syllabus: "/pdfs/Visa_and_Flight_Ticketing_Course.pdf"
     }
   ];
 
   const filteredCourses = courses.filter(course => {
     const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         course.description.toLowerCase().includes(searchTerm.toLowerCase());
+                        course.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "all" || course.category === selectedCategory;
     const matchesLevel = selectedLevel === "all" || course.level === selectedLevel;
     
@@ -175,20 +248,20 @@ const Courses = () => {
           className="text-center mb-12 scroll-animate"
         >
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 animate-fadeInUp">
-            Explore Our{" "}
+            Ready for  {" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Courses
+              Industrial Training Courses
             </span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
-            Discover courses designed to boost your career prospects and help you achieve your professional goals
+            Discover courses designed to boost your career prospects and help you achieve your professional goals with hands on experience.
           </p>
         </div>
 
         {/* Featured Courses */}
         <section className="mb-16">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8 animate-fadeInUp">Featured Courses</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
             {featuredCourses.map((course, index) => (
               <Card key={course.id} className="content-section hover-lift group animate-bounce-in" style={{ animationDelay: `${index * 0.1}s` }}>
                 <div className="relative">
@@ -201,10 +274,12 @@ const Courses = () => {
                     Featured
                   </Badge>
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-lg flex items-center justify-center">
-                    <Button size="sm" variant="secondary">
-                      <Play className="h-4 w-4 mr-2" />
-                      Preview
-                    </Button>
+                    <a href={course.syllabus} download target="_blank" rel="noopener noreferrer">
+  <Button size="sm" variant="secondary"> 
+    <Download className="h-4 w-4 mr-2" />
+    Download Syllabus
+  </Button>
+</a>
                   </div>
                 </div>
                 <CardHeader>
@@ -249,8 +324,8 @@ const Courses = () => {
                   
                   <div className="flex items-center justify-between">
                     <div className="text-lg font-bold text-primary">{course.price}</div>
-                    <Button size="sm" className="hover-lift">
-                      Enroll Now
+                    <Button size="sm" className="hover-lift" onClick={() => navigate('/register')}>
+                      Register for this Course
                     </Button>
                   </div>
                 </CardContent>
@@ -347,10 +422,13 @@ const Courses = () => {
                     </Badge>
                   )}
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-lg flex items-center justify-center">
-                    <Button size="sm" variant="secondary">
-                      <Play className="h-4 w-4 mr-2" />
-                      Preview
-                    </Button>
+                    <a href={course.syllabus} download target="_blank" rel="noopener noreferrer">
+  <Button size="sm" variant="secondary">
+    <Download className="h-4 w-4 mr-2" />
+    Download Syllabus
+  </Button>
+</a>
+
                   </div>
                 </div>
                 <CardHeader>
@@ -395,8 +473,8 @@ const Courses = () => {
                   
                   <div className="flex items-center justify-between">
                     <div className="text-lg font-bold text-primary">{course.price}</div>
-                    <Button size="sm" className="hover-lift">
-                      Enroll Now
+                    <Button size="sm" className="hover-lift" onClick={() => navigate('/register')}>
+                      Register for this Course
                     </Button>
                   </div>
                 </CardContent>
