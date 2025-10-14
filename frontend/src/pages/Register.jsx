@@ -506,10 +506,13 @@ const Register = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 py-8 px-4">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto pt-20">
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-3">
-            Register Here Based on Your Profession
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 animate-fadeInUp">
+            Register Here Based on{" "}
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Your Profession
+            </span>
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
             Choose your category below and fill in your details to get

@@ -75,11 +75,17 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center space-x-3">
-              <div className="bg-primary/20 backdrop-blur-lg p-3 rounded-xl border border-primary/30">
-                <Sparkles className="h-8 w-8 text-primary" />
-              </div>
-              <span className="text-2xl font-bold">P2P Career Guidance</span>
-            </div>
+  <div className="flex items-center space-x-3">
+  <img
+    src="/logos/P2P-white.jpeg"
+    alt="P2P Career Guidance Logo"
+    className="h-20 w-auto object-contain"
+  />
+</div>
+
+  <span className="text-2xl font-bold">P2P Career Guidance</span>
+</div>
+
             <p className="text-white/80 text-lg leading-relaxed max-w-md">
               Empowering students and freshers with personalized AI-powered career guidance 
               to navigate their career path with confidence and achieve their dreams.
@@ -158,7 +164,7 @@ const Footer = () => {
               <div>
                 <div className="text-sm text-white/60">Email us</div>
                 <a href="mailto:support@P2P Career Guidance.com" className="text-white hover:text-primary transition-colors duration-300">
-                  support@p2pcareerguidance.com
+                  p2pcareerguidance@gmail.com
                 </a>
               </div>
             </div>

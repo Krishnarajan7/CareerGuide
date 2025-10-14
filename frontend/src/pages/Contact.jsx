@@ -103,8 +103,8 @@ const Contact = () => {
       icon: Mail,
       title: "Email Us",
       description: "Get in touch via email",
-      value: "support@p2p.com",
-      action: "mailto:support@P2P.com",
+      value: "p2pcareerguidance@gmail.com",
+      action: "mailto:p2pcareerguidance@gmail.com",
     },
     {
       icon: Phone,
@@ -117,7 +117,7 @@ const Contact = () => {
       icon: MapPin,
       title: "Visit Us",
       description: "Our office location",
-      value: "Nagapattinam, Tamil Nadu",
+      value: "Chennai, Tamil Nadu",
       action: "#",
     },
     {

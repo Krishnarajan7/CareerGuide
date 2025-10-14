@@ -200,7 +200,7 @@ const Courses = () => {
       image: "images/english.jpg",
       skills: ["Public Speaking", "Business English", "Email Writing", "Negotiation"],
       featured: false,
-      syllabus: "/pdfs/Visa_and_Flight_Ticketing_Course.pdf"
+      syllabus: "/pdfs/English_Communication_Management_Training_Program.pdf"
     },
     {
       id: 10,
@@ -216,7 +216,7 @@ const Courses = () => {
       image: "/images/python.png",
       skills: ["Python Basics", "Data Structures", "File Handling", "OOP"],
       featured: false,
-      syllabus: "/pdfs/Visa_and_Flight_Ticketing_Course.pdf"
+      syllabus: "/pdfs/10-Day_Python_Training_Schedule"
     }
   ];
 

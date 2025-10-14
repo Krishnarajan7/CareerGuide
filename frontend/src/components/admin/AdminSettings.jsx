@@ -21,7 +21,7 @@ export function AdminSettings() {
   const [settings, setSettings] = useState({
     siteName: "Career Guidance Platform",
     adminEmail: "admin@p2p.com",
-    supportEmail: "support@p2p.com",
+    supportEmail: "p2pcareerguidance@gmail.com",
     emailNotifications: true,
     applicationAlerts: true,
     weeklyReports: false,

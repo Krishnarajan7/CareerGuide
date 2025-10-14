@@ -10,7 +10,9 @@ import {
   X,
   Briefcase,
   Shield,
+  Info,
 } from "lucide-react";
+import About from "../pages/About";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +21,7 @@ const Navigation = () => {
 
   const navItems = [
     { name: "Home", href: "/", icon: Home },
+    { name: "About", href: "/about", icon: Info },
     { name: "Careers", href: "/careers", icon: Briefcase },
     { name: "Courses", href: "/courses", icon: BookOpen },
     { name: "Resume Builder", href: "/resume-builder", icon: FileText },

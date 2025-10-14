@@ -148,10 +148,10 @@ function ActionSearchBar({
       <div className="relative flex flex-col justify-start items-center">
         <div className="w-full sticky top-0 bg-background/95 backdrop-blur-sm z-10 pb-1">
           <div className="text-center mb-4">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
+            <h3 className="text-2xl font-semibold text-foreground mb-2">
               Discover Your Future
             </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-lg text-muted-foreground">
               Search from 10,000+ colleges, courses & career opportunities
             </p>
           </div>

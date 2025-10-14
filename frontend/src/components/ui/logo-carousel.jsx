@@ -32,11 +32,12 @@ const distributeLogos = (allLogos, columnCount) => {
   return columns;
 };
 
-// Single column of logos
+// Single column of logos (animation)
 const LogoColumn = React.memo(({ logos, index, currentTime }) => {
   const cycleInterval = 2000; // 2 seconds per logo
   const columnDelay = index * 200; // stagger columns
-  const adjustedTime = (currentTime + columnDelay) % (cycleInterval * logos.length);
+  const adjustedTime =
+    (currentTime + columnDelay) % (cycleInterval * logos.length);
   const currentIndex = Math.floor(adjustedTime / cycleInterval);
 
   const currentLogo = useMemo(() => logos[currentIndex], [logos, currentIndex]);
@@ -81,7 +82,6 @@ const LogoColumn = React.memo(({ logos, index, currentTime }) => {
             },
           }}
         >
-          {/* ✅ Render logo as <img> */}
           <img
             src={currentLogo.img}
             alt={currentLogo.name}
@@ -95,8 +95,8 @@ const LogoColumn = React.memo(({ logos, index, currentTime }) => {
 
 LogoColumn.displayName = "LogoColumn";
 
-// Main carousel component
-export function LogoCarousel({ columnCount = 2, logos }) {
+// Main carousel component — now supports 2 rows (top:3, bottom:2)
+export function LogoCarousel({ logos }) {
   const [logoSets, setLogoSets] = useState([]);
   const [currentTime, setCurrentTime] = useState(0);
 
@@ -110,20 +110,37 @@ export function LogoCarousel({ columnCount = 2, logos }) {
   }, [updateTime]);
 
   useEffect(() => {
-    const distributed = distributeLogos(logos, columnCount);
-    setLogoSets(distributed);
-  }, [logos, columnCount]);
+    // Split logos between top (3) and bottom (2)
+    const topDistributed = distributeLogos(logos, 3);
+    const bottomDistributed = distributeLogos(logos, 2);
+    setLogoSets([topDistributed, bottomDistributed]);
+  }, [logos]);
 
   return (
-    <div className="flex space-x-4">
-      {logoSets.map((logos, index) => (
-        <LogoColumn
-          key={index}
-          logos={logos}
-          index={index}
-          currentTime={currentTime}
-        />
-      ))}
+    <div className="flex flex-col items-center space-y-4">
+      {/* Top row (3 columns) */}
+      <div className="flex justify-center space-x-4">
+        {logoSets[0]?.map((logos, index) => (
+          <LogoColumn
+            key={`top-${index}`}
+            logos={logos}
+            index={index}
+            currentTime={currentTime}
+          />
+        ))}
+      </div>
+
+      {/* Bottom row (2 columns, centered) */}
+      <div className="flex justify-center space-x-6">
+        {logoSets[1]?.map((logos, index) => (
+          <LogoColumn
+            key={`bottom-${index}`}
+            logos={logos}
+            index={index + 3} // offset index to stagger animations differently
+            currentTime={currentTime}
+          />
+        ))}
+      </div>
     </div>
   );
 }

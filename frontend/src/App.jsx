@@ -8,6 +8,7 @@ import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
+import About from "./pages/About";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
@@ -35,6 +36,7 @@ const AppContent = () => {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/careers" element={<Careers />} />

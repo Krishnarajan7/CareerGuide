@@ -281,6 +281,11 @@ const Careers = () => {
       logoUrl: "/logos/HCL_Technologies_logo.svg",
       alt: "HCL Technologies Logo",
     },
+    {
+      name: "Hexaware",
+      logoUrl: "/logos/kaartech.png",
+      alt: "Kaartech Logo",
+    },
   ];
 
   return (

@@ -130,40 +130,48 @@ const TestimonialCard = ({ testimonial, index }) => (
   </Card>
 );
 
-// Hero Section (adjusted padding to avoid navbar overlap)
+// Hero Section (adjusted padding to avoid navbar overlap, enhanced with rings and gradients)
 const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals }) => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/20 to-background overflow-hidden py-12 md:py-16">
-      {/* Background decoration */}
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/50 to-primary/20 overflow-hidden py-12 md:py-16">
+      {/* Background decoration with rings and gradients */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_80%,theme(colors.primary/0.1),transparent_50%)] animate-pulse"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_50%_50%,theme(colors.secondary/0.1),transparent_70%)] rounded-full blur-3xl animate-bounce-slow"></div>
+      {/* Floating rings */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 border-2 border-primary/20 rounded-full animate-spin-slow"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 border-2 border-secondary/20 rounded-full animate-spin-reverse"></div>
+      </div>
 
       <div
         ref={heroRef}
-        className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-animate z-10 pt-12 sm:pt-16 md:pt-12 lg:pt-12"
+        className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-animate z-10 pt-12 sm:pt-16 md:pt-12 lg:pt-12 opacity-0 fade-in-hero"
       >
-        <Badge className="mb-6 inline-flex items-center px-4 py-2 text-sm font-medium bg-primary/10 text-primary border-primary/20 shadow-lg hover:text-white">
+        <Badge className="mb-6 inline-flex items-center px-4 py-2 text-sm font-medium bg-primary/10 text-primary border-primary/20 shadow-lg hover:text-white fade-in-hero-item delay-100">
           <Sparkles className="h-5 w-5 mr-2" />
           AI-Powered Career Guidance
         </Badge>
 
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight">
-          Discover Your <span className="gradient-text">Career Path</span>
-          <br />
-          <span className="inline-block">with Confidence</span>
-        </h1>
+        <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold mb-6 leading-snug tracking-tight fade-in-hero-item delay-200">
+  Discover Your <span className="gradient-text">Career Path</span>
+  <br />
+  <span className="inline-block">with Confidence</span>
+</h1>
 
-        <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
+
+        <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed fade-in-hero-item delay-400">
           Unlock your potential with personalized, AI-driven guidance to
           navigate your career journey and achieve your dreams.
         </p>
 
-        <div className="mb-12 max-w-2xl mx-auto">
+        <div className="mb-12 max-w-2xl mx-auto fade-in-hero-item delay-500">
           <ActionSearchBar onCollegeSelect={handleCollegeSelect} />
         </div>
 
-        <div className="mb-16">
+        <div className="mb-16 fade-in-hero-item delay-600">
           <h2 className="text-3xl md:text-4xl font-bold mb-10 text-foreground">
             Choose Your Study Goal
           </h2>
@@ -174,7 +182,7 @@ const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals }) => {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 fade-in-hero-item delay-700">
           <Button
             size="lg"
             className="bg-gradient-to-r from-primary to-secondary hover:from-primary-light hover:to-secondary-light shadow-xl text-lg px-8 py-3 h-auto hover-lift group w-full sm:w-auto"
@@ -199,6 +207,64 @@ const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals }) => {
           </Button>
         </div>
       </div>
+      <style jsx>{`
+        .fade-in-hero {
+          animation: fadeInOut 1s ease-out forwards;
+        }
+        .fade-in-hero-item {
+          opacity: 0;
+          transform: translateY(20px);
+          animation: fadeInUp 0.8s ease-out forwards;
+        }
+        @keyframes fadeInOut {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+        @keyframes fadeInUp {
+          0% {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .delay-100 {
+          animation-delay: 0.1s;
+        }
+        .delay-200 {
+          animation-delay: 0.2s;
+        }
+        .delay-400 {
+          animation-delay: 0.4s;
+        }
+        .delay-500 {
+          animation-delay: 0.5s;
+        }
+        .delay-600 {
+          animation-delay: 0.6s;
+        }
+        .delay-700 {
+          animation-delay: 0.7s;
+        }
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes spin-reverse {
+          from { transform: rotate(360deg); }
+          to { transform: rotate(0deg); }
+        }
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+      `}</style>
     </section>
   );
 };
@@ -498,20 +564,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Trusted Companies Section */}
-      <section className="pt-20 pb-40  bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <GradientHeading size="lg" variant="default">
-              Trusted by <span className="gradient-text" size="lg">Leading Tech Companies</span>
-            </GradientHeading>
-          </div>
-          <div className="flex justify-center">
-            <LogoCarousel columnCount={3} logos={companyLogos} />
-          </div>
-        </div>
-      </section>
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-primary to-secondary text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
@@ -533,6 +585,20 @@ const Home = () => {
               <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
           </Button>
+        </div>
+      </section>
+
+      {/* Trusted Companies Section */}
+      <section className="pt-20 pb-40  bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <GradientHeading size="lg" variant="default">
+              Trusted by <span className="gradient-text" size="lg">Leading Tech Companies</span>
+            </GradientHeading>
+          </div>
+          <div className="flex justify-center">
+            <LogoCarousel columnCount={3} logos={companyLogos} />
+          </div>
         </div>
       </section>
       {/* Scroll to Top Button */}

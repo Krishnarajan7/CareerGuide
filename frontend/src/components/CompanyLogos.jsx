@@ -15,6 +15,16 @@ export const companyLogos = [
   { name: "Touchmark", id: 10, img: "/logos/tds-color-logo.png" },
   { name: "tds", id: 11, img: "/logos/tauras.jpg" },
   { name: "sys", id: 12, img: "/logos/sys.svg" },
+  { name: "kaartech", id: 13, img: "/logos/kaartech.png" },
+  { name: "Hexaware", id: 14, img: "/logos/Hexaware_new_logo.svg" },
+  { name: "Halleyx", id: 15, img: "/logos/Halleyx.svg" },
+  { name: "Blogvault", id: 16, img: "/logos/BlogVault.png" },
+  { name: "SoftSquare", id: 17, img: "/logos/SoftSquare.svg" },
+  { name: "Muthoot", id: 18, img: "/logos/Muthoot.webp" },
+  { name: "Delta", id: 19, img: "/logos/Delta.svg" },
+  { name: "Medplus_logo", id: 20, img: "/logos/Medplus_logo.jpg" },
+  { name: "Datapattern", id: 21, img: "/logos/Datapattern.png" },
+  { name: "Icanio", id: 21, img: "/logos/Icanio.svg" },
 ];
 
 // Main component
