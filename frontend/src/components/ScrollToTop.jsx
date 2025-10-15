@@ -30,7 +30,7 @@ const ScrollToTop = () => {
             >
               <ArrowUp className="h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 text-primary group-hover:-translate-y-1 transition-transform duration-300" />
             </button>
-            <span className="text-xs md:text-sm font-medium text-primary whitespace-nowrap group-hover:text-primary/80 transition-colors duration-300 mt-1">
+            <span className="text-xs md:text-sm font-medium text-secondary whitespace-nowrap group-hover:text-primary/80 transition-colors duration-300 mt-1">
               Boost me<br className="md:hidden" /> to Top
             </span>
           </div>

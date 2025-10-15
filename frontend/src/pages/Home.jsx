@@ -207,7 +207,7 @@ const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals }) => {
           </Button>
         </div>
       </div>
-      <style jsx>{`
+      <style>{`
         .fade-in-hero {
           animation: fadeInOut 1s ease-out forwards;
         }
@@ -415,32 +415,59 @@ const Home = () => {
 
   const testimonials = [
     {
-      name: "Priya Sharma",
-      role: "Software Engineer at TCS",
-      image:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      content:
-        "P2P Career Guidance helped me land my dream job! The personalized guidance and interview preparation were game-changers.",
-      rating: 5,
-    },
-    {
-      name: "Rohit Kumar",
-      role: "Data Scientist at Flipkart",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      content:
-        "The AI-powered recommendations were spot-on. I got placed in my preferred company within 3 months!",
-      rating: 5,
-    },
-    {
-      name: "Anita Patel",
-      role: "Product Manager at Zomato",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-      content:
-        "From college selection to job placement, P2P Career Guidance was with me every step of the way. Highly recommended!",
-      rating: 5,
-    },
+    name: "Priya Sharma",
+    role: "Software Engineer at TCS",
+    image:
+      "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+    content:
+      "P2P Career Guidance helped me land my dream job! The personalized guidance and interview preparation were game-changers.",
+    rating: 5,
+  },
+  {
+    name: "Rohit Kumar",
+    role: "Data Scientist at Flipkart",
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+    content:
+      "The AI-powered recommendations were spot-on. I got placed in my preferred company within 3 months!",
+    rating: 5,
+  },
+  {
+    name: "Anita Patel",
+    role: "Product Manager at Zomato",
+    image:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+    content:
+      "From college selection to job placement, P2P Career Guidance was with me every step of the way. Highly recommended!",
+    rating: 5,
+  },
+  {
+    name: "Karan Mehta",
+    role: "Frontend Developer at Swiggy",
+    image:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+    content:
+      "The mentorship and project guidance helped me land my first role as a frontend developer. Truly amazing experience!",
+    rating: 5,
+  },
+  {
+    name: "Sneha Gupta",
+    role: "Backend Developer at Zomato",
+    image:
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face",
+    content:
+      "Excellent support and practical guidance. I felt confident during my interviews and secured my dream backend role.",
+    rating: 5,
+  },
+  {
+    name: "Rahul Verma",
+    role: "Data Analyst at Amazon",
+    image:
+      "https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=150&h=150&fit=crop&crop=face",
+    content:
+      "The career guidance platform was instrumental in helping me analyze and improve my skills. Highly recommend it!",
+    rating: 5,
+  },
   ];
 
   const features = [
@@ -577,7 +604,7 @@ const Home = () => {
           </p>
           <Button
             size="lg"
-            className="bg-white text-primary hover:bg-white/90 shadow-xl text-lg px-8 py-3 h-auto hover-lift group w-full sm:w-auto"
+            className="bg-white text-black/90 hover:bg-white/90 shadow-xl text-lg px-8 py-3 h-auto hover-lift group w-full sm:w-auto"
             asChild
           >
             <Link to="/register">
@@ -589,7 +616,7 @@ const Home = () => {
       </section>
 
       {/* Trusted Companies Section */}
-      <section className="pt-20 pb-40  bg-background">
+      <section className="pt-40  bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <GradientHeading size="lg" variant="default">

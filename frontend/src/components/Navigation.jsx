@@ -11,6 +11,7 @@ import {
   Briefcase,
   Shield,
   Info,
+  Building,
 } from "lucide-react";
 import About from "../pages/About";
 
@@ -23,8 +24,9 @@ const Navigation = () => {
     { name: "Home", href: "/", icon: Home },
     { name: "About", href: "/about", icon: Info },
     { name: "Careers", href: "/careers", icon: Briefcase },
+    { name: "Internships", href: "/internships", icon: Building},
     { name: "Courses", href: "/courses", icon: BookOpen },
-    { name: "Resume Builder", href: "/resume-builder", icon: FileText },
+    // { name: "Resume Builder", href: "/resume-builder", icon: FileText },
     { name: "Contact", href: "/contact", icon: Phone },
   ];
 

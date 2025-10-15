@@ -17,14 +17,14 @@ function useDebounce(value, delay = 300) {
   return debouncedValue;
 }
 
-// Highlight helper
+// Highlight helper (updated for better contrast)
 const highlightText = (text, query) => {
   if (!query) return text;
   const regex = new RegExp(`(${query})`, "gi");
   const parts = text.split(regex);
   return parts.map((part, i) =>
     regex.test(part) ? (
-      <span key={i} className="bg-yellow-200 px-0.5 rounded">
+      <span key={i} className="bg-yellow-300 px-0.5 rounded font-semibold">
         {part}
       </span>
     ) : (
@@ -43,9 +43,17 @@ function ActionSearchBar({
   const [isSearching, setIsSearching] = useState(false);
   const [selectedCollege, setSelectedCollege] = useState(null);
   const [highlightIndex, setHighlightIndex] = useState(0);
+  const [error, setError] = useState(null);  // New: For error handling
+  const [recentSearches, setRecentSearches] = useState([]);  // New: For recent searches
   const containerRef = useRef(null);
 
   const debouncedQuery = useDebounce(query, 300);
+
+  // New: Load recent searches from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem('recentCollegeSearches');
+    if (stored) setRecentSearches(JSON.parse(stored));
+  }, []);
 
   useEffect(() => {
     if (!isFocused) {
@@ -55,10 +63,10 @@ function ActionSearchBar({
 
     const fetchColleges = async () => {
       setIsSearching(true);
+      setError(null);  // Reset error
       try {
         let response;
         if (!debouncedQuery.trim()) {
-
           response = await collegeApi.getPopularColleges(5);
         } else {
           response = await collegeApi.searchSmart(debouncedQuery, "", "", 8);
@@ -68,10 +76,12 @@ function ActionSearchBar({
           setResult({ colleges: response.data });
         } else {
           setResult({ colleges: [] });
+          setError("No results available. Try a different search.");
         }
       } catch (error) {
         console.error('Error fetching colleges:', error);
         setResult({ colleges: [] });
+        setError("Something went wrong. Please try again.");
       } finally {
         setIsSearching(false);
       }
@@ -124,11 +134,17 @@ function ActionSearchBar({
 
   const handleInputChange = (e) => setQuery(e.target.value);
 
+  // Updated: Handle college click with recent searches
   const handleCollegeClick = (college) => {
     setSelectedCollege(college);
     setQuery(college.name);
     setIsFocused(false);
     onCollegeSelect?.(college);
+
+    // Update recent searches
+    const updated = [college.name, ...recentSearches.filter(s => s !== college.name)].slice(0, 5);
+    setRecentSearches(updated);
+    localStorage.setItem('recentCollegeSearches', JSON.stringify(updated));
   };
 
   const container = {
@@ -148,9 +164,9 @@ function ActionSearchBar({
       <div className="relative flex flex-col justify-start items-center">
         <div className="w-full sticky top-0 bg-background/95 backdrop-blur-sm z-10 pb-1">
           <div className="text-center mb-4">
-            <h3 className="text-2xl font-semibold text-foreground mb-2">
+            <h2 className="text-2xl font-semibold text-foreground mb-2">
               Discover Your Future
-            </h3>
+            </h2>
             <p className="text-lg text-muted-foreground">
               Search from 10,000+ colleges, courses & career opportunities
             </p>
@@ -166,7 +182,12 @@ function ActionSearchBar({
                 setSelectedCollege(null);
                 setIsFocused(true);
               }}
-              className="h-12 pl-4 pr-12 text-base rounded-xl bg-card border-border/150 hover:border-primary/50 focus-visible:outline-none focus-visible:ring-0 focus-visible:border-primary transition-all duration-300 shadow-sm hover:shadow-md"
+              aria-label="Search colleges by name or district"
+              aria-expanded={isFocused}
+              aria-autocomplete="list"
+              aria-controls="college-results"
+              role="combobox"
+              className="h-12 pl-4 pr-12 text-base rounded-xl bg-card border-border/150 hover:border-primary/50 focus-visible:outline-none focus-visible:ring-0 focus-visible:border-primary transition-all duration-300 shadow-sm hover:shadow-md text-foreground/90"  // Darker text for contrast
             />
             <div className="absolute right-4 top-1/2 -translate-y-1/2">
               <button
@@ -177,6 +198,7 @@ function ActionSearchBar({
                     if (top) handleCollegeClick(top);
                   }
                 }}
+                aria-label={query.length > 0 ? "Submit search" : "Search colleges"}  // Fix: Accessible name for button
                 className="cursor-pointer p-1 rounded-md hover:bg-muted transition"
               >
                 <AnimatePresence mode="popLayout">
@@ -217,11 +239,35 @@ function ActionSearchBar({
                 animate="show"
                 exit="exit"
               >
-                <motion.ul className="max-h-80 overflow-y-auto">
+                {/* New: Recent searches section */}
+                {recentSearches.length > 0 && !debouncedQuery.trim() && (
+                  <div className="px-4 py-2 border-b border-border/30">
+                    <p className="text-xs text-muted-foreground mb-2">Recent Searches</p>
+                    <div className="flex flex-wrap gap-2">
+                      {recentSearches.map(search => (
+                        <button
+                          key={search}
+                          onClick={() => setQuery(search)}
+                          className="text-xs bg-muted px-2 py-1 rounded-md text-primary hover:bg-primary/10 transition"
+                        >
+                          {search}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <motion.ul
+                  id="college-results"
+                  role="listbox"
+                  className="max-h-80 overflow-y-auto"
+                >
                   {result.colleges.length > 0 ? (
                     result.colleges.map((college, idx) => (
                       <motion.li
                         key={college.id}
+                        role="option"
+                        aria-selected={idx === highlightIndex}
                         className={`px-4 py-3 flex items-center justify-between cursor-pointer transition-all duration-200 border-b border-border/30 last:border-b-0 ${
                           idx === highlightIndex
                             ? "bg-primary/10"
@@ -259,6 +305,19 @@ function ActionSearchBar({
                         <div className="flex items-center justify-center gap-2">
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                           Searching colleges...
+                        </div>
+                      ) : error ? (
+                        <div className="text-red-600 flex items-center justify-center gap-2">
+                          <span>{error}</span>
+                          <button
+                            onClick={() => {
+                              setError(null);
+                              setIsFocused(true);  // Refocus to retry
+                            }}
+                            className="text-primary hover:underline"
+                          >
+                            Retry
+                          </button>
                         </div>
                       ) : (
                         "No colleges found for your search"

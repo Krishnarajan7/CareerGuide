@@ -136,7 +136,7 @@ const AboutHeroSection = ({ heroRef }) => {
           </Button>
         </div>
       </div>
-      <style jsx>{`
+      <style>{`
         .fade-in-hero {
           animation: fadeInOut 1s ease-out forwards;
         }

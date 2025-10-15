@@ -14,8 +14,9 @@ import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import Careers from "./pages/Careers";
+import Internships from "./pages/Internship";
 import Courses from "./pages/Courses";
-import ResumeBuilder from "./pages/ResumeBuilder";
+// import ResumeBuilder from "./pages/ResumeBuilder";
 import Contact from "./pages/Contact";
 import CollegeDetails from "./pages/CollegeDetails";
 import NotFound from "./pages/NotFound";
@@ -40,8 +41,9 @@ const AppContent = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/careers" element={<Careers />} />
+          <Route path="/internships" element={<Internships />} />
           <Route path="/courses" element={<Courses />} />
-          <Route path="/resume-builder" element={<ResumeBuilder />} />
+          {/* <Route path="/resume-builder" element={<ResumeBuilder />} /> */}
           <Route path="/contact" element={<Contact />} />
           <Route path="/college/:id" element={<CollegeDetails />} />
           <Route path="*" element={<NotFound />} />
