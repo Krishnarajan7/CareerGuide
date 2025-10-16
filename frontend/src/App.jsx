@@ -1,6 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
@@ -23,12 +23,100 @@ import NotFound from "./pages/NotFound";
 
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 
+// New imports for FloatingButton integration
+import { FloatingButton, FloatingButtonItem } from "@/components/ui/floating-button";
+import { cn } from "@/lib/utils";
+import { Dribbble, Facebook, Instagram, Linkedin, Plus, MessageCircle, } from "lucide-react";
+
 const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
   const { ProtectedAdminWrapper } = useAuth();
+
+  // Inline FloatingButton example (adapt items array as needed)
+  const FloatingButtonExample = () => {
+  const items = [
+    {
+      icon: <Facebook />,
+      bgColor: "bg-[#1877f2]",
+      link: "https://www.facebook.com/your-page", // External link
+    },
+    {
+      icon: <Dribbble />,
+      bgColor: "bg-[#ea4c89]",
+      link: "https://dribbble.com/your-page",
+    },
+    {
+      icon: <Linkedin />,
+      bgColor: "bg-[#0a66c2]",
+      link: "https://www.linkedin.com/in/your-profile",
+    },
+    {
+      icon: <MessageCircle />,
+      bgColor: "bg-[#25D366]",
+      link: "https://wa.me/1234567890", // WhatsApp direct link
+      tooltipText: "Join WhatsApp channel for placement opportunities",
+    },
+    {
+      icon: <Instagram />,
+      bgColor: "bg-gradient-to-r from-[#E4405F] to-[#F77737]",
+      link: "https://www.instagram.com/your-page",
+    },
+  ];
+
+  return (
+    <FloatingButton
+      triggerContent={
+        <button
+  className="flex items-center justify-center h-12 w-12 rounded-full
+            bg-[#333533] 
+            text-white z-10 shadow-lg hover:shadow-xl transition-all"
+>
+  <Plus />
+</button>
+
+      }
+    >
+      {items.map((item, key) => (
+        <FloatingButtonItem key={key}>
+          {item.tooltipText ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <a href={item.link} target="_blank" rel="noopener noreferrer">
+                  <button
+                    className={cn(
+                      "h-12 w-12 rounded-full flex items-center justify-center text-white/80 shadow-lg hover:shadow-xl transition-shadow",
+                      item.bgColor
+                    )}
+                  >
+                    {item.icon}
+                  </button>
+                </a>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{item.tooltipText}</p>
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <a href={item.link} target="_blank" rel="noopener noreferrer">
+              <button
+                className={cn(
+                  "h-12 w-12 rounded-full flex items-center justify-center text-white/80 shadow-lg hover:shadow-xl transition-shadow",
+                  item.bgColor
+                )}
+              >
+                {item.icon}
+              </button>
+            </a>
+          )}
+        </FloatingButtonItem>
+      ))}
+    </FloatingButton>
+  );
+};
+
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -63,6 +151,13 @@ const AppContent = () => {
         </Routes>
       </main>
       {!isAdminRoute && <Footer />}
+
+      {/* Integrated FloatingButton: Fixed bottom-right, hidden on admin routes */}
+      {!isAdminRoute && (
+        <div className="fixed bottom-4 right-4 z-50">
+          <FloatingButtonExample />
+        </div>
+      )}
     </div>
   );
 };

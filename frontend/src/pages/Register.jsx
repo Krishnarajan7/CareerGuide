@@ -16,6 +16,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "../context/AuthContext";
+
 import {
   UserPlus,
   GraduationCap,
@@ -86,6 +88,7 @@ const Register = () => {
 
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const { register } = useAuth(); // Use context's register
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -95,76 +98,23 @@ const Register = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const scriptURLs = {
-      "college-joining":
-        "https://script.google.com/macros/s/AKfycbx9p-rZnIWCoMMbf2hYhFlVWsiDlWXE-ikdIGgo_4sSSsBvF9xohvIJAZIiUkqHkggW/exec",
-      "college-student":
-        "https://script.google.com/macros/s/AKfycbz-xlzBpAUJI-bnQxRr2HTIO63XeHL7-feP945iYDn-Cmug1utcMsLtK_j5Pyx50LBV/exec",
-      fresher:
-        "https://script.google.com/macros/s/AKfycbw2dssdElD_siMCzFbBKGuxJ039I6egX8lhO4xuGEDk4V2tJfw7gwq4yP7Y5Oh0DjlbHQ/exec",
-    };
+    if (!userType) {
+      toast({
+        title: "Select a Category",
+        description:
+          "Please select a registration category before submitting.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
 
     try {
-      let payload = new FormData();
-      let scriptURL = "";
+      // Call context's register with formData and userType
+      // Context will handle Google Sheets submission and set authentication
+      await register(formData, userType);
 
-      if (userType === "college-joining") {
-        scriptURL = scriptURLs["college-joining"];
-        payload.append("name", formData.name);
-        payload.append("email", formData.email);
-        payload.append("phone", formData.phone);
-        payload.append("district", formData.district);
-        payload.append("cutoff", formData.cutoff);
-        payload.append("school", formData.school);
-      } else if (userType === "college-student") {
-        scriptURL = scriptURLs["college-student"];
-        payload.append("name", formData.name);
-        payload.append("email", formData.email);
-        payload.append("phone", formData.phone);
-        payload.append("college", formData.college);
-        payload.append("department", formData.department);
-        payload.append("cgpa", formData.cgpa);
-        payload.append("job", formData.interestedJob);
-        payload.append("training", formData.trainingType);
-      } else if (userType === "fresher") {
-        scriptURL = scriptURLs["fresher"];
-        payload.append("name", formData.name);
-        payload.append("email", formData.email);
-        payload.append("phone", formData.phone);
-        payload.append("skills", formData.skills);
-        payload.append("projects", formData.fresherExperience);
-        payload.append("experience", formData.experience);
-        payload.append("currentCompany", formData.currentCompany);
-        payload.append("resumeLink", formData.resumeLink);
-      } else {
-        toast({
-          title: "Select a Category",
-          description:
-            "Please select a registration category before submitting.",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      const response = await fetch(scriptURL, {
-        method: "POST",
-        body: payload,
-      });
-
-      const result = await response.json();
-
-      if (result.result === "success") {
-        toast({
-          title: "Registration Successful!",
-          description:
-            "Your data has been saved successfully to Google Sheets.",
-        });
-      } else {
-        throw new Error(result.message || "Error saving to Google Sheets");
-      }
-
-      // Reset form
+      // Reset form on success (handled in context toast, but reset here too)
       setFormData({
         name: "",
         email: "",
@@ -185,13 +135,8 @@ const Register = () => {
       });
       setUserType("");
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast({
-        title: "Submission Failed",
-        description:
-          "There was an issue submitting your data. Please try again later.",
-        variant: "destructive",
-      });
+      console.error("Registration failed:", error);
+      // Error toast handled in context
     } finally {
       setIsLoading(false);
     }

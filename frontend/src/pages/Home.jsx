@@ -9,6 +9,9 @@ import { GradientHeading } from "@/components/ui/gradient-heading";
 import { companyLogos } from "@/components/CompanyLogos";
 import SectionHeader from "@/components/SectionHeader";
 import ScrollToTop from "@/components/ScrollToTop";
+import { useContext, useEffect, useCallback, useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 import {
   ArrowRight,
   BookOpen,
@@ -30,10 +33,17 @@ import {
   Code,
   Building,
   Atom,
+  Download,
+  Eye,
+  X,
+  Fish,
+  Scale,
+  Wrench,
+  Leaf
 } from "lucide-react";
 
 // Reusable Study Goal Card
-const StudyGoalCard = ({ goal, index }) => (
+const StudyGoalCard = ({ goal, index, onView }) => (
   <Card
     key={index}
     className="group cursor-pointer hover:shadow-xl transition-all duration-300 border-2 border-gray-200 hover:border-primary/50"
@@ -53,6 +63,18 @@ const StudyGoalCard = ({ goal, index }) => (
       <div
         className={`h-1 w-0 group-hover:w-full bg-gradient-to-r ${goal.color} rounded-full transition-all duration-500 mt-4 mx-auto`}
       ></div>
+      <Button
+        variant="outline"
+        size="sm"
+        className="mt-4 w-full group-hover:bg-primary/10 hover:text-primary transition-colors"
+        onClick={(e) => {
+          e.stopPropagation(); // Prevent card hover effects if needed
+          onView(goal);
+        }}
+      >
+        <Eye className="h-4 w-4 mr-2" />
+        View College List
+      </Button>
     </CardContent>
   </Card>
 );
@@ -131,7 +153,7 @@ const TestimonialCard = ({ testimonial, index }) => (
 );
 
 // Hero Section (adjusted padding to avoid navbar overlap, enhanced with rings and gradients)
-const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals }) => {
+const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals, onView }) => {
   const navigate = useNavigate();
 
   return (
@@ -156,11 +178,10 @@ const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals }) => {
         </Badge>
 
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold mb-6 leading-snug tracking-tight fade-in-hero-item delay-200">
-  Discover Your <span className="gradient-text">Career Path</span>
-  <br />
-  <span className="inline-block">with Confidence</span>
-</h1>
-
+          Discover Your <span className="gradient-text">Career Path</span>
+          <br />
+          <span className="inline-block">with Confidence</span>
+        </h1>
 
         <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed fade-in-hero-item delay-400">
           Unlock your potential with personalized, AI-driven guidance to
@@ -177,7 +198,7 @@ const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals }) => {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {studyGoals.map((goal, index) => (
-              <StudyGoalCard goal={goal} index={index} key={index} />
+              <StudyGoalCard goal={goal} index={index} key={index} onView={onView} />
             ))}
           </div>
         </div>
@@ -271,80 +292,152 @@ const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals }) => {
 
 const Home = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { toast } = useToast();
   const heroRef = useScrollAnimation();
   const featuresRef = useScrollAnimation();
   const statsRef = useScrollAnimation();
   const testimonialsRef = useScrollAnimation();
+  const [previewGoal, setPreviewGoal] = useState(null);
 
   const handleCollegeSelect = (college) => {
     navigate(`/college/${college.id}`);
   };
 
+  // Handler for view button click (now opens preview instead of download)
+  const handleView = useCallback((goal) => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Unlock College Lists",
+        description: "Please complete your registration to view college lists.",
+      });
+      localStorage.setItem('pendingView', JSON.stringify(goal));
+      navigate('/register');
+      return;
+    }
+    setPreviewGoal(goal);
+    toast({
+      title: "College List Ready",
+      description: `${goal.title} College List is now available to view.`,
+    });
+  }, [isAuthenticated, navigate, toast]);
+
+  // Check for pending view after authentication
+  useEffect(() => {
+    if (isAuthenticated) {
+      const pendingStr = localStorage.getItem('pendingView');
+      if (pendingStr) {
+        const goal = JSON.parse(pendingStr);
+        localStorage.removeItem('pendingView');
+        toast({
+          title: "Welcome Back!",
+          description: "Your requested college list is ready to view.",
+        });
+        setPreviewGoal(goal);
+      }
+    }
+  }, [isAuthenticated, toast]);
+
+  const getPdfPath = (goal) => `/pdfs/${goal.title.toLowerCase()}.pdf`;
+
   const studyGoals = [
     {
-      icon: Code,
-      title: "Engineering",
-      subtitle: "BE/B.Tech, Diploma, M.Tech",
-      color: "from-blue-500 to-cyan-500",
-      bgColor: "bg-blue-50",
-      iconColor: "text-blue-600",
-    },
-    {
-      icon: Briefcase,
-      title: "Management",
-      subtitle: "MBA, BBA, PGDM",
-      color: "from-purple-500 to-pink-500",
-      bgColor: "bg-purple-50",
-      iconColor: "text-purple-600",
-    },
-    {
-      icon: Calculator,
-      title: "Commerce",
-      subtitle: "B.Com, M.Com, CA, CS",
-      color: "from-green-500 to-emerald-500",
-      bgColor: "bg-green-50",
-      iconColor: "text-green-600",
-    },
-    {
-      icon: Palette,
-      title: "Arts",
-      subtitle: "BA, MA, Fine Arts, Design",
-      color: "from-orange-500 to-red-500",
-      bgColor: "bg-orange-50",
-      iconColor: "text-orange-600",
-    },
-    {
-      icon: Stethoscope,
-      title: "Medical",
-      subtitle: "MBBS, BDS, BAMS, Nursing",
-      color: "from-red-500 to-pink-500",
-      bgColor: "bg-red-50",
-      iconColor: "text-red-600",
-    },
-    {
-      icon: Atom,
-      title: "Science",
-      subtitle: "B.Sc, M.Sc, Research",
-      color: "from-indigo-500 to-blue-500",
-      bgColor: "bg-indigo-50",
-      iconColor: "text-indigo-600",
-    },
-    {
-      icon: Building,
-      title: "Architecture",
-      subtitle: "B.Arch, M.Arch, Planning",
-      color: "from-teal-500 to-cyan-500",
-      bgColor: "bg-teal-50",
-      iconColor: "text-teal-600",
-    },
-    {
-      icon: GraduationCap,
-      title: "Education",
-      subtitle: "B.Ed, M.Ed, D.Ed",
-      color: "from-yellow-500 to-orange-500",
-      bgColor: "bg-yellow-50",
-      iconColor: "text-yellow-600",
-    },
+    icon: Code,
+    title: "Engineering",
+    subtitle: "BE/B.Tech, Diploma, M.Tech",
+    color: "from-blue-500 to-cyan-500",
+    bgColor: "bg-blue-50",
+    iconColor: "text-blue-600",
+  },
+  {
+    icon: Briefcase,
+    title: "Management",
+    subtitle: "MBA, BBA, PGDM",
+    color: "from-purple-500 to-pink-500",
+    bgColor: "bg-purple-50",
+    iconColor: "text-purple-600",
+  },
+  {
+    icon: Calculator,
+    title: "Commerce",
+    subtitle: "B.Com, M.Com, CA, CS",
+    color: "from-green-500 to-emerald-500",
+    bgColor: "bg-green-50",
+    iconColor: "text-green-600",
+  },
+  {
+    icon: Palette,
+    title: "Arts",
+    subtitle: "BA, MA, Fine Arts, Design",
+    color: "from-orange-500 to-red-500",
+    bgColor: "bg-orange-50",
+    iconColor: "text-orange-600",
+  },
+  {
+    icon: Stethoscope,
+    title: "Medical",
+    subtitle: "MBBS, BDS, BAMS, Nursing",
+    color: "from-red-500 to-pink-500",
+    bgColor: "bg-red-50",
+    iconColor: "text-red-600",
+  },
+  {
+    icon: Atom,
+    title: "Science",
+    subtitle: "B.Sc, M.Sc, Research",
+    color: "from-indigo-500 to-blue-500",
+    bgColor: "bg-indigo-50",
+    iconColor: "text-indigo-600",
+  },
+  {
+    icon: Building,
+    title: "Architecture",
+    subtitle: "B.Arch, M.Arch, Planning",
+    color: "from-teal-500 to-cyan-500",
+    bgColor: "bg-teal-50",
+    iconColor: "text-teal-600",
+  },
+  {
+    icon: GraduationCap,
+    title: "Education",
+    subtitle: "B.Ed, M.Ed, D.Ed",
+    color: "from-yellow-500 to-orange-500",
+    bgColor: "bg-yellow-50",
+    iconColor: "text-yellow-600",
+  },
+  {
+    icon: Scale, // ⚖️ (add import from lucide-react)
+    title: "Law",
+    subtitle: "LLB, LLM, B.A. LL.B, Corporate Law",
+    color: "from-rose-500 to-fuchsia-500",
+    bgColor: "bg-rose-50",
+    iconColor: "text-rose-600",
+  },
+  {
+    icon: Wrench, // 🛠️ (add import from lucide-react)
+    title: "Polytechnic",
+    subtitle: "Diploma in Engineering, Technical Education",
+    color: "from-gray-500 to-slate-500",
+    bgColor: "bg-gray-50",
+    iconColor: "text-gray-600",
+  },
+  {
+    icon: Fish, // 🐟 (add import from lucide-react)
+    title: "Fisheries",
+    subtitle: "B.F.Sc, M.F.Sc, Aquaculture, Marine Science",
+    color: "from-sky-500 to-blue-400",
+    bgColor: "bg-sky-50",
+    iconColor: "text-sky-600",
+  },
+  {
+    icon: Leaf,
+    title: "Agriculture",
+    subtitle: "B.Sc Agri, M.Sc Agri, Horticulture, Agronomy",
+    color: "from-lime-500 to-green-500",
+    bgColor: "bg-lime-50",
+    iconColor: "text-lime-600",
+  },
+    
   ];
 
   const userTypes = [
@@ -415,59 +508,59 @@ const Home = () => {
 
   const testimonials = [
     {
-    name: "Priya Sharma",
-    role: "Software Engineer at TCS",
-    image:
-      "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-    content:
-      "P2P Career Guidance helped me land my dream job! The personalized guidance and interview preparation were game-changers.",
-    rating: 5,
-  },
-  {
-    name: "Rohit Kumar",
-    role: "Data Scientist at Flipkart",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    content:
-      "The AI-powered recommendations were spot-on. I got placed in my preferred company within 3 months!",
-    rating: 5,
-  },
-  {
-    name: "Anita Patel",
-    role: "Product Manager at Zomato",
-    image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-    content:
-      "From college selection to job placement, P2P Career Guidance was with me every step of the way. Highly recommended!",
-    rating: 5,
-  },
-  {
-    name: "Karan Mehta",
-    role: "Frontend Developer at Swiggy",
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
-    content:
-      "The mentorship and project guidance helped me land my first role as a frontend developer. Truly amazing experience!",
-    rating: 5,
-  },
-  {
-    name: "Sneha Gupta",
-    role: "Backend Developer at Zomato",
-    image:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face",
-    content:
-      "Excellent support and practical guidance. I felt confident during my interviews and secured my dream backend role.",
-    rating: 5,
-  },
-  {
-    name: "Rahul Verma",
-    role: "Data Analyst at Amazon",
-    image:
-      "https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=150&h=150&fit=crop&crop=face",
-    content:
-      "The career guidance platform was instrumental in helping me analyze and improve my skills. Highly recommend it!",
-    rating: 5,
-  },
+      name: "Priya Sharma",
+      role: "Software Engineer at TCS",
+      image:
+        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      content:
+        "P2P Career Guidance helped me land my dream job! The personalized guidance and interview preparation were game-changers.",
+      rating: 5,
+    },
+    {
+      name: "Rohit Kumar",
+      role: "Data Scientist at Flipkart",
+      image:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      content:
+        "The AI-powered recommendations were spot-on. I got placed in my preferred company within 3 months!",
+      rating: 5,
+    },
+    {
+      name: "Anita Patel",
+      role: "Product Manager at Zomato",
+      image:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      content:
+        "From college selection to job placement, P2P Career Guidance was with me every step of the way. Highly recommended!",
+      rating: 5,
+    },
+    {
+      name: "Karan Mehta",
+      role: "Frontend Developer at Swiggy",
+      image:
+        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+      content:
+        "The mentorship and project guidance helped me land my first role as a frontend developer. Truly amazing experience!",
+      rating: 5,
+    },
+    {
+      name: "Sneha Gupta",
+      role: "Backend Developer at Zomato",
+      image:
+        "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face",
+      content:
+        "Excellent support and practical guidance. I felt confident during my interviews and secured my dream backend role.",
+      rating: 5,
+    },
+    {
+      name: "Rahul Verma",
+      role: "Data Analyst at Amazon",
+      image:
+        "https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=150&h=150&fit=crop&crop=face",
+      content:
+        "The career guidance platform was instrumental in helping me analyze and improve my skills. Highly recommend it!",
+      rating: 5,
+    },
   ];
 
   const features = [
@@ -499,7 +592,54 @@ const Home = () => {
         heroRef={heroRef}
         handleCollegeSelect={handleCollegeSelect}
         studyGoals={studyGoals}
+        onView={handleView}
       />
+
+      {/* Preview Modal */}
+      {previewGoal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-6xl max-h-[90vh] w-full flex flex-col overflow-hidden">
+            <div className="p-6 border-b flex justify-between items-center">
+              <h2 className="text-2xl font-bold">{previewGoal.title} College List</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setPreviewGoal(null)}
+                className="h-8 w-8 p-0"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="flex-1 overflow-auto p-6">
+              <iframe
+                src={getPdfPath(previewGoal)}
+                className="w-full h-[60vh] border"
+                title={`${previewGoal.title} PDF Preview`}
+              />
+            </div>
+            <div className="p-6 border-t flex gap-4 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  window.open(getPdfPath(previewGoal), '_blank');
+                }}
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                View Full Size
+              </Button>
+              <a
+                href={getPdfPath(previewGoal)}
+                download={`${previewGoal.title.toLowerCase()}-college-list.pdf`}
+              >
+                <Button className="flex items-center gap-2">
+                  <Download className="h-4 w-4" />
+                  Download PDF
+                </Button>
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* User Types Section */}
       <section className="py-20 bg-background/50">
@@ -631,7 +771,6 @@ const Home = () => {
       {/* Scroll to Top Button */}
       <ScrollToTop />
     </div>
-    
   );
 };
 

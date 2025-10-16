@@ -98,28 +98,28 @@ const Careers = () => {
   const getExperienceColor = (experience) => {
     switch (experience) {
       case "Fresher":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200";
       case "0-1 years":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200";
       case "1-3 years":
-        return "bg-purple-100 text-purple-800";
+        return "bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-200";
       case "3-5 years":
-        return "bg-orange-100 text-orange-800";
+        return "bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-200";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 dark:bg-gray-900/20 text-gray-800 dark:text-gray-200";
     }
   };
 
   const getTypeColor = (type) => {
     switch (type) {
       case "Full-time":
-        return "bg-primary/10 text-primary";
+        return "bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-foreground";
       case "Part-time":
-        return "bg-secondary/10 text-secondary";
+        return "bg-secondary/10 dark:bg-secondary/20 text-secondary dark:text-secondary-foreground";
       case "Internship":
-        return "bg-accent/10 text-accent";
+        return "bg-accent/10 dark:bg-accent/20 text-accent dark:text-accent-foreground";
       case "Contract":
-        return "bg-warning/10 text-warning";
+        return "bg-destructive/10 dark:bg-destructive/20 text-destructive dark:text-destructive-foreground";
       default:
         return "bg-muted text-muted-foreground";
     }
@@ -161,15 +161,21 @@ const Careers = () => {
                 size="sm"
                 onClick={() => handleSaveJob(job.id)}
                 className={savedJobs.includes(job.id) ? "text-red-500" : ""}
+                aria-label={savedJobs.includes(job.id) ? "Remove job from saved" : "Save job"}
               >
                 <Heart
                   className={`h-4 w-4 ${
                     savedJobs.includes(job.id) ? "fill-current" : ""
                   }`}
+                  aria-hidden="true"
                 />
               </Button>
-              <Button variant="ghost" size="sm">
-                <Share2 className="h-4 w-4" />
+              <Button 
+                variant="ghost" 
+                size="sm"
+                aria-label="Share job"
+              >
+                <Share2 className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
           </div>
@@ -206,7 +212,7 @@ const Careers = () => {
           <h3 className="text-lg font-semibold mb-3">Required Skills</h3>
           <div className="flex flex-wrap gap-2">
             {job.skills.map((skill, index) => (
-              <Badge key={index} variant="outline" className="bg-primary/5">
+              <Badge key={index} variant="outline" className="bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-foreground">
                 {skill}
               </Badge>
             ))}
@@ -326,16 +332,15 @@ const Careers = () => {
           </div>
 
           {/* Featured Companies */}
-          {/* Featured Companies */}
           <div className="mb-12">
-            <h3 className="text-center text-lg font-semibold mb-6 text-muted-foreground">
+            <h2 className="text-center text-lg font-semibold mb-6 text-foreground">
               Trusted by Leading Companies
-            </h3>
+            </h2>
             <div className="flex flex-wrap justify-center items-center gap-8">
               {featuredCompanies.map((company) => (
                 <div
                   key={company.name}
-                  className="flex items-center justify-center w-32 h-16 bg-white border border-border/50 rounded-lg shadow-sm hover:shadow-md transition-shadow p-2"
+                  className="flex items-center justify-center w-32 h-16 bg-white dark:bg-card border border-border/50 rounded-lg shadow-sm hover:shadow-md transition-shadow p-2"
                 >
                   <img
                     src={company.logoUrl}
@@ -362,6 +367,7 @@ const Careers = () => {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-10"
+                      aria-label="Search jobs"
                     />
                   </div>
 
@@ -369,8 +375,8 @@ const Careers = () => {
                     value={categoryFilter}
                     onValueChange={setCategoryFilter}
                   >
-                    <SelectTrigger>
-                      <Filter className="h-4 w-4 mr-2" />
+                    <SelectTrigger aria-label="Filter by category">
+                      <Filter className="h-4 w-4 mr-2" aria-hidden="true" />
                       <SelectValue placeholder="Category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -386,7 +392,7 @@ const Careers = () => {
                     value={experienceFilter}
                     onValueChange={setExperienceFilter}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger aria-label="Filter by experience level">
                       <SelectValue placeholder="Experience" />
                     </SelectTrigger>
                     <SelectContent>
@@ -399,7 +405,7 @@ const Careers = () => {
                   </Select>
 
                   <Select value={typeFilter} onValueChange={setTypeFilter}>
-                    <SelectTrigger>
+                    <SelectTrigger aria-label="Filter by job type">
                       <SelectValue placeholder="Job Type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -431,7 +437,7 @@ const Careers = () => {
               {filteredJobs.map((job) => (
                 <Card
                   key={job.id}
-                  className="hover-lift group cursor-pointer relative"
+                  className="hover-lift group cursor-pointer relative border-border"
                 >
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
@@ -470,11 +476,13 @@ const Careers = () => {
                             className={`absolute top-4 right-4 ${
                               savedJobs.includes(job.id) ? "text-red-500" : ""
                             }`}
+                            aria-label={savedJobs.includes(job.id) ? "Remove job from saved" : "Save job"}
                           >
                             <Heart
                               className={`h-4 w-4 ${
                                 savedJobs.includes(job.id) ? "fill-current" : ""
                               }`}
+                              aria-hidden="true"
                             />
                           </Button>
                         </div>
@@ -488,7 +496,7 @@ const Careers = () => {
                             <Badge className={getTypeColor(job.type)}>
                               {job.type}
                             </Badge>
-                            <Badge variant="secondary">{job.category}</Badge>
+                            <Badge variant="secondary" className="text-foreground">{job.category}</Badge>
                             <Badge
                               className={getExperienceColor(job.experience)}
                             >
@@ -519,13 +527,13 @@ const Careers = () => {
                               <Badge
                                 key={index}
                                 variant="outline"
-                                className="text-xs"
+                                className="text-xs bg-muted/50 dark:bg-muted/20 text-foreground"
                               >
                                 {skill}
                               </Badge>
                             ))}
                             {job.skills.length > 3 && (
-                              <Badge variant="outline" className="text-xs">
+                              <Badge variant="outline" className="text-xs bg-muted/50 dark:bg-muted/20 text-foreground">
                                 +{job.skills.length - 3} more
                               </Badge>
                             )}

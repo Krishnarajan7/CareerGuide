@@ -22,7 +22,8 @@ const Footer = () => {
   const quickLinks = [
     { name: "Home", href: "/" },
     { name: "Courses", href: "/courses" },
-    { name: "Resume Builder", href: "/resume-builder" },
+    { name: "Careers", href: "/careers" },
+    { name: "Internships", href: "/internships" },
     { name: "Dashboard", href: "/dashboard" },
     { name: "Contact", href: "/contact" },
   ];
