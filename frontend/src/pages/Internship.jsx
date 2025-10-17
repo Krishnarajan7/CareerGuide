@@ -208,7 +208,7 @@ const Filters = ({ onSearch, onLocationChange, selectedLocation }) => (
     </div>
     <div className="flex-1">
       <Select value={selectedLocation} onValueChange={onLocationChange}>
-        <SelectTrigger>
+        <SelectTrigger aria-label="Filter internships by location">
           <SelectValue placeholder="Filter by Location" />
         </SelectTrigger>
         <SelectContent>
@@ -305,8 +305,8 @@ const ApplicationForm = ({ internship, open, onClose }) => {
               <span className="text-sm text-muted-foreground">
                 {formData.resume ? formData.resume.name : "No file selected"}
               </span>
-              <label htmlFor="resume" className="cursor-pointer">
-                <Upload className="h-4 w-4 text-primary" />
+              <label htmlFor="resume" className="cursor-pointer" aria-label="Upload resume">
+                <Upload className="h-4 w-4 text-primary" aria-hidden="true" />
                 <input
                   id="resume"
                   type="file"
@@ -375,7 +375,7 @@ const InternshipHeroSection = ({ heroRef }) => {
           <Button
             variant="outline"
             size="lg"
-            className="border-black text-black hover:bg-black/40 text-base md:text-lg px-8 md:px-10 py-4 h-auto w-full sm:w-auto"
+            className="border-black text-black hover:bg-primary/80 text-base md:text-lg px-8 md:px-10 py-4 h-auto w-full sm:w-auto"
             asChild
           >
             <Link to="/courses">
@@ -434,7 +434,7 @@ const SelectionSection = ({ internshipsRef, activeTab, onTabChange }) => {
             className={`px-8 py-4 text-lg font-semibold transition-all duration-300 ${
               activeTab === 'full-time'
                 ? 'bg-gradient-to-r from-primary to-secondary shadow-lg'
-                : 'border-black hover:bg-primary/10'
+                : 'border-black hover:bg-primary/90 hover:border-primary'
             }`}
           >
             <Fullscreen className="h-5 w-5 mr-2" />
@@ -446,7 +446,7 @@ const SelectionSection = ({ internshipsRef, activeTab, onTabChange }) => {
             className={`px-8 py-4 text-lg font-semibold transition-all duration-300 ${
               activeTab === 'part-time'
                 ? 'bg-gradient-to-r from-primary to-secondary shadow-lg'
-                : 'border-black hover:bg-primary/10'
+                : 'border-black hover:bg-primary/90 hover:border-primary' 
             }`}
           >
             <Clock2 className="h-5 w-5 mr-2" />

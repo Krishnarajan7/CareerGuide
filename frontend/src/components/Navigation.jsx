@@ -119,7 +119,7 @@ const Navigation = () => {
               <Button
                 variant="outline"
                 size="sm"
-                className="border-accent/20 hover:border-accent/40 hover:bg-accent/50 hover:text-black transition-all duration-300"
+                className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 text-white"
                 asChild
               >
                 <Link to="/admin/login" className="flex items-center space-x-2">
@@ -127,7 +127,7 @@ const Navigation = () => {
                   <span>Admin</span>
                 </Link>
               </Button>
-              <Button
+              {/* <Button
                 size="sm"
                 className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                 asChild
@@ -136,7 +136,7 @@ const Navigation = () => {
                   <Rocket className="h-4 w-4" />
                   <span>Dashboard</span>
                 </Link>
-              </Button>
+              </Button> */}
             </div>
 
             {/* Mobile Menu Button */}

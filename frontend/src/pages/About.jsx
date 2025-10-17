@@ -126,7 +126,7 @@ const AboutHeroSection = ({ heroRef }) => {
           <Button
             variant="outline"
             size="lg"
-            className="border-black text-black hover:bg-black/40 text-base md:text-lg px-8 md:px-10 py-4 h-auto w-full sm:w-auto"
+            className="border-black text-black hover:bg-primary/90 text-base md:text-lg px-8 md:px-10 py-4 h-auto w-full sm:w-auto"
             asChild
           >
             <Link to="/courses">
@@ -534,7 +534,7 @@ const ContactSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
           <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
             <MapPin className="h-6 w-6 md:h-8 md:w-8 text-primary" />
-            <span className="text-muted-foreground">Mumbai, India</span>
+            <span className="text-muted-foreground">Chennai, India</span>
           </div>
           <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
             <Phone className="h-6 w-6 md:h-8 md:w-8 text-primary" />
@@ -542,7 +542,7 @@ const ContactSection = () => {
           </div>
           <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
             <Mail className="h-6 w-6 md:h-8 md:w-8 text-primary" />
-            <span className="text-muted-foreground">hello@p2pcareer.com</span>
+            <span className="text-muted-foreground">p2pcareerguidance@gmail.com</span>
           </div>
         </div>
         <Button variant="outline" size="lg" asChild className="text-base md:text-lg border-black">

@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import React from "react";
 
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
@@ -10,7 +11,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+// import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import Careers from "./pages/Careers";
@@ -41,82 +42,75 @@ const AppContent = () => {
     {
       icon: <Facebook />,
       bgColor: "bg-[#1877f2]",
-      link: "https://www.facebook.com/your-page", // External link
+      link: "https://www.facebook.com/your-page",
+      ariaLabel: "Follow us on Facebook",
+      tooltipText: "Follow us on Facebook",
     },
     {
       icon: <Dribbble />,
       bgColor: "bg-[#ea4c89]",
       link: "https://dribbble.com/your-page",
+      ariaLabel: "Follow us on Dribbble",
+      tooltipText: "Follow us on Dribbble",
     },
     {
       icon: <Linkedin />,
       bgColor: "bg-[#0a66c2]",
       link: "https://www.linkedin.com/in/your-profile",
+      ariaLabel: "Follow us on LinkedIn",
+      tooltipText: "Follow us on LinkedIn",
     },
     {
       icon: <MessageCircle />,
       bgColor: "bg-[#25D366]",
-      link: "https://wa.me/1234567890", // WhatsApp direct link
+      link: "https://whatsapp.com/channel/0029VbATpFc6RGJPUogzkP2p",
+      ariaLabel: "Join WhatsApp channel for placement opportunities",
       tooltipText: "Join WhatsApp channel for placement opportunities",
     },
     {
       icon: <Instagram />,
       bgColor: "bg-gradient-to-r from-[#E4405F] to-[#F77737]",
       link: "https://www.instagram.com/your-page",
+      ariaLabel: "Follow us on Instagram",
+      tooltipText: "Follow us on Instagram",
     },
   ];
 
   return (
     <FloatingButton
-      triggerContent={
-        <button
-  className="flex items-center justify-center h-12 w-12 rounded-full
-            bg-[#333533] 
-            text-white z-10 shadow-lg hover:shadow-xl transition-all"
->
-  <Plus />
-</button>
-
-      }
+      className="flex items-center justify-center h-12 w-12 rounded-full bg-[#333533] text-white z-10 shadow-lg hover:shadow-xl transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      triggerContent={<Plus size={20} aria-hidden="true" />}
+      triggerAriaLabel="Open social media menu"
     >
       {items.map((item, key) => (
-        <FloatingButtonItem key={key}>
-          {item.tooltipText ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <a href={item.link} target="_blank" rel="noopener noreferrer">
-                  <button
-                    className={cn(
-                      "h-12 w-12 rounded-full flex items-center justify-center text-white/80 shadow-lg hover:shadow-xl transition-shadow",
-                      item.bgColor
-                    )}
-                  >
-                    {item.icon}
-                  </button>
-                </a>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{item.tooltipText}</p>
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            <a href={item.link} target="_blank" rel="noopener noreferrer">
-              <button
-                className={cn(
-                  "h-12 w-12 rounded-full flex items-center justify-center text-white/80 shadow-lg hover:shadow-xl transition-shadow",
-                  item.bgColor
-                )}
+        <FloatingButtonItem key={key} ariaLabel={item.ariaLabel}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={item.ariaLabel}
               >
-                {item.icon}
-              </button>
-            </a>
-          )}
+                <div
+                  className={cn(
+                    "h-12 w-12 rounded-full flex items-center justify-center text-white/80 shadow-lg hover:shadow-xl transition-shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500",
+                    item.bgColor
+                  )}
+                >
+                  {React.cloneElement(item.icon, { size: 20, 'aria-hidden': true })}
+                </div>
+              </a>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{item.tooltipText}</p>
+            </TooltipContent>
+          </Tooltip>
         </FloatingButtonItem>
       ))}
     </FloatingButton>
   );
 };
-
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -127,7 +121,7 @@ const AppContent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/careers" element={<Careers />} />
           <Route path="/internships" element={<Internships />} />
           <Route path="/courses" element={<Courses />} />

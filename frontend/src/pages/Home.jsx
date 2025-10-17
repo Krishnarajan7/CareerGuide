@@ -50,9 +50,9 @@ const StudyGoalCard = ({ goal, index, onView }) => (
   >
     <CardContent className="p-6 text-center">
       <div
-        className={`w-16 h-16 mx-auto mb-4 rounded-2xl ${goal.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
+        className={`w-16 h-16 mx-auto mb-4 rounded-2xl ${goal.bgColor} flex items-center justify-center group-hover:scale-105 transition-transform duration-300`}
       >
-        <goal.icon className={`h-8 w-8 ${goal.iconColor}`} />
+        <goal.icon className={`h-8 w-8 ${goal.iconColor}`} strokeWidth={2} />
       </div>
       <h3 className="text-xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors">
         {goal.title}
@@ -68,11 +68,11 @@ const StudyGoalCard = ({ goal, index, onView }) => (
         size="sm"
         className="mt-4 w-full group-hover:bg-primary/10 hover:text-primary transition-colors"
         onClick={(e) => {
-          e.stopPropagation(); // Prevent card hover effects if needed
+          e.stopPropagation(); 
           onView(goal);
         }}
       >
-        <Eye className="h-4 w-4 mr-2" />
+        <Eye className="h-4 w-4 mr-2" strokeWidth={2} />
         View College List
       </Button>
     </CardContent>
@@ -83,8 +83,8 @@ const StudyGoalCard = ({ goal, index, onView }) => (
 const UserTypeCard = ({ type, index }) => (
   <Card key={index} className="hover-lift group">
     <CardContent className="p-8">
-      <div className="text-5xl mb-6 text-center group-hover:animate-bounce">
-        {type.icon}
+      <div className="w-16 h-16 mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+        <type.icon className="h-10 w-10 text-primary" strokeWidth={2} />
       </div>
       <h3 className="text-xl font-bold mb-4 text-center">{type.title}</h3>
       <p className="text-muted-foreground mb-6 text-center leading-relaxed">
@@ -93,7 +93,7 @@ const UserTypeCard = ({ type, index }) => (
       <div className="space-y-3">
         {type.features.map((feature, idx) => (
           <div key={idx} className="flex items-center">
-            <CheckCircle className="h-5 w-5 text-success mr-3 flex-shrink-0" />
+            <CheckCircle className="h-5 w-5 text-success mr-3 flex-shrink-0" strokeWidth={2} />
             <span className="text-sm">{feature}</span>
           </div>
         ))}
@@ -106,7 +106,7 @@ const UserTypeCard = ({ type, index }) => (
 const StatCard = ({ stat, index }) => (
   <div key={index} className="text-center group hover-lift">
     <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl group-hover:bg-white/20 transition-all duration-300">
-      <stat.icon className="h-10 w-10 mx-auto mb-4 text-accent" />
+      <stat.icon className="h-10 w-10 mx-auto mb-4 text-accent" strokeWidth={2} />
       <div className="text-2xl font-bold mb-2">{stat.value}</div>
       <div className="text-primary-foreground/80">{stat.label}</div>
     </div>
@@ -117,8 +117,8 @@ const StatCard = ({ stat, index }) => (
 const FeatureCard = ({ feature, index }) => (
   <Card key={index} className="hover-lift group text-center">
     <CardContent className="p-8">
-      <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-4 rounded-2xl w-16 h-16 mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-        <feature.icon className="h-8 w-8 text-primary" />
+      <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-4 rounded-2xl w-16 h-16 mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+        <feature.icon className="h-8 w-8 text-primary" strokeWidth={2} />
       </div>
       <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
       <p className="text-muted-foreground">{feature.description}</p>
@@ -144,7 +144,7 @@ const TestimonialCard = ({ testimonial, index }) => (
       </div>
       <div className="flex mb-4">
         {[...Array(testimonial.rating)].map((_, i) => (
-          <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+          <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" strokeWidth={2} />
         ))}
       </div>
       <p className="text-muted-foreground italic">"{testimonial.content}"</p>
@@ -152,7 +152,7 @@ const TestimonialCard = ({ testimonial, index }) => (
   </Card>
 );
 
-// Hero Section (adjusted padding to avoid navbar overlap, enhanced with rings and gradients)
+// Hero Section 
 const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals, onView }) => {
   const navigate = useNavigate();
 
@@ -173,7 +173,7 @@ const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals, onView }) => {
         className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-animate z-10 pt-12 sm:pt-16 md:pt-12 lg:pt-12 opacity-0 fade-in-hero"
       >
         <Badge className="mb-6 inline-flex items-center px-4 py-2 text-sm font-medium bg-primary/10 text-primary border-primary/20 shadow-lg hover:text-white fade-in-hero-item delay-100">
-          <Sparkles className="h-5 w-5 mr-2" />
+          <Sparkles className="h-5 w-5 mr-2" strokeWidth={2} />
           AI-Powered Career Guidance
         </Badge>
 
@@ -210,9 +210,9 @@ const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals, onView }) => {
             asChild
           >
             <Link to="/register">
-              <Zap className="h-5 w-5 mr-2 group-hover:animate-bounce" />
+              <Zap className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform duration-300" strokeWidth={2} />
               Start Your Journey
-              <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+              <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" strokeWidth={2} />
             </Link>
           </Button>
           <Button
@@ -222,7 +222,7 @@ const HeroSection = ({ heroRef, handleCollegeSelect, studyGoals, onView }) => {
             asChild
           >
             <Link to="/courses">
-              <BookOpen className="h-5 w-5 mr-2" />
+              <BookOpen className="h-5 w-5 mr-2" strokeWidth={2} />
               Explore Courses
             </Link>
           </Button>
@@ -338,6 +338,19 @@ const Home = () => {
     }
   }, [isAuthenticated, toast]);
 
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    if (previewGoal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [previewGoal]);
+
   const getPdfPath = (goal) => `/pdfs/${goal.title.toLowerCase()}.pdf`;
 
   const studyGoals = [
@@ -406,7 +419,7 @@ const Home = () => {
     iconColor: "text-yellow-600",
   },
   {
-    icon: Scale, // ⚖️ (add import from lucide-react)
+    icon: Scale, 
     title: "Law",
     subtitle: "LLB, LLM, B.A. LL.B, Corporate Law",
     color: "from-rose-500 to-fuchsia-500",
@@ -414,7 +427,7 @@ const Home = () => {
     iconColor: "text-rose-600",
   },
   {
-    icon: Wrench, // 🛠️ (add import from lucide-react)
+    icon: Wrench, 
     title: "Polytechnic",
     subtitle: "Diploma in Engineering, Technical Education",
     color: "from-gray-500 to-slate-500",
@@ -422,7 +435,7 @@ const Home = () => {
     iconColor: "text-gray-600",
   },
   {
-    icon: Fish, // 🐟 (add import from lucide-react)
+    icon: Fish, 
     title: "Fisheries",
     subtitle: "B.F.Sc, M.F.Sc, Aquaculture, Marine Science",
     color: "from-sky-500 to-blue-400",
@@ -442,39 +455,39 @@ const Home = () => {
 
   const userTypes = [
     {
-      icon: "🎯",
+      icon: Target,
       title: "12th Students",
       description:
         "Get AI-powered guidance on college selection, course recommendations, and strategic career planning based on your interests and academic performance.",
       features: [
-        "🏛️ College Recommendations",
-        "📚 Course Selection",
-        "🗺️ Career Mapping",
-        "💰 Scholarship Info",
+        "College Recommendations",
+        "Course Selection",
+        "Career Mapping",
+        "Scholarship Info",
       ],
     },
     {
-      icon: "🚀",
+      icon: GraduationCap,
       title: "College Students",
       description:
         "Access premium internship opportunities, advanced skill development programs, and exclusive industry insights to accelerate your career trajectory.",
       features: [
-        "💼 Internship Portal",
-        "📊 Skill Assessment",
-        "🤝 Industry Connect",
-        "🔬 Project Guidance",
+        "Internship Portal",
+        "Skill Assessment",
+        "Industry Connect",
+        "Project Guidance",
       ],
     },
     {
-      icon: "💎",
+      icon: Briefcase,
       title: "Freshers",
       description:
         "Land your dream job with professional interview preparation, expert resume optimization, and AI-driven personalized job recommendations.",
       features: [
-        "🎯 Job Matching",
-        "🎤 Interview Prep",
-        "📋 Resume Builder",
-        "💸 Salary Insights",
+        "Job Matching",
+        "Interview Prep",
+        "Resume Builder",
+        "Salary Insights",
       ],
     },
   ];
@@ -598,7 +611,10 @@ const Home = () => {
       {/* Preview Modal */}
       {previewGoal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-6xl max-h-[90vh] w-full flex flex-col overflow-hidden">
+          <div 
+            className="bg-white rounded-lg max-w-6xl max-h-[90vh] w-full flex flex-col overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="p-6 border-b flex justify-between items-center">
               <h2 className="text-2xl font-bold">{previewGoal.title} College List</h2>
               <Button
@@ -607,7 +623,7 @@ const Home = () => {
                 onClick={() => setPreviewGoal(null)}
                 className="h-8 w-8 p-0"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4" strokeWidth={2} />
               </Button>
             </div>
             <div className="flex-1 overflow-auto p-6">
@@ -624,7 +640,7 @@ const Home = () => {
                   window.open(getPdfPath(previewGoal), '_blank');
                 }}
               >
-                <Eye className="h-4 w-4 mr-2" />
+                <Eye className="h-4 w-4 mr-2" strokeWidth={2} />
                 View Full Size
               </Button>
               <a
@@ -632,7 +648,7 @@ const Home = () => {
                 download={`${previewGoal.title.toLowerCase()}-college-list.pdf`}
               >
                 <Button className="flex items-center gap-2">
-                  <Download className="h-4 w-4" />
+                  <Download className="h-4 w-4" strokeWidth={2} />
                   Download PDF
                 </Button>
               </a>
@@ -749,7 +765,7 @@ const Home = () => {
           >
             <Link to="/register">
               Get Started Today
-              <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+              <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" strokeWidth={2} />
             </Link>
           </Button>
         </div>

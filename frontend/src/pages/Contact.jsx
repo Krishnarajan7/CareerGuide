@@ -236,9 +236,9 @@ const Contact = () => {
                   className="w-full justify-start hover-lift"
                   asChild
                 >
-                  <a href="/dashboard">
+                  <a href="/interships">
                     <CheckCircle className="h-4 w-4 mr-2" />
-                    Access Dashboard
+                    Browse Internships
                   </a>
                 </Button>
                 <Button
@@ -256,9 +256,9 @@ const Contact = () => {
                   className="w-full justify-start hover-lift"
                   asChild
                 >
-                  <a href="/resume-builder">
+                  <a href="/careers">
                     <CheckCircle className="h-4 w-4 mr-2" />
-                    Resume Builder
+                    Career Guidance
                   </a>
                 </Button>
               </CardContent>

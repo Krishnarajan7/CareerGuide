@@ -4,46 +4,40 @@ import { GradientHeading } from "@/components/ui/gradient-heading";
 import { companyLogos } from "@/components/CompanyLogos";
 
 const InfiniteSliderHorizontal = ({ items, reverse = false }) => {
-  const duplicatedItems = [...items, ...items];
-
   return (
-    <motion.div
-      className="overflow-hidden py-4"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      viewport={{ once: true }}
+    <div
+      className={`group flex overflow-hidden py-4 [--gap:1rem] [gap:var(--gap)] flex-row max-w-full [--duration:40s] ${
+        reverse ? '[mask-image:linear-gradient(to_left,_rgba(0,_0,_0,_0),rgba(0,_0,_0,_1)_10%,rgba(0,_0,_0,_1)_90%,rgba(0,_0,_0,_0))]' : '[mask-image:linear-gradient(to_right,_rgba(0,_0,_0,_0),rgba(0,_0,_0,_1)_10%,rgba(0,_0,_0,_1)_90%,rgba(0,_0,_0,_0))]'
+      }`}
     >
-      <motion.div
-        className="flex whitespace-nowrap"
-        animate={{
-          x: reverse ? ["-50%", "0%"] : ["0%", "-50%"], // <-- reverse scroll direction
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      >
-        {duplicatedItems.map((item, index) => (
-          <motion.div
-            key={index}
-            className="flex-shrink-0 mx-2 sm:mx-4 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32"
-            whileHover={{ scale: 1.1, opacity: 1 }}
-            initial={{ opacity: 0.7 }}
+      {Array(4)
+        .fill(0)
+        .map((_, i) => (
+          <div
+            className={`flex shrink-0 justify-around [gap:var(--gap)] ${
+              reverse ? "animate-marquee-reverse" : "animate-marquee"
+            } flex-row`}
+            key={i}
           >
-            <img
-              src={item.img}
-              alt={item.name}
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
+            {items.map((item) => (
+              <motion.div
+                key={item.name}
+                className="flex-shrink-0 mx-2 sm:mx-4 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32"
+                whileHover={{ scale: 1.1, opacity: 1 }}
+                initial={{ opacity: 0.7 }}
+              >
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  className="w-full h-full object-contain"
+                />
+              </motion.div>
+            ))}
+          </div>
         ))}
-      </motion.div>
-    </motion.div>
+    </div>
   );
 };
-
 
 const MNCLogoCarousel = ({ refProp }) => {
   return (
