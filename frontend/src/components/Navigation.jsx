@@ -26,6 +26,7 @@ const Navigation = () => {
     { name: "Careers", href: "/careers", icon: Briefcase },
     { name: "Internships", href: "/internships", icon: Building},
     { name: "Courses", href: "/courses", icon: BookOpen },
+    { name: "Resources", href: "/resources", icon: FileText },
     // { name: "Resume Builder", href: "/resume-builder", icon: FileText },
     { name: "Contact", href: "/contact", icon: Phone },
   ];
@@ -257,7 +258,7 @@ const Navigation = () => {
                     Admin
                   </Link>
                 </Button>
-                <Button
+                {/* <Button
                   className="w-full justify-start h-12 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-lg"
                   asChild
                 >
@@ -265,7 +266,7 @@ const Navigation = () => {
                     <Rocket className="h-5 w-5 mr-3" />
                     Dashboard
                   </Link>
-                </Button>
+                </Button> */}
               </div>
             </div>
           </div>

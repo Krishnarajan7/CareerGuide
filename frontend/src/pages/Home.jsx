@@ -12,6 +12,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { useContext, useEffect, useCallback, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { TestimonialsColumn } from "@/components/TestimonialsColumn";
 import {
   ArrowRight,
   BookOpen,
@@ -122,32 +123,6 @@ const FeatureCard = ({ feature, index }) => (
       </div>
       <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
       <p className="text-muted-foreground">{feature.description}</p>
-    </CardContent>
-  </Card>
-);
-
-// Reusable Testimonial Card
-const TestimonialCard = ({ testimonial, index }) => (
-  <Card key={index} className="hover-lift">
-    <CardContent className="p-8">
-      <div className="flex items-center mb-6">
-        <img
-          src={testimonial.image}
-          alt={testimonial.name}
-          className="w-16 h-16 rounded-full mr-4 object-cover"
-          loading="lazy"
-        />
-        <div>
-          <h4 className="font-bold">{testimonial.name}</h4>
-          <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-        </div>
-      </div>
-      <div className="flex mb-4">
-        {[...Array(testimonial.rating)].map((_, i) => (
-          <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" strokeWidth={2} />
-        ))}
-      </div>
-      <p className="text-muted-foreground italic">"{testimonial.content}"</p>
     </CardContent>
   </Card>
 );
@@ -521,60 +496,46 @@ const Home = () => {
 
   const testimonials = [
     {
+      text: "P2P Career Guidance helped me land my dream job! The personalized guidance and interview preparation were game-changers.",
+      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
       name: "Priya Sharma",
       role: "Software Engineer at TCS",
-      image:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      content:
-        "P2P Career Guidance helped me land my dream job! The personalized guidance and interview preparation were game-changers.",
-      rating: 5,
     },
     {
+      text: "The AI-powered recommendations were spot-on. I got placed in my preferred company within 3 months!",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
       name: "Rohit Kumar",
       role: "Data Scientist at Flipkart",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      content:
-        "The AI-powered recommendations were spot-on. I got placed in my preferred company within 3 months!",
-      rating: 5,
     },
     {
+      text: "From college selection to job placement, P2P Career Guidance was with me every step of the way. Highly recommended!",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
       name: "Anita Patel",
       role: "Product Manager at Zomato",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-      content:
-        "From college selection to job placement, P2P Career Guidance was with me every step of the way. Highly recommended!",
-      rating: 5,
     },
     {
+      text: "The mentorship and project guidance helped me land my first role as a frontend developer. Truly amazing experience!",
+      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
       name: "Karan Mehta",
       role: "Frontend Developer at Swiggy",
-      image:
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
-      content:
-        "The mentorship and project guidance helped me land my first role as a frontend developer. Truly amazing experience!",
-      rating: 5,
     },
     {
+      text: "Excellent support and practical guidance. I felt confident during my interviews and secured my dream backend role.",
+      image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face",
       name: "Sneha Gupta",
       role: "Backend Developer at Zomato",
-      image:
-        "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face",
-      content:
-        "Excellent support and practical guidance. I felt confident during my interviews and secured my dream backend role.",
-      rating: 5,
     },
     {
+      text: "The career guidance platform was instrumental in helping me analyze and improve my skills. Highly recommend it!",
+      image: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=150&h=150&fit=crop&crop=face",
       name: "Rahul Verma",
       role: "Data Analyst at Amazon",
-      image:
-        "https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=150&h=150&fit=crop&crop=face",
-      content:
-        "The career guidance platform was instrumental in helping me analyze and improve my skills. Highly recommend it!",
-      rating: 5,
     },
   ];
+
+  const firstColumn = testimonials.slice(0, 2);
+  const secondColumn = testimonials.slice(2, 4);
+  const thirdColumn = testimonials.slice(4, 6);
 
   const features = [
     {
@@ -722,31 +683,27 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-background/50">
+      <section className="py-20 bg-background/50 relative overflow-hidden">
         <div
           ref={testimonialsRef}
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-animate"
         >
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <div className="text-center mb-10 md:mb-12">
+            <GradientHeading size="lg" className="mb-4 md:mb-6">
               Success <span className="gradient-text">Stories</span>
-            </h2>
+            </GradientHeading>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Hear from our students who have successfully transformed their
-              careers
+              Hear from our students who have successfully transformed their careers.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <TestimonialCard
-                testimonial={testimonial}
-                index={index}
-                key={index}
-              />
-            ))}
+          <div className="flex justify-center gap-6 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
+            <TestimonialsColumn testimonials={firstColumn} duration={15} />
+            <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
+            <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
           </div>
         </div>
       </section>
+
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-primary to-secondary text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>

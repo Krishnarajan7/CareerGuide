@@ -12,6 +12,7 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { GradientHeading } from "@/components/ui/gradient-heading";
 import ScrollToTop from "@/components/ScrollToTop";
 import MNCLogoCarousel from "@/components/MNCLogoCarousel";
+import { TestimonialsColumn } from "@/components/TestimonialsColumn";
 import {
   ArrowRight,
   Search,
@@ -494,6 +495,95 @@ const InternshipsListSection = ({ listRef, activeTab, filteredInternships, onSea
   );
 };
 
+// Testimonials Section
+const TestimonialsSection = () => {
+  const testimonials = [
+    {
+      text: "This internship at Google transformed my coding skills and gave me real-world project experience. The mentorship was invaluable!",
+      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      name: "Priya Sharma",
+      role: "Software Engineering Intern",
+    },
+    {
+      text: "Microsoft's data team taught me advanced analytics techniques. It's been a game-changer for my career aspirations.",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      name: "Rahul Mehta",
+      role: "Data Analyst Intern",
+    },
+    {
+      text: "Working on Amazon's marketing campaigns honed my SEO skills and boosted my confidence in digital strategy.",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      name: "Aisha Khan",
+      role: "Marketing Intern",
+    },
+    {
+      text: "Apple's product management internship exposed me to agile methodologies and user-centric design principles.",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      name: "Vikram Singh",
+      role: "Product Manager Intern",
+    },
+    {
+      text: "IBM's DevOps role introduced me to cloud tools like AWS, accelerating my technical growth.",
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      name: "Neha Patel",
+      role: "DevOps Engineer Intern",
+    },
+    {
+      text: "Flipkart's UI/UX internship was creative and collaborative—perfect for building my design portfolio.",
+      image: "https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      name: "Arjun Reddy",
+      role: "UI/UX Designer Intern",
+    },
+    {
+      text: "Zomato's content writing gig sharpened my storytelling skills while working with a fun team.",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      name: "Sanya Gupta",
+      role: "Content Writer Intern",
+    },
+    {
+      text: "Paytm's social media internship helped me master viral content creation and analytics.",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      name: "Karan Joshi",
+      role: "Social Media Intern",
+    },
+    {
+      text: "Swiggy's graphic design role was hands-on and inspiring for my visual branding journey.",
+      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      name: "Lila Nair",
+      role: "Graphic Designer Intern",
+    },
+  ];
+
+  const firstColumn = testimonials.slice(0, 3);
+  const secondColumn = testimonials.slice(3, 6);
+  const thirdColumn = testimonials.slice(6, 9);
+
+  return (
+    <section className="py-16 md:py-20 bg-background relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-10 md:mb-12">
+          <div className="flex justify-center mb-4">
+            <Badge variant="outline" className="border-primary text-primary px-4 py-2">
+              Intern Voices
+            </Badge>
+          </div>
+          <GradientHeading size="xl" className="mb-4 md:mb-6">
+            What Our <span className="gradient-text">Interns Say</span>
+          </GradientHeading>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
+            Hear from students who've turned opportunities into careers.
+          </p>
+        </div>
+        <div className="flex justify-center gap-6 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
+          <TestimonialsColumn testimonials={firstColumn} duration={15} />
+          <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
+          <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
+        </div>
+      </div>
+    </section>
+  );
+};
+
 // CTA Section
 const CTASection = () => {
   return (
@@ -585,7 +675,8 @@ const Internships = () => {
         selectedLocation={selectedLocation}
         onApply={handleApply}
       />
-      <MNCLogoCarousel refProp={mncsRef} />
+      <TestimonialsSection />
+
       <ScrollToTop />
       <CTASection />
       <ApplicationForm

@@ -158,7 +158,7 @@ const Contact = () => {
   ];
 
   return (
-    <div className="page-container page-bg-gradient">
+    <div className="page-container">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div ref={headerRef} className="text-center mb-12 scroll-animate">

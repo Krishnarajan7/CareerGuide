@@ -19,7 +19,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import MNCLogoCarousel from "@/components/MNCLogoCarousel";
 import { mockJobs, searchJobs } from "@/data/mockJobs";
+import ScrollToTop from "@/components/ScrollToTop";
 import {
   Search,
   Filter,
@@ -52,6 +54,7 @@ const Careers = () => {
   const headerRef = useScrollAnimation();
   const filtersRef = useScrollAnimation();
   const jobsRef = useScrollAnimation();
+  const mncsRef = useScrollAnimation();
 
   const filteredJobs = searchJobs(
     searchQuery,
@@ -295,7 +298,7 @@ const Careers = () => {
   ];
 
   return (
-    <div className="min-h-screen page-bg-gradient">
+    <div className="min-h-screen">
       <div className="page-container">
         {/* Header */}
         <div ref={headerRef} className="scroll-animate mb-12">
@@ -595,6 +598,8 @@ const Careers = () => {
             )}
           </div>
         </div>
+        <MNCLogoCarousel refProp={mncsRef} />
+        <ScrollToTop />
       </div>
     </div>
   );

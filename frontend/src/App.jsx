@@ -28,6 +28,7 @@ import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { FloatingButton, FloatingButtonItem } from "@/components/ui/floating-button";
 import { cn } from "@/lib/utils";
 import { Dribbble, Facebook, Instagram, Linkedin, Plus, MessageCircle, } from "lucide-react";
+import Resources from "./pages/Resources";
 
 const queryClient = new QueryClient();
 
@@ -125,6 +126,7 @@ const AppContent = () => {
           <Route path="/careers" element={<Careers />} />
           <Route path="/internships" element={<Internships />} />
           <Route path="/courses" element={<Courses />} />
+          <Route path="/resources" element={<Resources />} />
           {/* <Route path="/resume-builder" element={<ResumeBuilder />} /> */}
           <Route path="/contact" element={<Contact />} />
           <Route path="/college/:id" element={<CollegeDetails />} />

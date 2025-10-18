@@ -54,7 +54,7 @@ const MNCLogoCarousel = ({ refProp }) => {
           viewport={{ once: true }}
         >
           <GradientHeading size="lg" className="mb-4">
-            Get Internships from <span className="gradient-text">Top MNCs</span>
+            Get Placements from <span className="gradient-text">Top MNCs</span>
           </GradientHeading>
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
             Partnering with industry leaders to provide unparalleled opportunities
